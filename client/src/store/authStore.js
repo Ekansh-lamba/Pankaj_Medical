@@ -133,19 +133,16 @@ export const useAuthStore = create((set, get) => ({
       if (response.data && response.data.success) {
         const { accessToken } = response.data.data;
 
-        // Retrieve temporary profile info decode from token or let next step load it
-        // Decoded token contains user id and role
-        const jwt = await import('jsonwebtoken'); // Webpack/Vite client doesn't have jsonwebtoken easily, let's decode using standard helper
+        // Decode user profile info from access token payload using pure-JS helper
+        // (no Node.js module needed — parseJwt uses window.atob)
         const decoded = parseJwt(accessToken);
 
-        // We'll set simple user info based on decoded context, or call verify on backend
-        // In Phase 1, we can create a mock verification endpoint or fetch profile details, let's keep it simple
         set({
           accessToken,
           user: {
             id: decoded.userId,
             role: decoded.role,
-            name: decoded.role.toUpperCase() + ' User' // Temporary name till profile fetch
+            name: decoded.role.toUpperCase() + ' User' // Temporary until profile fetch
           },
           isAuthenticated: true,
           isLoading: false
