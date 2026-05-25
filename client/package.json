@@ -11,13 +11,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.4.0",
     "axios": "^1.6.8",
     "firebase": "^10.11.0",
     "lucide-react": "^0.372.0",
     "pankaj-medical": "file:..",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-dropzone": "^15.0.0",
+    "react-hook-form": "^7.76.1",
     "react-router-dom": "^6.23.0",
+    "zod": "^4.4.3",
     "zustand": "^4.5.2"
   },
   "devDependencies": {

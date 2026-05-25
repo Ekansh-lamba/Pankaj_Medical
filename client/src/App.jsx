@@ -4,11 +4,10 @@ import {
   Routes,
   Route,
   Link,
-  useNavigate,
   useLocation
 } from 'react-router-dom';
 import { useAuthStore } from './store/authStore';
-import { Landmark, Info, Phone, LogIn, LayoutDashboard } from 'lucide-react';
+import { Landmark, LogIn, LayoutDashboard } from 'lucide-react';
 
 // Common components
 import ProtectedRoute from './components/common/ProtectedRoute';
@@ -22,6 +21,15 @@ import Signup from './pages/auth/Signup';
 import ForgotPassword from './pages/auth/ForgotPassword';
 import ResetPassword from './pages/auth/ResetPassword';
 import VerifyEmail from './pages/auth/VerifyEmail';
+
+// Phase 2 components
+import SearchBar from './components/shared/SearchBar';
+import ProductList from './pages/public/ProductList';
+import ProductDetail from './pages/public/ProductDetail';
+import Products from './pages/admin/Products';
+import AddEditProduct from './pages/admin/AddEditProduct';
+import CsvImport from './pages/admin/CsvImport';
+import ExpiryPage from './pages/staff/ExpiryPage';
 
 // Protected Dashboard components
 import CustomerDashboard from './pages/customer/CustomerDashboard';
@@ -48,18 +56,18 @@ const Layout = ({ children }) => {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
       {/* Sticky Top Header Navbar */}
-      <header className="sticky top-0 bg-white border-b border-gray-200 z-40 shadow-xs">
-        <div className="max-w-6xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
+      <header className="sticky top-0 bg-white border-b border-gray-200 z-40 shadow-sm">
+        <div className="max-w-6xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between gap-4">
           <Link
             to="/"
             style={{ textDecoration: 'none' }}
-            className="flex items-center gap-2 text-teal-700 font-extrabold text-lg"
+            className="flex items-center gap-2 text-teal-700 font-extrabold text-lg shrink-0"
           >
             <Landmark className="w-6 h-6" />
-            <span>Pankaj Medical</span>
+            <span className="hidden xs:inline">Pankaj Medical</span>
           </Link>
 
-          <nav className="hidden sm:flex items-center gap-6 text-sm font-semibold text-gray-500">
+          <nav className="hidden lg:flex items-center gap-6 text-sm font-semibold text-gray-500 shrink-0">
             <Link
               to="/"
               style={{ textDecoration: 'none' }}
@@ -68,11 +76,18 @@ const Layout = ({ children }) => {
               Home
             </Link>
             <Link
+              to="/products"
+              style={{ textDecoration: 'none' }}
+              className="hover:text-teal-600 transition-colors"
+            >
+              Medicines
+            </Link>
+            <Link
               to="/about"
               style={{ textDecoration: 'none' }}
               className="hover:text-teal-600 transition-colors"
             >
-              About Us
+              About
             </Link>
             <Link
               to="/contact"
@@ -83,17 +98,22 @@ const Layout = ({ children }) => {
             </Link>
           </nav>
 
-          <div className="flex items-center gap-3">
+          {/* Autocomplete SearchBar wired into the main Navbar */}
+          <div className="flex-grow max-w-sm sm:max-w-xs md:max-w-md mx-2">
+            <SearchBar />
+          </div>
+
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             {isAuthenticated ? (
               <>
                 <Link
                   to={getDashboardLink()}
                   style={{ textDecoration: 'none' }}
-                  className="btn-teal-outline flex items-center gap-1.5 py-1.5 px-3 text-xs"
+                  className="btn-teal-outline flex items-center gap-1.5 py-1.5 px-3 text-xs font-bold"
                 >
                   <LayoutDashboard className="w-3.5 h-3.5" /> Dashboard
                 </Link>
-                <button onClick={() => logoutUser()} className="btn-white text-xs py-1.5 px-3">
+                <button onClick={() => logoutUser()} className="btn-white text-xs py-1.5 px-3 font-bold">
                   Sign Out
                 </button>
               </>
@@ -101,7 +121,7 @@ const Layout = ({ children }) => {
               <Link
                 to="/login"
                 style={{ textDecoration: 'none' }}
-                className="btn-teal flex items-center gap-1.5 py-1.5 px-4 text-xs"
+                className="btn-teal flex items-center gap-1.5 py-1.5 px-4 text-xs font-bold"
               >
                 <LogIn className="w-3.5 h-3.5" /> Sign In
               </Link>
@@ -165,6 +185,8 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/products" element={<ProductList />} />
+          <Route path="/products/:slug" element={<ProductDetail />} />
 
           {/* Auth Pages */}
           <Route path="/login" element={<Login />} />
@@ -178,21 +200,27 @@ const App = () => {
             <Route path="/customer/dashboard" element={<CustomerDashboard />} />
           </Route>
 
-          {/* Protected Staff Routes */}
-          <Route element={<ProtectedRoute roles={['staff']} />}>
+          {/* Protected Staff & Admin Shared Routes */}
+          <Route element={<ProtectedRoute roles={['staff', 'admin']} />}>
             <Route path="/staff/dashboard" element={<StaffDashboard />} />
+            <Route path="/staff/expiry" element={<ExpiryPage />} />
           </Route>
 
-          {/* Protected Admin Routes */}
+          {/* Protected Admin Only Routes */}
           <Route element={<ProtectedRoute roles={['admin']} />}>
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/products" element={<Products />} />
+            <Route path="/admin/products/add" element={<AddEditProduct />} />
+            <Route path="/admin/products/edit/:id" element={<AddEditProduct />} />
+            <Route path="/admin/products/import" element={<CsvImport />} />
+            <Route path="/admin/expiry" element={<ExpiryPage />} />
           </Route>
 
           {/* Catch-all Redirect */}
           <Route
             path="*"
             element={
-              <Link to="/" className="text-teal-600 block text-center py-10">
+              <Link to="/" className="text-teal-600 block text-center py-10 font-bold">
                 Page not found. Return to Home
               </Link>
             }

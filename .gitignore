@@ -31,5 +31,8 @@ Thumbs.db
 
 # Recovery and prompt files
 ANTIGRAVITY_RECOVERY_PROMPT.md
+ANTIGRAVITY_PROMPT_PHASE2.md
 PANKAJ_MEDICAL_PROJECT_SPEC.md
 ANTHROPIC_PROMPT_PHASE1.md
+*.prompt.md
+recovery*.md

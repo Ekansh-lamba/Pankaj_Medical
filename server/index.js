@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
+const { startCron } = require('./jobs/expiryChecker');
 
 // Load environment variables (local overrides in .env take precedence)
 dotenv.config();
@@ -16,6 +17,7 @@ const app = express();
 
 // Establish Mongoose Database Connection
 connectDB();
+startCron();
 
 // Security and Utility Middlewares
 app.use(helmet());

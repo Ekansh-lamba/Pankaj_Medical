@@ -142,8 +142,68 @@ const sendWelcomeEmail = async (email, name) => {
   return transporter.sendMail(mailOptions);
 };
 
+/**
+ * Send Low Stock Alert Email to Admin
+ */
+const sendLowStockAlert = async (email, products) => {
+  const tableRows = products
+    .map(
+      (p) => `
+    <tr>
+      <td style="padding: 10px; border-bottom: 1px solid #eeeeee; font-weight: bold;">${p.name}</td>
+      <td style="padding: 10px; border-bottom: 1px solid #eeeeee;">${p.brand}</td>
+      <td style="padding: 10px; border-bottom: 1px solid #eeeeee; text-align: center; color: #ef4444; font-weight: bold;">${p.stock}</td>
+      <td style="padding: 10px; border-bottom: 1px solid #eeeeee; text-align: center;">${p.lowStockThreshold}</td>
+      <td style="padding: 10px; border-bottom: 1px solid #eeeeee; text-align: center;">${p.rackLocation || 'Not Assigned'}</td>
+    </tr>
+  `
+    )
+    .join('');
+
+  const mailOptions = {
+    from: `"Pankaj Medical Stores" <${process.env.EMAIL_USER || 'no-reply@pankajmedical.com'}>`,
+    to: email,
+    subject: `[Pankaj Medical] Low Stock Alert — ${products.length} Products Need Restocking`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 650px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 4px; background-color: #ffffff;">
+        <div style="background-color: #0d9488; color: #ffffff; padding: 20px; text-align: center; border-radius: 4px 4px 0 0;">
+          <h1 style="margin: 0; font-size: 24px; font-weight: bold;">Pankaj Medical & General Stores</h1>
+        </div>
+        <div style="padding: 20px; color: #333333; line-height: 1.6;">
+          <h2 style="color: #ef4444; margin-top: 0;">Inventory Alert: Low Stock Warning</h2>
+          <p>Hello Admin,</p>
+          <p>The system inventory check has flagged the following <strong>${products.length}</strong> items as being at or below their low stock threshold levels. Please initiate restock requests with your distributor as soon as possible:</p>
+          
+          <table style="width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px;">
+            <thead>
+              <tr style="background-color: #f2f2f2; text-align: left;">
+                <th style="padding: 12px 10px; border-bottom: 2px solid #0d9488;">Medicine Name</th>
+                <th style="padding: 12px 10px; border-bottom: 2px solid #0d9488;">Brand</th>
+                <th style="padding: 12px 10px; border-bottom: 2px solid #0d9488; text-align: center;">Current Stock</th>
+                <th style="padding: 12px 10px; border-bottom: 2px solid #0d9488; text-align: center;">Limit Threshold</th>
+                <th style="padding: 12px 10px; border-bottom: 2px solid #0d9488; text-align: center;">Rack Location</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${tableRows}
+            </tbody>
+          </table>
+        </div>
+        <div style="padding: 20px; background-color: #f9f9f9; text-align: center; font-size: 12px; color: #666666; border-top: 1px solid #e0e0e0; border-radius: 0 0 4px 4px;">
+          <p style="margin: 0; font-weight: bold;">${pharmacyDetails.name}</p>
+          <p style="margin: 4px 0;">${pharmacyDetails.address}</p>
+          <p style="margin: 4px 0;">GSTIN: ${pharmacyDetails.gstin}</p>
+        </div>
+      </div>
+    `
+  };
+
+  return transporter.sendMail(mailOptions);
+};
+
 module.exports = {
   sendVerificationEmail,
   sendPasswordResetEmail,
-  sendWelcomeEmail
+  sendWelcomeEmail,
+  sendLowStockAlert
 };
