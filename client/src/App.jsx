@@ -4,6 +4,7 @@ import {
   Routes,
   Route,
   Link,
+  Outlet,
   useLocation
 } from 'react-router-dom';
 import { useAuthStore } from './store/authStore';
@@ -11,6 +12,10 @@ import { Landmark, LogIn, LayoutDashboard } from 'lucide-react';
 
 // Common components
 import ProtectedRoute from './components/common/ProtectedRoute';
+
+// Layouts
+import AdminLayout from './components/layout/AdminLayout';
+import StaffLayout from './components/layout/StaffLayout';
 
 // Page components
 import Home from './pages/public/Home';
@@ -41,8 +46,12 @@ const Layout = ({ children }) => {
   const { isAuthenticated, user, logoutUser } = useAuthStore();
   const location = useLocation();
 
-  // Hide header/footer inside dashboard routes to keep views clean
-  const isDashboard = location.pathname.includes('/dashboard');
+  // Hide public header/footer inside dashboard, admin, and staff routes
+  const isPortal = location.pathname.startsWith('/admin') ||
+                   location.pathname.startsWith('/staff') ||
+                   location.pathname.includes('/dashboard');
+
+  if (isPortal) return <>{children}</>;
 
   const getDashboardLink = () => {
     if (!user) return '/login';

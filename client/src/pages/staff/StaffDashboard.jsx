@@ -1,34 +1,15 @@
 import React from 'react';
 import { useAuthStore } from '../../store/authStore';
-import { LogOut, ShieldCheck, ClipboardCheck, Package, AlertCircle } from 'lucide-react';
+import { ShieldCheck, ClipboardCheck, Package, AlertCircle } from 'lucide-react';
+import StaffLayout from '../../components/layout/StaffLayout';
 
 const StaffDashboard = () => {
-  const { user, logoutUser } = useAuthStore();
-
-  const handleLogout = async () => {
-    await logoutUser();
-  };
+  const { user } = useAuthStore();
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      {/* Top Navbar */}
-      <nav className="bg-teal-700 text-white shadow-sm py-4 px-6 md:px-8 flex justify-between items-center">
-        <h1 className="text-xl font-bold font-sans">Pankaj Medical Stores</h1>
-        <div className="flex items-center gap-4">
-          <span className="text-xs bg-teal-800 px-2.5 py-1 rounded-full font-semibold uppercase">
-            Staff Portal
-          </span>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-1.5 bg-teal-800 hover:bg-teal-900 text-white text-xs font-semibold py-1.5 px-3 rounded border border-teal-600 transition-colors"
-          >
-            <LogOut className="w-3.5 h-3.5" /> Sign Out
-          </button>
-        </div>
-      </nav>
+    <StaffLayout>
+      <div className="max-w-4xl mx-auto py-10 px-4">
 
-      {/* Main Content */}
-      <main className="max-w-4xl mx-auto py-12 px-4">
         {/* Welcome Box */}
         <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-xs mb-8">
           <div className="flex items-center gap-4">
@@ -148,8 +129,8 @@ const StaffDashboard = () => {
             </div>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </StaffLayout>
   );
 };
 

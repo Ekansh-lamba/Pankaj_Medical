@@ -1,116 +1,173 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
-import { LogOut, Landmark, Settings, Users, Database } from 'lucide-react';
+import AdminLayout from '../../components/layout/AdminLayout';
+import {
+  Pill,
+  FileUp,
+  Clock,
+  ShoppingCart,
+  FileText,
+  Users,
+  Settings,
+  ArrowRight,
+} from 'lucide-react';
+
+// Quick-action cards — live ones are Links, coming-soon ones are disabled divs
+const QUICK_ACTIONS = [
+  {
+    label: 'Product Catalogue',
+    desc: 'View, edit, hide, and manage all medicines in the inventory.',
+    icon: Pill,
+    path: '/admin/products',
+    color: 'teal',
+    live: true,
+  },
+  {
+    label: 'Import CSV',
+    desc: 'Batch-upload or update stock records from a spreadsheet file.',
+    icon: FileUp,
+    path: '/admin/products/import',
+    color: 'teal',
+    live: true,
+  },
+  {
+    label: 'Expiry Monitor',
+    desc: 'Review expired, near-expiry, and expiring-soon stock buckets.',
+    icon: Clock,
+    path: '/admin/expiry',
+    color: 'amber',
+    live: true,
+  },
+  {
+    label: 'Orders',
+    desc: 'Process, track, and dispatch customer orders.',
+    icon: ShoppingCart,
+    path: '/admin/orders',
+    color: 'slate',
+    live: false,
+    phase: 3,
+  },
+  {
+    label: 'Prescriptions',
+    desc: 'Review and approve patient prescription uploads.',
+    icon: FileText,
+    path: '/admin/prescriptions',
+    color: 'slate',
+    live: false,
+    phase: 3,
+  },
+  {
+    label: 'Staff Management',
+    desc: 'Invite staff, set permissions, and manage accounts.',
+    icon: Users,
+    path: '/admin/staff',
+    color: 'slate',
+    live: false,
+    phase: 5,
+  },
+];
+
+// Color map
+const COLOR = {
+  teal: {
+    icon: 'bg-teal-50 text-teal-600',
+    border: 'border-gray-200 hover:border-teal-300 hover:shadow-sm',
+    arrow: 'text-teal-500',
+  },
+  amber: {
+    icon: 'bg-amber-50 text-amber-600',
+    border: 'border-gray-200 hover:border-amber-300 hover:shadow-sm',
+    arrow: 'text-amber-500',
+  },
+  slate: {
+    icon: 'bg-gray-100 text-gray-400',
+    border: 'border-gray-100',
+    arrow: 'text-gray-300',
+  },
+};
 
 const AdminDashboard = () => {
-  const { user, logoutUser } = useAuthStore();
-
-  const handleLogout = async () => {
-    await logoutUser();
-  };
+  const { user } = useAuthStore();
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      {/* Top Navbar */}
-      <nav className="bg-slate-900 text-white shadow-sm py-4 px-6 md:px-8 flex justify-between items-center">
-        <h1 className="text-xl font-bold font-sans flex items-center gap-2">
-          <Landmark className="text-teal-500 w-5 h-5" /> Pankaj Medical Stores
-        </h1>
-        <div className="flex items-center gap-4">
-          <span className="text-xs bg-red-600 px-2.5 py-1 rounded-full font-semibold uppercase">
-            Administrator
-          </span>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold py-1.5 px-3 rounded border border-slate-700 transition-colors"
-          >
-            <LogOut className="w-3.5 h-3.5" /> Sign Out
-          </button>
-        </div>
-      </nav>
-
-      {/* Main Content */}
-      <main className="max-w-4xl mx-auto py-12 px-4">
-        {/* Welcome Box */}
-        <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-xs mb-8">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center text-red-600">
-              <Settings className="w-6 h-6" />
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold text-gray-800">
-                Welcome, Admin {user?.name || 'Administrator'}!
-              </h2>
-              <p className="text-sm text-gray-500">Root System Control Shell</p>
-            </div>
-          </div>
-          <div className="mt-6 border-t border-gray-100 pt-4 flex gap-4 text-xs text-gray-500 font-mono">
-            <span>ADMIN_EMAIL MATCH: {user?.email || 'N/A'}</span>
-          </div>
+    <AdminLayout>
+      <div className="px-6 py-8 max-w-5xl mx-auto">
+        {/* Welcome header */}
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-gray-900">
+            Welcome back, {user?.name || 'Administrator'} 👋
+          </h1>
+          <p className="text-sm text-gray-500 mt-1">
+            Here's a quick overview of what you can manage from this panel.
+          </p>
         </div>
 
-        {/* Admin Scopes */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Card 1 */}
-          <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-xs flex flex-col justify-between">
-            <div>
-              <div className="w-10 h-10 bg-teal-50 text-teal-600 rounded flex items-center justify-center mb-4">
-                <Users className="w-5 h-5" />
-              </div>
-              <h3 className="text-base font-bold text-gray-800 mb-1">Staff Management</h3>
-              <p className="text-xs text-gray-500 leading-normal">
-                Invite new pharmacy staff, activate/deactivate accounts, and configure permissions.
-              </p>
-            </div>
-            <button
-              className="btn-teal text-xs py-1.5 mt-6 w-full opacity-60 cursor-not-allowed"
-              disabled
-            >
-              Manage Staff (Phase 5)
-            </button>
-          </div>
+        {/* Quick Actions Grid */}
+        <section>
+          <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">
+            Quick Actions
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {QUICK_ACTIONS.map((action) => {
+              const Icon = action.icon;
+              const c = COLOR[action.color];
 
-          {/* Card 2 */}
-          <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-xs flex flex-col justify-between">
-            <div>
-              <div className="w-10 h-10 bg-teal-50 text-teal-600 rounded flex items-center justify-center mb-4">
-                <Database className="w-5 h-5" />
-              </div>
-              <h3 className="text-base font-bold text-gray-800 mb-1">Bulk Data Import</h3>
-              <p className="text-xs text-gray-500 leading-normal">
-                Perform batch updates on prices, stocks, and expiration batches via CSV files.
-              </p>
-            </div>
-            <button
-              className="btn-teal text-xs py-1.5 mt-6 w-full opacity-60 cursor-not-allowed"
-              disabled
-            >
-              Import CSV (Phase 2)
-            </button>
-          </div>
+              if (!action.live) {
+                return (
+                  <div
+                    key={action.path}
+                    className={`bg-white border rounded-xl p-5 flex flex-col gap-3 opacity-50 cursor-not-allowed ${c.border}`}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${c.icon}`}>
+                        <Icon className="w-4.5 h-4.5" />
+                      </div>
+                      <span className="text-[10px] font-bold bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full uppercase">
+                        Phase {action.phase}
+                      </span>
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold text-gray-700">{action.label}</h3>
+                      <p className="text-xs text-gray-400 mt-0.5 leading-relaxed">{action.desc}</p>
+                    </div>
+                  </div>
+                );
+              }
 
-          {/* Card 3 */}
-          <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-xs flex flex-col justify-between">
-            <div>
-              <div className="w-10 h-10 bg-teal-50 text-teal-600 rounded flex items-center justify-center mb-4">
-                <Landmark className="w-5 h-5" />
-              </div>
-              <h3 className="text-base font-bold text-gray-800 mb-1">Store Controls</h3>
-              <p className="text-xs text-gray-500 leading-normal">
-                Configure delivery charges, modify whitelisted pin codes, and trigger maintenance
-                modes.
-              </p>
-            </div>
-            <button
-              className="btn-teal text-xs py-1.5 mt-6 w-full opacity-60 cursor-not-allowed"
-              disabled
-            >
-              Settings (Phase 5)
-            </button>
+              return (
+                <Link
+                  key={action.path}
+                  to={action.path}
+                  style={{ textDecoration: 'none' }}
+                  className={`group bg-white border rounded-xl p-5 flex flex-col gap-3 transition-all ${c.border}`}
+                >
+                  <div className="flex items-start justify-between">
+                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${c.icon}`}>
+                      <Icon className="w-4.5 h-4.5" />
+                    </div>
+                    <ArrowRight
+                      className={`w-4 h-4 transition-transform group-hover:translate-x-0.5 ${c.arrow}`}
+                    />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-gray-800">{action.label}</h3>
+                    <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{action.desc}</p>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
+        </section>
+
+        {/* System Info strip */}
+        <div className="mt-10 bg-slate-900 rounded-xl px-6 py-4 flex flex-wrap gap-x-8 gap-y-2 text-xs font-mono text-slate-400">
+          <span>ROLE: <span className="text-red-400 font-bold">ADMIN</span></span>
+          <span>EMAIL: <span className="text-slate-200">{user?.email || 'N/A'}</span></span>
+          <span>USER ID: <span className="text-slate-200">{user?.id || 'N/A'}</span></span>
         </div>
-      </main>
-    </div>
+      </div>
+    </AdminLayout>
   );
 };
 
