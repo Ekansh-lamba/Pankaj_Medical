@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #fcfcfc;
+  color: #1e293b;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* premium components classes */
+.btn-teal {
+  @apply bg-teal-600 hover:bg-teal-700 text-white font-medium py-2.5 px-4 rounded shadow-sm transition-all duration-200 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
+}
+
+.btn-teal-outline {
+  @apply bg-white hover:bg-teal-50 border border-teal-600 text-teal-700 font-medium py-2.5 px-4 rounded transition-all duration-200 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
+}
+
+.btn-white {
+  @apply bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 font-medium py-2.5 px-4 rounded shadow-sm transition-all duration-200 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
+}
+
+.input-teal {
+  @apply w-full px-3 py-2.5 border border-gray-300 rounded shadow-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-150 placeholder:text-gray-400;
+}
+
+.card-teal {
+  @apply bg-white border border-gray-200 rounded-lg p-6 shadow-sm;
+}

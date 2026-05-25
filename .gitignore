@@ -1,0 +1,30 @@
+# Dependecies
+node_modules/
+/client/node_modules/
+/server/node_modules/
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+client/.env.development
+client/.env.production
+server/.env
+server/.env.development
+server/.env.production
+
+# IDEs and System
+.vscode/
+.idea/
+.DS_Store
+*.log
+Thumbs.db
+
+# Build outputs
+/client/dist/
+/client/build/
+/server/dist/
+/server/build/
