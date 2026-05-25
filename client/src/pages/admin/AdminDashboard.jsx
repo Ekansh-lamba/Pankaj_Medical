@@ -1,7 +1,6 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
-import AdminLayout from '../../components/layout/AdminLayout';
+
 import {
   Pill,
   FileUp,
@@ -9,7 +8,6 @@ import {
   ShoppingCart,
   FileText,
   Users,
-  Settings,
   ArrowRight,
 } from 'lucide-react';
 
@@ -91,8 +89,7 @@ const AdminDashboard = () => {
   const { user } = useAuthStore();
 
   return (
-    <AdminLayout>
-      <div className="px-6 py-8 max-w-5xl mx-auto">
+    <div className="px-6 py-8 max-w-5xl mx-auto">
         {/* Welcome header */}
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-gray-900">
@@ -167,7 +164,6 @@ const AdminDashboard = () => {
           <span>USER ID: <span className="text-slate-200">{user?.id || 'N/A'}</span></span>
         </div>
       </div>
-    </AdminLayout>
   );
 };
 

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { NavLink, useNavigate, Outlet } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import {
   Landmark,
@@ -150,9 +150,8 @@ const StaffLayout = ({ children }) => {
           </button>
         </header>
 
-        {/* Page Content */}
         <main className="flex-1 overflow-y-auto">
-          {children}
+          {children || <Outlet />}
         </main>
       </div>
     </div>

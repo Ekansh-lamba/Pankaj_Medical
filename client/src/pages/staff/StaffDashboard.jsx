@@ -1,14 +1,12 @@
-import React from 'react';
 import { useAuthStore } from '../../store/authStore';
 import { ShieldCheck, ClipboardCheck, Package, AlertCircle } from 'lucide-react';
-import StaffLayout from '../../components/layout/StaffLayout';
+
 
 const StaffDashboard = () => {
   const { user } = useAuthStore();
 
   return (
-    <StaffLayout>
-      <div className="max-w-4xl mx-auto py-10 px-4">
+    <div className="max-w-4xl mx-auto py-10 px-4">
 
         {/* Welcome Box */}
         <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-xs mb-8">
@@ -130,7 +128,6 @@ const StaffDashboard = () => {
           </div>
         </div>
       </div>
-    </StaffLayout>
   );
 };
 

@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Link,
-  Outlet,
   useLocation
 } from 'react-router-dom';
 import { useAuthStore } from './store/authStore';
@@ -59,8 +58,6 @@ const Layout = ({ children }) => {
     if (user.role === 'staff') return '/staff/dashboard';
     return '/customer/dashboard';
   };
-
-  if (isDashboard) return <>{children}</>;
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
@@ -211,18 +208,22 @@ const App = () => {
 
           {/* Protected Staff & Admin Shared Routes */}
           <Route element={<ProtectedRoute roles={['staff', 'admin']} />}>
-            <Route path="/staff/dashboard" element={<StaffDashboard />} />
-            <Route path="/staff/expiry" element={<ExpiryPage />} />
+            <Route element={<StaffLayout />}>
+              <Route path="/staff/dashboard" element={<StaffDashboard />} />
+              <Route path="/staff/expiry" element={<ExpiryPage />} />
+            </Route>
           </Route>
 
           {/* Protected Admin Only Routes */}
           <Route element={<ProtectedRoute roles={['admin']} />}>
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-            <Route path="/admin/products" element={<Products />} />
-            <Route path="/admin/products/add" element={<AddEditProduct />} />
-            <Route path="/admin/products/edit/:id" element={<AddEditProduct />} />
-            <Route path="/admin/products/import" element={<CsvImport />} />
-            <Route path="/admin/expiry" element={<ExpiryPage />} />
+            <Route element={<AdminLayout />}>
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="/admin/products" element={<Products />} />
+              <Route path="/admin/products/add" element={<AddEditProduct />} />
+              <Route path="/admin/products/edit/:id" element={<AddEditProduct />} />
+              <Route path="/admin/products/import" element={<CsvImport />} />
+              <Route path="/admin/expiry" element={<ExpiryPage />} />
+            </Route>
           </Route>
 
           {/* Catch-all Redirect */}
