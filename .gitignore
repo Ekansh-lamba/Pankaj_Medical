@@ -28,3 +28,8 @@ Thumbs.db
 /client/build/
 /server/dist/
 /server/build/
+
+# Recovery and prompt files
+ANTIGRAVITY_RECOVERY_PROMPT.md
+PANKAJ_MEDICAL_PROJECT_SPEC.md
+ANTHROPIC_PROMPT_PHASE1.md
