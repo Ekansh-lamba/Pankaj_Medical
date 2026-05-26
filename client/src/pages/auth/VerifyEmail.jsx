@@ -20,7 +20,8 @@ const VerifyEmail = () => {
       }
 
       try {
-        const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        const rawBaseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        const baseURL = rawBaseURL.endsWith('/api') ? rawBaseURL.slice(0, -4) : rawBaseURL;
         // Hit the backend email verification API
         // Since backend verifyEmail controller returns visual HTML directly,
         // we can fetch it, or perform a custom API check. Let's treat the HTML fetch as success.

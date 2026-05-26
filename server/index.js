@@ -17,6 +17,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const app = express();
+app.set('trust proxy', 1);
 
 // Establish Mongoose Database Connection
 connectDB();
