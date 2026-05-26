@@ -12,7 +12,8 @@ const {
   getAllOrders,
   updateOrderStatus,
   markCodCollected,
-  handleReturnAction
+  handleReturnAction,
+  downloadInvoice
 } = require('../controllers/order.controller');
 
 // All routes require auth
@@ -22,6 +23,7 @@ router.use(protect);
 router.post('/', placeOrder);
 router.get('/my-orders', getMyOrders);
 router.get('/my-orders/:id', getMyOrderDetail);
+router.get('/my-orders/:id/invoice', downloadInvoice);
 router.post('/my-orders/:id/cancel', cancelOrder);
 router.post('/my-orders/:id/rate', rateOrder);
 router.post('/my-orders/:id/return', requestReturn);

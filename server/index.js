@@ -5,6 +5,8 @@ const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const { startCron } = require('./jobs/expiryChecker');
+const maintenanceMiddleware = require('./middleware/maintenance.middleware');
+const { apiRateLimiter } = require('./middleware/rateLimit.middleware');
 
 // Load environment variables (local overrides in .env take precedence)
 dotenv.config();
@@ -21,8 +23,9 @@ startCron();
 // Security and Utility Middlewares
 app.use(helmet());
 app.use(cookieParser());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(maintenanceMiddleware);
 
 // CORS configuration (enforce Whitelisting)
 const allowedOrigins = ['http://localhost:5173', process.env.CLIENT_URL].filter(Boolean);
@@ -43,6 +46,9 @@ app.use(
   })
 );
 
+// Global API rate limiter — applied to all /api/* routes
+app.use('/api/', apiRateLimiter);
+
 // Health check endpoint (Returns ok status and timestamp for UptimeRobot monitoring)
 app.get('/health', (req, res) => {
   res.status(200).json({
@@ -59,10 +65,52 @@ app.use('/api/orders', require('./routes/order.routes'));
 app.use('/api/prescriptions', require('./routes/prescription.routes'));
 app.use('/api/payments', require('./routes/payment.routes'));
 app.use('/api/cart', require('./routes/cart.routes'));
+app.use('/api/coupons', require('./routes/coupon.routes'));
 app.use('/api/admin', require('./routes/admin.routes'));
 app.use('/api/staff', require('./routes/staff.routes'));
 app.use('/api/notifications', require('./routes/notification.routes'));
 app.use('/api/settings', require('./routes/settings.routes'));
+
+// SEO: Dynamic sitemap.xml — lists all active product pages
+app.get('/sitemap.xml', async (req, res) => {
+  try {
+    const Product = require('./models/Product');
+    const BASE_URL = process.env.CLIENT_URL || 'https://pankajmedical.in';
+    const products = await Product.find({ isActive: true, isHidden: false }, 'slug updatedAt').lean();
+
+    const staticUrls = [
+      { loc: `${BASE_URL}/`, priority: '1.0', changefreq: 'weekly' },
+      { loc: `${BASE_URL}/products`, priority: '0.9', changefreq: 'daily' },
+      { loc: `${BASE_URL}/about`, priority: '0.5', changefreq: 'monthly' },
+      { loc: `${BASE_URL}/contact`, priority: '0.5', changefreq: 'monthly' }
+    ];
+
+    const productUrls = products
+      .filter((p) => p.slug)
+      .map((p) => ({
+        loc: `${BASE_URL}/products/${p.slug}`,
+        lastmod: p.updatedAt ? p.updatedAt.toISOString().split('T')[0] : '',
+        priority: '0.7',
+        changefreq: 'weekly'
+      }));
+
+    const allUrls = [...staticUrls, ...productUrls];
+    const urlXml = allUrls
+      .map((u) =>
+        `  <url>\n    <loc>${u.loc}</loc>${u.lastmod ? `\n    <lastmod>${u.lastmod}</lastmod>` : ''}\n    <changefreq>${u.changefreq}</changefreq>\n    <priority>${u.priority}</priority>\n  </url>`
+      )
+      .join('\n');
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urlXml}\n</urlset>`;
+
+    res.set('Content-Type', 'application/xml');
+    return res.status(200).send(xml);
+  } catch (err) {
+    console.error('Sitemap generation error:', err);
+    return res.status(500).send('Failed to generate sitemap.');
+  }
+});
+
 
 // Fallback Route for Undefined Paths
 app.use((req, res) => {

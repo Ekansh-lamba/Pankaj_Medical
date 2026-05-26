@@ -176,6 +176,17 @@ export default function Checkout() {
     setStep(3);
   };
 
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.async = true;
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
   const handlePlaceOrder = async () => {
     setLoading(true);
     try {
@@ -208,7 +219,94 @@ export default function Checkout() {
 
       const orderData = orderRes.data.data;
 
-      // 2. Upload prescription if required
+      // 2. If Payment Method is Online (Razorpay), trigger overlay
+      if (paymentMethod === 'razorpay') {
+        const initPaymentRes = await api.post('/api/payments/create-order', { orderId: orderData._id });
+        if (!initPaymentRes.data || !initPaymentRes.data.success) {
+          toast.error('Failed to initiate online transaction');
+          navigate(`/my-orders/${orderData._id}`);
+          setLoading(false);
+          return;
+        }
+
+        const { key, order: rzpOrder } = initPaymentRes.data;
+
+        const isScriptLoaded = await loadRazorpayScript();
+        if (!isScriptLoaded) {
+          toast.error('Failed to load payment gateway script. Please check your internet connection.');
+          navigate(`/my-orders/${orderData._id}`);
+          setLoading(false);
+          return;
+        }
+
+        const options = {
+          key,
+          amount: rzpOrder.amount,
+          currency: rzpOrder.currency,
+          name: 'Pankaj Medical Store',
+          description: `Payment for Order #${orderData.orderNumber}`,
+          order_id: rzpOrder.id,
+          handler: async function (response) {
+            setLoading(true);
+            try {
+              const verifyRes = await api.post('/api/payments/verify', {
+                orderId: orderData._id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature
+              });
+
+              if (verifyRes.data && verifyRes.data.success) {
+                // Upload prescription if required
+                if (hasRxItems && prescriptionFile) {
+                  const formData = new FormData();
+                  formData.append('orderId', orderData._id);
+                  formData.append('prescription', prescriptionFile);
+
+                  await api.post('/api/prescriptions/upload', formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                  });
+                }
+
+                setPlacedOrder(verifyRes.data.data);
+                clearCart();
+                setStep(4);
+                toast.success('Payment verified & order placed successfully!');
+              } else {
+                toast.error('Payment verification failed.');
+                navigate(`/my-orders/${orderData._id}`);
+              }
+            } catch (err) {
+              console.error('Payment verification failure:', err);
+              toast.error(err.response?.data?.message || 'Error verifying signature');
+              navigate(`/my-orders/${orderData._id}`);
+            } finally {
+              setLoading(false);
+            }
+          },
+          prefill: {
+            name: user?.name || '',
+            email: user?.email || '',
+            contact: user?.phone || ''
+          },
+          theme: {
+            color: '#0f766e'
+          },
+          modal: {
+            ondismiss: function () {
+              setLoading(false);
+              toast.error('Payment cancelled. You can retry paying from your track order dashboard.');
+              navigate(`/my-orders/${orderData._id}`);
+            }
+          }
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.open();
+        return;
+      }
+
+      // 3. Upload prescription if required for COD
       if (hasRxItems && prescriptionFile) {
         const formData = new FormData();
         formData.append('orderId', orderData._id);
@@ -223,7 +321,7 @@ export default function Checkout() {
         }
       }
 
-      // Success transition
+      // Success transition for COD
       setPlacedOrder(orderData);
       clearCart();
       setStep(4);
@@ -626,25 +724,28 @@ export default function Checkout() {
                     </div>
                   </label>
 
-                  {/* Online Razorpay Placeholder */}
-                  <div className="p-4 border border-gray-250 bg-gray-50 opacity-60 rounded-xl cursor-not-allowed select-none relative">
+                  {/* Online Razorpay */}
+                  <label className={`block p-4 border rounded-xl cursor-pointer transition-all ${
+                    paymentMethod === 'razorpay'
+                      ? 'border-teal-500 bg-teal-50/10 text-teal-800 font-bold'
+                      : 'border-gray-250 bg-white text-gray-500'
+                  }`}>
                     <div className="flex items-start gap-3">
                       <input
                         type="radio"
-                        disabled
-                        className="text-gray-300 focus:ring-gray-300 mt-0.5"
+                        name="payment_select"
+                        checked={paymentMethod === 'razorpay'}
+                        onChange={() => setPaymentMethod('razorpay')}
+                        className="text-teal-600 focus:ring-teal-500 mt-0.5"
                       />
                       <div className="text-xs">
-                        <p className="font-extrabold uppercase tracking-wide text-gray-500">Pay Online via UPI/Card</p>
+                        <p className="font-extrabold uppercase tracking-wide">Pay Online via UPI/Card</p>
                         <p className="text-[10px] text-gray-400 font-medium leading-normal mt-0.5">
-                          Online checkout is currently locked.
+                          Pay instantly and securely using Razorpay (Cards, UPI, Netbanking).
                         </p>
-                        <span className="absolute top-3 right-3 text-[9px] font-black bg-gray-200 text-gray-500 px-2 py-0.5 rounded uppercase tracking-wider">
-                          COMING SOON
-                        </span>
                       </div>
                     </div>
-                  </div>
+                  </label>
                 </div>
 
                 {/* Summaries */}
@@ -674,7 +775,7 @@ export default function Checkout() {
                     </>
                   ) : (
                     <>
-                      Place COD Order ({formatCurrency(grandTotal)})
+                      {paymentMethod === 'razorpay' ? 'Pay & Place Order' : 'Place COD Order'} ({formatCurrency(grandTotal)})
                     </>
                   )}
                 </button>

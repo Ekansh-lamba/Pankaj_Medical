@@ -32,6 +32,7 @@ export default function OrderDetail() {
   const [reuploadFile, setReuploadFile] = useState(null);
   const [reuploadPreview, setReuploadPreview] = useState(null);
   const [uploadLoading, setUploadLoading] = useState(false);
+  const [downloading, setDownloading] = useState(false);
 
   const fetchOrderDetail = async () => {
     setLoading(true);
@@ -146,6 +147,24 @@ export default function OrderDetail() {
     }
   };
 
+  const handleDownloadInvoice = async () => {
+    setDownloading(true);
+    try {
+      const res = await api.get(`/api/orders/my-orders/${order._id}/invoice`);
+      if (res.data && res.data.success && res.data.url) {
+        window.open(res.data.url, '_blank');
+        toast.success('GST invoice downloaded successfully.');
+      } else {
+        toast.error('Failed to retrieve invoice download link.');
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('Error fetching invoice.');
+    } finally {
+      setDownloading(false);
+    }
+  };
+
   if (loading && !order) {
     return (
       <div className="py-20 text-center text-sm text-gray-400 flex flex-col items-center justify-center">
@@ -190,6 +209,24 @@ export default function OrderDetail() {
 
         {/* Action Header bar */}
         <div className="flex items-center gap-2">
+          {order.status !== 'pending_payment' && order.status !== 'payment_failed' && (
+            <button
+              onClick={handleDownloadInvoice}
+              disabled={downloading}
+              className="flex items-center gap-1 text-xs text-teal-700 bg-teal-50 hover:bg-teal-100 font-bold py-2 px-4 rounded-lg border border-teal-100 transition-colors disabled:opacity-50"
+            >
+              {downloading ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" /> Fetching...
+                </>
+              ) : (
+                <>
+                  <FileText className="w-3.5 h-3.5" /> Download Invoice
+                </>
+              )}
+            </button>
+          )}
+
           {isCancellable && (
             <button
               onClick={handleCancelOrder}

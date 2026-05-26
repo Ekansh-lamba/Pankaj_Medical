@@ -1,10 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { ShieldCheck, Truck, ClipboardList, Clock, Search } from 'lucide-react';
 
 const Home = () => {
   return (
     <div className="bg-white min-h-screen">
+      <Helmet>
+        <title>Pankaj Medical & General Stores — Online Pharmacy in Kanpur</title>
+        <meta name="description" content="Order genuine prescription medicines, OTC drugs, and wellness products online. Fast doorstep delivery inside Kanpur. GSTIN-compliant licensed pharmacy." />
+        <meta name="keywords" content="online pharmacy Kanpur, medicine delivery Kanpur, prescription medicines, Pankaj Medical" />
+        <meta property="og:title" content="Pankaj Medical & General Stores" />
+        <meta property="og:description" content="Your trusted neighborhood online pharmacy. Genuine medicines delivered fast in Kanpur." />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href="https://pankajmedical.in/" />
+      </Helmet>
       {/* Hero Section */}
       <section className="bg-teal-50 border-b border-teal-100 py-16 px-4 md:px-8">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">

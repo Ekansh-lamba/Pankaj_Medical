@@ -1,20 +1,24 @@
-# Dependecies
+# Dependencies
 node_modules/
 /client/node_modules/
 /server/node_modules/
 
-# Environment Variables
+# Environment Variables — never commit any .env file
 .env
+.env.*
+*.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
-*.env
-client/.env.development
-client/.env.production
 server/.env
+server/.env.*
 server/.env.development
 server/.env.production
+client/.env
+client/.env.*
+client/.env.development
+client/.env.production
 
 # IDEs and System
 .vscode/
@@ -29,11 +33,14 @@ Thumbs.db
 /server/dist/
 /server/build/
 
-# Recovery and prompt files
-ANTIGRAVITY_RECOVERY_PROMPT.md
-ANTIGRAVITY_PROMPT_PHASE2.md
-ANTIGRAVITY_PROMPT_PHASE3.md
-PANKAJ_MEDICAL_PROJECT_SPEC.md
-ANTHROPIC_PROMPT_PHASE1.md
+# Antigravity AI prompt, spec, and recovery files — never commit
+ANTIGRAVITY_*.md
+PANKAJ_MEDICAL_*.md
+ANTHROPIC_PROMPT_*.md
 *.prompt.md
 recovery*.md
+
+# One-time admin scripts — sensitive, should not be in source control
+server/create-indexes.js
+server/seed-settings.js
+server/activate-products.js

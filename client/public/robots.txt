@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+Allow: /products
+Allow: /products/
+
+# Block admin, staff, and auth routes from crawlers
+Disallow: /admin/
+Disallow: /staff/
+Disallow: /customer/
+Disallow: /checkout
+Disallow: /profile
+Disallow: /cart
+Disallow: /login
+Disallow: /signup
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /verify-email
+Disallow: /maintenance
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://pankajmedical.in/sitemap.xml

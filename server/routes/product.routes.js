@@ -66,7 +66,12 @@ router.put(
 router.put('/:id/substitutes', protect, requireRole(['admin']), productController.setSubstitutes);
 
 // Bulk operations
-router.put('/bulk-action',       protect, requireRole(['admin']), productController.bulkAction);
-router.put('/bulk-activate-all', protect, requireRole(['admin']), productController.bulkActivateAll);
+router.put('/bulk-action', protect, requireRole(['admin']), productController.bulkAction);
+router.put(
+  '/bulk-activate-all',
+  protect,
+  requireRole(['admin']),
+  productController.bulkActivateAll
+);
 
 module.exports = router;

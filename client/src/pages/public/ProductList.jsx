@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { AlertCircle, SlidersHorizontal, Loader2, ArrowRight } from 'lucide-react';
 import { useProducts } from '../../hooks/useProducts';
 import ProductCard from '../../components/shared/ProductCard';
@@ -58,6 +59,20 @@ export default function ProductList() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 md:px-6 py-8">
+      <Helmet>
+        <title>
+          {filters.q
+            ? `Search: "${filters.q}" — Pankaj Medical`
+            : filters.category
+            ? `${filters.category} Medicines — Pankaj Medical`
+            : 'Buy Medicines Online — Pankaj Medical Kanpur'}
+        </title>
+        <meta
+          name="description"
+          content="Browse thousands of prescription and OTC medicines. Fast delivery in Kanpur. GSTIN-compliant pharmacy with genuine stock."
+        />
+        <link rel="canonical" href="https://pankajmedical.in/products" />
+      </Helmet>
       {/* Category/Query Header Banner */}
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>

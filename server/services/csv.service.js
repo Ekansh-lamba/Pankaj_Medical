@@ -275,7 +275,10 @@ function parseAndValidatePurchaseOrderFile(buffer, filename = '') {
       // ── Supplier row ──────────────────────────────────────────────────────
       if (colA.startsWith('-')) {
         if (!currentProduct) {
-          errors.push({ row: i + 1, message: 'Supplier row found without a preceding product name row' });
+          errors.push({
+            row: i + 1,
+            message: 'Supplier row found without a preceding product name row'
+          });
           continue;
         }
 
@@ -284,33 +287,31 @@ function parseAndValidatePurchaseOrderFile(buffer, filename = '') {
         const parts = supplierText.split(/\s+/);
         const lastWord = parts[parts.length - 1];
         const gstin = /^[0-9A-Z]{15}$/i.test(lastWord) ? lastWord.toUpperCase() : '';
-        const supplierName = gstin
-          ? parts.slice(0, -1).join(' ').trim()
-          : supplierText;
+        const supplierName = gstin ? parts.slice(0, -1).join(' ').trim() : supplierText;
 
         // Column indices: E=4, F=5, G=6 (0-based)
-        const qty     = Math.round(parseFloat(row[4]) || 0);
-        const free    = Math.round(parseFloat(row[5]) || 0);
-        const netAmt  = parseFloat(row[6]) || 0;
+        const qty = Math.round(parseFloat(row[4]) || 0);
+        const free = Math.round(parseFloat(row[5]) || 0);
+        const netAmt = parseFloat(row[6]) || 0;
 
         const key = currentProduct.toLowerCase();
         if (productMap[key]) {
           // Accumulate quantities for the same product across multiple suppliers
           productMap[key].quantityPurchased += qty;
-          productMap[key].freeQuantity      += free;
-          productMap[key].netAmountPaid     += netAmt;
+          productMap[key].freeQuantity += free;
+          productMap[key].netAmountPaid += netAmt;
           // Append additional supplier names
           if (supplierName && !productMap[key].brand.includes(supplierName)) {
             productMap[key].brand += `, ${supplierName}`;
           }
         } else {
           productMap[key] = {
-            name:              currentProduct,
-            brand:             supplierName || 'Generic',
+            name: currentProduct,
+            brand: supplierName || 'Generic',
             gstin,
             quantityPurchased: qty,
-            freeQuantity:      free,
-            netAmountPaid:     netAmt
+            freeQuantity: free,
+            netAmountPaid: netAmt
           };
         }
 
@@ -329,10 +330,16 @@ function parseAndValidatePurchaseOrderFile(buffer, filename = '') {
     }
 
     // Convert map to flat array; filter out rows where total qty is 0
-    const validRows = Object.values(productMap).filter(r => r.quantityPurchased + r.freeQuantity > 0);
+    const validRows = Object.values(productMap).filter(
+      (r) => r.quantityPurchased + r.freeQuantity > 0
+    );
 
     if (validRows.length === 0 && errors.length === 0) {
-      errors.push({ row: 0, message: 'No valid product rows found. Check that the file is the correct billing software export format.' });
+      errors.push({
+        row: 0,
+        message:
+          'No valid product rows found. Check that the file is the correct billing software export format.'
+      });
     }
 
     return { validRows, errors };
@@ -351,16 +358,26 @@ function parseAndValidatePurchaseOrderFile(buffer, filename = '') {
   }
 
   const HEADER_MAPPINGS = {
-    name:         ['productname', 'name', 'prodname', 'product', 'item', 'itemname'],
-    supplier:     ['supplierpartyname', 'suppliername', 'partyname', 'supplier', 'party', 'supplierparty'],
-    gstin:        ['suppliergstin', 'gstin', 'suppliergst'],
-    quantity:     ['quantitypurchased', 'qtypurchased', 'quantity', 'qty', 'purchasedquantity'],
+    name: ['productname', 'name', 'prodname', 'product', 'item', 'itemname'],
+    supplier: [
+      'supplierpartyname',
+      'suppliername',
+      'partyname',
+      'supplier',
+      'party',
+      'supplierparty'
+    ],
+    gstin: ['suppliergstin', 'gstin', 'suppliergst'],
+    quantity: ['quantitypurchased', 'qtypurchased', 'quantity', 'qty', 'purchasedquantity'],
     freeQuantity: ['freequantity', 'freeqty'],
-    amountPaid:   ['netamountpaid', 'netamount', 'amountpaid', 'amount']
+    amountPaid: ['netamountpaid', 'netamount', 'amountpaid', 'amount']
   };
 
   function normalizeKey(key) {
-    return key.toString().toLowerCase().replace(/[^a-z0-9]/gi, '');
+    return key
+      .toString()
+      .toLowerCase()
+      .replace(/[^a-z0-9]/gi, '');
   }
 
   const csvValidRows = [];
@@ -371,7 +388,7 @@ function parseAndValidatePurchaseOrderFile(buffer, filename = '') {
 
     // Map raw column headers to standard keys
     const rowData = {};
-    Object.keys(record).forEach(key => {
+    Object.keys(record).forEach((key) => {
       const normKey = normalizeKey(key);
       for (const [stdKey, aliases] of Object.entries(HEADER_MAPPINGS)) {
         if (aliases.includes(normKey)) {
@@ -386,23 +403,35 @@ function parseAndValidatePurchaseOrderFile(buffer, filename = '') {
     }
 
     const supplier = rowData.supplier ? rowData.supplier.toString().trim() : 'Generic';
-    const gstin    = rowData.gstin    ? rowData.gstin.toString().trim()    : '';
+    const gstin = rowData.gstin ? rowData.gstin.toString().trim() : '';
 
     let quantity = 0;
     if (rowData.quantity !== undefined && rowData.quantity !== '') {
       quantity = parseInt(rowData.quantity, 10);
       if (isNaN(quantity) || quantity < 0) {
-        rowErrors.push({ row: rowNum, field: 'Quantity purchased', message: 'Must be a non-negative integer' });
+        rowErrors.push({
+          row: rowNum,
+          field: 'Quantity purchased',
+          message: 'Must be a non-negative integer'
+        });
       }
     } else {
-      rowErrors.push({ row: rowNum, field: 'Quantity purchased', message: 'Quantity purchased is required' });
+      rowErrors.push({
+        row: rowNum,
+        field: 'Quantity purchased',
+        message: 'Quantity purchased is required'
+      });
     }
 
     let freeQty = 0;
     if (rowData.freeQuantity !== undefined && rowData.freeQuantity !== '') {
       freeQty = parseInt(rowData.freeQuantity, 10);
       if (isNaN(freeQty) || freeQty < 0) {
-        rowErrors.push({ row: rowNum, field: 'Free quantity', message: 'Must be a non-negative integer' });
+        rowErrors.push({
+          row: rowNum,
+          field: 'Free quantity',
+          message: 'Must be a non-negative integer'
+        });
       }
     }
 
@@ -410,7 +439,11 @@ function parseAndValidatePurchaseOrderFile(buffer, filename = '') {
     if (rowData.amountPaid !== undefined && rowData.amountPaid !== '') {
       amountPaid = parseFloat(rowData.amountPaid);
       if (isNaN(amountPaid) || amountPaid < 0) {
-        rowErrors.push({ row: rowNum, field: 'Net amount paid', message: 'Must be a non-negative number' });
+        rowErrors.push({
+          row: rowNum,
+          field: 'Net amount paid',
+          message: 'Must be a non-negative number'
+        });
       }
     }
 
@@ -419,11 +452,11 @@ function parseAndValidatePurchaseOrderFile(buffer, filename = '') {
     } else {
       csvValidRows.push({
         name,
-        brand:             supplier,
+        brand: supplier,
         gstin,
         quantityPurchased: quantity,
-        freeQuantity:      freeQty,
-        netAmountPaid:     amountPaid
+        freeQuantity: freeQty,
+        netAmountPaid: amountPaid
       });
     }
   });

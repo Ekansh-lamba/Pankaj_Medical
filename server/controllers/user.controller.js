@@ -52,13 +52,18 @@ exports.updateProfile = async (req, res) => {
     }
 
     if (name) user.name = name;
-    
+
     if (phone !== undefined) {
       // Check if phone is already taken
       if (phone && phone !== user.phone) {
         const phoneExists = await User.findOne({ phone, isDeleted: false });
         if (phoneExists) {
-          return res.status(400).json({ success: false, message: 'Phone number already registered with another account' });
+          return res
+            .status(400)
+            .json({
+              success: false,
+              message: 'Phone number already registered with another account'
+            });
         }
       }
       user.phone = phone || undefined;
@@ -98,7 +103,12 @@ exports.addAddress = async (req, res) => {
   const { label, line1, line2, city, state, pinCode, isDefault } = req.body;
 
   if (!label || !line1 || !city || !state || !pinCode) {
-    return res.status(400).json({ success: false, message: 'Missing required address fields (label, line1, city, state, pinCode)' });
+    return res
+      .status(400)
+      .json({
+        success: false,
+        message: 'Missing required address fields (label, line1, city, state, pinCode)'
+      });
   }
 
   try {
@@ -110,7 +120,7 @@ exports.addAddress = async (req, res) => {
 
     // If marked as default, clear previous defaults first
     if (isDefault) {
-      user.addresses.forEach(addr => {
+      user.addresses.forEach((addr) => {
         addr.isDefault = false;
       });
     }
@@ -163,14 +173,14 @@ exports.deleteAddress = async (req, res) => {
     }
 
     const initialLength = user.addresses.length;
-    user.addresses = user.addresses.filter(addr => addr._id.toString() !== id);
+    user.addresses = user.addresses.filter((addr) => addr._id.toString() !== id);
 
     if (user.addresses.length === initialLength) {
       return res.status(404).json({ success: false, message: 'Address not found' });
     }
 
     // If we deleted the default address, set another one as default
-    if (user.addresses.length > 0 && !user.addresses.some(addr => addr.isDefault)) {
+    if (user.addresses.length > 0 && !user.addresses.some((addr) => addr.isDefault)) {
       user.addresses[0].isDefault = true;
     }
 
@@ -194,7 +204,9 @@ exports.changePassword = async (req, res) => {
   const { currentPassword, newPassword } = req.body;
 
   if (!currentPassword || !newPassword) {
-    return res.status(400).json({ success: false, message: 'Current and new passwords are required' });
+    return res
+      .status(400)
+      .json({ success: false, message: 'Current and new passwords are required' });
   }
 
   try {
@@ -204,9 +216,9 @@ exports.changePassword = async (req, res) => {
     }
 
     if (!user.passwordHash) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Social sign-in accounts cannot change password directly' 
+      return res.status(400).json({
+        success: false,
+        message: 'Social sign-in accounts cannot change password directly'
       });
     }
 
@@ -221,7 +233,9 @@ exports.changePassword = async (req, res) => {
     return res.status(200).json({ success: true, message: 'Password changed successfully' });
   } catch (err) {
     console.error('Change password error:', err);
-    return res.status(500).json({ success: false, message: 'Server error while resetting password' });
+    return res
+      .status(500)
+      .json({ success: false, message: 'Server error while resetting password' });
   }
 };
 
@@ -246,7 +260,7 @@ exports.updateAddress = async (req, res) => {
 
     // If marked as default, clear other defaults first
     if (isDefault) {
-      user.addresses.forEach(addr => {
+      user.addresses.forEach((addr) => {
         addr.isDefault = false;
       });
     }
@@ -261,7 +275,7 @@ exports.updateAddress = async (req, res) => {
     if (isDefault !== undefined) address.isDefault = Boolean(isDefault);
 
     // Ensure at least one default remains if we set isDefault to false
-    if (!user.addresses.some(addr => addr.isDefault) && user.addresses.length > 0) {
+    if (!user.addresses.some((addr) => addr.isDefault) && user.addresses.length > 0) {
       user.addresses[0].isDefault = true;
     }
 
@@ -294,4 +308,3 @@ exports.getProfile = async (req, res) => {
     return res.status(500).json({ success: false, message: 'Server error while fetching profile' });
   }
 };
-

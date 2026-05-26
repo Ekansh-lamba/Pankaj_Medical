@@ -12,6 +12,7 @@ import {
   FileText,
   Users,
   Settings,
+  ClipboardList,
   Menu,
   X,
 } from 'lucide-react';
@@ -24,8 +25,9 @@ const NAV_ITEMS = [
   { label: 'Expiry',        path: '/admin/expiry',          icon: Clock,           live: true  },
   { label: 'Orders',        path: '/admin/orders',          icon: ShoppingCart,    live: true, phase: 3 },
   { label: 'Prescriptions', path: '/admin/prescriptions',   icon: FileText,        live: true, phase: 3 },
-  { label: 'Staff',         path: '/admin/staff',           icon: Users,           live: false, phase: 5 },
-  { label: 'Settings',      path: '/admin/settings',        icon: Settings,        live: false, phase: 5 },
+  { label: 'Staff',         path: '/admin/staff',           icon: Users,           live: true },
+  { label: 'Settings',      path: '/admin/settings',        icon: Settings,        live: true },
+  { label: 'Audit Logs',    path: '/admin/audit-logs',      icon: ClipboardList,   live: true },
 ];
 
 const AdminLayout = ({ children }) => {

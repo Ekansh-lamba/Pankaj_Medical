@@ -61,7 +61,8 @@ exports.getPublicSettings = async (req, res) => {
         workingHours: settings.workingHours,
         pharmacyPhone: settings.pharmacyPhone,
         pharmacyEmail: settings.pharmacyEmail,
-        maintenanceMode: settings.maintenanceMode
+        maintenanceMode: settings.maintenanceMode,
+        autoOffers: settings.autoOffers
       }
     });
   } catch (err) {
@@ -94,7 +95,8 @@ exports.updateAdminSettings = async (req, res) => {
       'estimatedDeliveryHours',
       'pharmacyPhone',
       'pharmacyEmail',
-      'maintenanceMode'
+      'maintenanceMode',
+      'autoOffers'
     ];
 
     allowedFields.forEach((field) => {

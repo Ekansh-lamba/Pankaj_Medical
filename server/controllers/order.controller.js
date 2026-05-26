@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Order = require('../models/Order');
 const Product = require('../models/Product');
 const Settings = require('../models/Settings');
+const Coupon = require('../models/Coupon');
 const Notification = require('../models/Notification');
 const AuditLog = require('../models/AuditLog');
 const Cart = require('../models/Cart');
@@ -58,7 +59,7 @@ const createNotification = async (recipientId, type, title, message, link) => {
 
 // POST /api/orders — place order
 exports.placeOrder = async (req, res) => {
-  const { deliveryType, deliveryAddress, items, paymentMethod } = req.body;
+  const { deliveryType, deliveryAddress, items, paymentMethod, couponCode } = req.body;
 
   if (!deliveryType || !items || !Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ success: false, message: 'Missing required order fields' });
@@ -99,12 +100,10 @@ exports.placeOrder = async (req, res) => {
       if (!product || !product.isActive || product.isHidden) {
         // Rollback reserved items if any
         await rollbackStock(reservedItems);
-        return res
-          .status(400)
-          .json({
-            success: false,
-            message: `Medicine "${orderItem.name || 'Unknown'}" is not available`
-          });
+        return res.status(400).json({
+          success: false,
+          message: `Medicine "${orderItem.name || 'Unknown'}" is not available`
+        });
       }
 
       const requestedQty = parseInt(orderItem.quantity, 10);
@@ -118,12 +117,10 @@ exports.placeOrder = async (req, res) => {
       const maxLimit = isRx ? 2 : 10;
       if (requestedQty > maxLimit) {
         await rollbackStock(reservedItems);
-        return res
-          .status(400)
-          .json({
-            success: false,
-            message: `Exceeded maximum units of ${maxLimit} for ${product.name}`
-          });
+        return res.status(400).json({
+          success: false,
+          message: `Exceeded maximum units of ${maxLimit} for ${product.name}`
+        });
       }
 
       // Atomic stock decrement verification
@@ -164,9 +161,100 @@ exports.placeOrder = async (req, res) => {
       });
     }
 
-    // 4. Grand Total & Delivery Fees Calculations
-    const deliveryCharge = subtotal >= settings.freeDeliveryThreshold ? 0 : settings.deliveryCharge;
-    const grandTotal = subtotal + deliveryCharge;
+    // 4. Calculate Auto-Offers
+    let autoOfferDiscount = 0;
+    if (settings.autoOffers && settings.autoOffers.length > 0) {
+      const activeOffers = settings.autoOffers.filter(
+        (o) => o.isActive && subtotal >= o.minOrderValue
+      );
+      let bestDiscount = 0;
+
+      for (const offer of activeOffers) {
+        let disc = 0;
+        if (offer.discountType === 'percentage') {
+          disc = subtotal * (offer.discountValue / 100);
+          if (offer.maxDiscount && disc > offer.maxDiscount) {
+            disc = offer.maxDiscount;
+          }
+        } else if (offer.discountType === 'flat') {
+          disc = Math.min(offer.discountValue, subtotal);
+        }
+
+        if (disc > bestDiscount) {
+          bestDiscount = disc;
+        }
+      }
+      autoOfferDiscount = bestDiscount;
+    }
+
+    // 5. Calculate Coupon Discounts
+    let couponDiscount = 0;
+    let freeDeliveryCoupon = false;
+    let couponDoc = null;
+
+    if (couponCode) {
+      couponDoc = await Coupon.findOne({ code: couponCode.toUpperCase() });
+      if (!couponDoc) {
+        await rollbackStock(reservedItems);
+        return res.status(400).json({ success: false, message: 'Invalid coupon code.' });
+      }
+      if (!couponDoc.isActive) {
+        await rollbackStock(reservedItems);
+        return res.status(400).json({ success: false, message: 'This coupon is inactive.' });
+      }
+      if (couponDoc.expiryDate && new Date(couponDoc.expiryDate) < new Date()) {
+        await rollbackStock(reservedItems);
+        return res.status(400).json({ success: false, message: 'This coupon has expired.' });
+      }
+      if (couponDoc.totalUsageLimit && couponDoc.usedCount >= couponDoc.totalUsageLimit) {
+        await rollbackStock(reservedItems);
+        return res
+          .status(400)
+          .json({ success: false, message: 'This coupon has reached its usage limit.' });
+      }
+      const userUsageCount = couponDoc.usedBy.filter(
+        (id) => id.toString() === req.user._id.toString()
+      ).length;
+      if (userUsageCount >= couponDoc.perCustomerLimit) {
+        await rollbackStock(reservedItems);
+        return res
+          .status(400)
+          .json({ success: false, message: 'You have already used this coupon code.' });
+      }
+      if (subtotal < couponDoc.minOrderValue) {
+        await rollbackStock(reservedItems);
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message: `Minimum order for coupon is ₹${couponDoc.minOrderValue}.`
+          });
+      }
+
+      if (couponDoc.type === 'percentage') {
+        couponDiscount = subtotal * (couponDoc.value / 100);
+        if (couponDoc.maxDiscount && couponDiscount > couponDoc.maxDiscount) {
+          couponDiscount = couponDoc.maxDiscount;
+        }
+      } else if (couponDoc.type === 'flat') {
+        couponDiscount = Math.min(couponDoc.value, subtotal);
+      } else if (couponDoc.type === 'free_delivery') {
+        freeDeliveryCoupon = true;
+      }
+    }
+
+    // Combine discounts (make sure we don't discount more than the subtotal)
+    let totalDiscount = autoOfferDiscount + couponDiscount;
+    if (totalDiscount > subtotal) {
+      totalDiscount = subtotal;
+    }
+
+    // 6. Grand Total & Delivery Fees Calculations
+    let deliveryCharge = subtotal >= settings.freeDeliveryThreshold ? 0 : settings.deliveryCharge;
+    if (freeDeliveryCoupon) {
+      deliveryCharge = 0;
+    }
+    const grandTotal = subtotal - totalDiscount + deliveryCharge;
 
     // Build items snapshots
     const orderItemsSnapshots = [];
@@ -204,6 +292,9 @@ exports.placeOrder = async (req, res) => {
       deliveryAddress: deliveryType === 'delivery' ? deliveryAddress : undefined,
       deliveryCharge,
       subtotal,
+      discount: totalDiscount,
+      couponCode: couponCode ? couponCode.toUpperCase() : undefined,
+      couponDiscount,
       gstTotal,
       grandTotal,
       payment: {
@@ -219,6 +310,48 @@ exports.placeOrder = async (req, res) => {
     });
 
     await order.save();
+
+    // Increment coupon usage if used
+    if (couponDoc) {
+      couponDoc.usedCount += 1;
+      couponDoc.usedBy.push(req.user._id);
+      await couponDoc.save();
+    }
+
+    // Trigger invoice generation immediately if COD order is confirmed directly
+    if (status === 'confirmed') {
+      try {
+        const invoiceService = require('../services/invoice.service');
+        Order.findById(order._id)
+          .populate('customer')
+          .then((populatedOrder) => {
+            if (populatedOrder) {
+              invoiceService
+                .generateAndUploadInvoice(populatedOrder)
+                .then(async (url) => {
+                  order.invoiceUrl = url;
+                  await order.save();
+                  console.log(
+                    `[Invoice] Automatically created invoice for COD order ${order.orderNumber}`
+                  );
+                })
+                .catch((err) => console.error('Invoice auto-creation failed for COD order:', err));
+            }
+          });
+      } catch (invoiceErr) {
+        console.error('Invoice auto-creation bootstrap failed:', invoiceErr);
+      }
+    }
+
+    // Send confirmation email for COD orders immediately
+    if (paymentMethod === 'cod') {
+      try {
+        const emailService = require('../services/email.service');
+        await emailService.sendOrderConfirmed(req.user.email, req.user.name, order);
+      } catch (emailErr) {
+        console.error('Email dispatch failed on place COD order:', emailErr);
+      }
+    }
 
     // 6. Clear user cart since checkout is successful
     const userCart = await Cart.findOne({ customer: req.user._id });
@@ -539,7 +672,7 @@ exports.updateOrderStatus = async (req, res) => {
   }
 
   try {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id).populate('customer');
     if (!order) {
       return res.status(404).json({ success: false, message: 'Order not found' });
     }
@@ -573,6 +706,35 @@ exports.updateOrderStatus = async (req, res) => {
     }
 
     await order.save();
+
+    // Trigger invoice generation immediately if staff confirms a pending order
+    if (status === 'confirmed') {
+      try {
+        const invoiceService = require('../services/invoice.service');
+        invoiceService
+          .generateAndUploadInvoice(order)
+          .then(async (url) => {
+            order.invoiceUrl = url;
+            await order.save();
+            console.log(
+              `[Invoice] Automatically created invoice for confirmed order ${order.orderNumber}`
+            );
+          })
+          .catch((err) => console.error('Invoice auto-creation failed for confirmed order:', err));
+      } catch (invoiceErr) {
+        console.error('Invoice auto-creation bootstrap failed on status update:', invoiceErr);
+      }
+    }
+
+    // Send shipped email
+    if (status === 'shipped') {
+      try {
+        const emailService = require('../services/email.service');
+        await emailService.sendOrderShipped(order.customer.email, order.customer.name, order);
+      } catch (emailErr) {
+        console.error('Email dispatch failed on order shipped status update:', emailErr);
+      }
+    }
 
     // Customer notification
     await createNotification(
@@ -641,12 +803,10 @@ exports.handleReturnAction = async (req, res) => {
     }
 
     if (order.status !== 'return_requested') {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: 'Return action is only allowed for return_requested orders'
-        });
+      return res.status(400).json({
+        success: false,
+        message: 'Return action is only allowed for return_requested orders'
+      });
     }
 
     const previousStatus = order.status;
@@ -691,5 +851,35 @@ exports.handleReturnAction = async (req, res) => {
     return res
       .status(500)
       .json({ success: false, message: 'Server error during return validation' });
+  }
+};
+
+/**
+ * GET /api/orders/my-orders/:id/invoice
+ * Generates (if missing) and returns the GST invoice PDF URL.
+ */
+exports.downloadInvoice = async (req, res) => {
+  try {
+    const order = await Order.findOne({ _id: req.params.id, customer: req.user._id }).populate(
+      'customer'
+    );
+    if (!order) {
+      return res.status(404).json({ success: false, message: 'Order not found.' });
+    }
+
+    if (order.invoiceUrl) {
+      return res.json({ success: true, url: order.invoiceUrl });
+    }
+
+    // Generate on-the-fly
+    const invoiceService = require('../services/invoice.service');
+    const url = await invoiceService.generateAndUploadInvoice(order);
+    order.invoiceUrl = url;
+    await order.save();
+
+    return res.json({ success: true, url });
+  } catch (error) {
+    console.error('Invoice download handler failed:', error);
+    return res.status(500).json({ success: false, message: 'Failed to retrieve invoice.' });
   }
 };

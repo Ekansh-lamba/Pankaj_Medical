@@ -109,10 +109,15 @@ export default function Products() {
   const runBulkAction = async (action) => {
     const ids = [...selectedIds];
     if (ids.length === 0) return;
+
+    if (action === 'delete') {
+      if (!window.confirm(`Are you sure you want to permanently DELETE ${ids.length} selected product(s)?`)) return;
+    }
+
     setBulkLoading(true);
     setBulkDropOpen(false);
     try {
-      const res = await api.put('/api/products/bulk-action', { ids, action });
+      const res = await api.put('/api/admin/products/bulk-action', { ids, action });
       if (res.data?.success) {
         toast.success(res.data.message);
         fetchAdminProducts();
@@ -128,7 +133,7 @@ export default function Products() {
     if (!window.confirm('Activate ALL inactive products? This will make them visible in the customer store.')) return;
     setBulkLoading(true);
     try {
-      const res = await api.put('/api/products/bulk-activate-all');
+      const res = await api.put('/api/admin/products/bulk-activate');
       if (res.data?.success) {
         toast.success(res.data.message);
         fetchAdminProducts();
@@ -167,7 +172,7 @@ export default function Products() {
               className="flex items-center gap-1.5 text-xs py-2 px-4 font-bold rounded-lg border border-amber-400 bg-amber-50 text-amber-800 hover:bg-amber-100 transition-colors shadow-xs disabled:opacity-60"
             >
               <Zap className="w-3.5 h-3.5" />
-              Activate All Inactive ({inactiveCount})
+              Activate All Inactive Products ({inactiveCount})
             </button>
           )}
           <Link
@@ -268,9 +273,15 @@ export default function Products() {
                 </button>
                 <button
                   onClick={() => runBulkAction('deactivate')}
-                  className="w-full text-left px-4 py-2.5 text-xs font-semibold text-red-600 hover:bg-red-50 transition-colors border-t border-gray-100"
+                  className="w-full text-left px-4 py-2.5 text-xs font-semibold text-red-650 hover:bg-red-50 transition-colors border-t border-gray-100"
                 >
                   ✗ Deactivate Selected
+                </button>
+                <button
+                  onClick={() => runBulkAction('delete')}
+                  className="w-full text-left px-4 py-2.5 text-xs font-semibold text-red-700 hover:bg-red-50 transition-colors border-t border-gray-100"
+                >
+                  🗑 Delete Selected
                 </button>
               </div>
             )}

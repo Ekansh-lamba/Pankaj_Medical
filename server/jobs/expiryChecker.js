@@ -1,7 +1,7 @@
 const cron = require('node-cron');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
-const { sendLowStockAlert } = require('../services/email.service');
+const { sendLowStockAlert, sendDailySummary } = require('../services/email.service');
 
 /**
  * Sweeps stock items for date boundaries and quantity thresholds
@@ -96,17 +96,79 @@ const runHourlyPrescriptionAutoCancel = async () => {
   }
 };
 
+/**
+ * Compiles and emails a daily operations summary to the Admin at 9:00 AM IST (3:30 AM UTC)
+ */
+const runDailySummaryReport = async () => {
+  try {
+    console.log('[Cron Job] Compiling Daily Operations Summary Report...');
+
+    // Yesterday's date boundaries
+    const now = new Date();
+    const yesterdayStart = new Date(now);
+    yesterdayStart.setDate(now.getDate() - 1);
+    yesterdayStart.setHours(0, 0, 0, 0);
+
+    const yesterdayEnd = new Date(now);
+    yesterdayEnd.setDate(now.getDate() - 1);
+    yesterdayEnd.setHours(23, 59, 59, 999);
+
+    // Yesterday's Revenue
+    const yesterdayPaidOrders = await Order.find({
+      'payment.status': 'paid',
+      createdAt: { $gte: yesterdayStart, $lte: yesterdayEnd }
+    });
+
+    let yesterdayRevenue = 0;
+    yesterdayPaidOrders.forEach((o) => {
+      yesterdayRevenue += o.grandTotal;
+    });
+
+    // Pending prescription reviews
+    const pendingPrescriptions = await Order.countDocuments({
+      status: 'pending_approval'
+    });
+
+    // Low stock count
+    const lowStockCount = await Product.countDocuments({
+      $expr: { $lte: ['$stock', '$lowStockThreshold'] },
+      isActive: true
+    });
+
+    const stats = {
+      yesterdayRevenue,
+      orderCount: yesterdayPaidOrders.length,
+      pendingPrescriptions,
+      lowStockCount
+    };
+
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@pankajmedical.com';
+    await sendDailySummary(adminEmail, stats);
+    console.log('[Cron Job] Daily Operations Summary email sent successfully.');
+  } catch (err) {
+    console.error('[Cron Job] Daily Operations Summary compilation failed:', err);
+  }
+};
+
 // Start all cron schedulers
 const startCron = () => {
   // Daily cron job running at 00:00 IST (18:30 UTC)
   cron.schedule('30 18 * * *', runExpiryAndStockCheck);
 
+  // Daily operations summary email at 09:00 AM IST (03:30 AM UTC)
+  cron.schedule('30 3 * * *', runDailySummaryReport);
+
   // Hourly cron job running at the beginning of each hour
   cron.schedule('0 * * * *', runHourlyPrescriptionAutoCancel);
 
   console.log(
-    '[Cron Job] Automated schedulers successfully initialized (Daily Expiry Sweeps & Hourly Stale Prescriptions Lock-releases).'
+    '[Cron Job] Automated schedulers successfully initialized (Daily Expiry Sweeps, Hourly Stale Prescriptions Lock-releases, and 9:00 AM Daily Summary).'
   );
 };
 
-module.exports = { startCron, runExpiryAndStockCheck, runHourlyPrescriptionAutoCancel };
+module.exports = {
+  startCron,
+  runExpiryAndStockCheck,
+  runHourlyPrescriptionAutoCancel,
+  runDailySummaryReport
+};

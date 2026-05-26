@@ -54,6 +54,10 @@ import NotificationBell from './components/shared/NotificationBell';
 import CustomerDashboard from './pages/customer/CustomerDashboard';
 import StaffDashboard from './pages/staff/StaffDashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import StaffManagement from './pages/admin/StaffManagement';
+import StoreSettings from './pages/admin/StoreSettings';
+import AuditLogs from './pages/admin/AuditLogs';
+import Maintenance from './pages/Maintenance';
 
 // Layout component wrapping public pages
 const Layout = ({ children }) => {
@@ -275,8 +279,14 @@ const App = () => {
               <Route path="/admin/expiry" element={<ExpiryPage />} />
               <Route path="/admin/orders" element={<OrderQueue />} />
               <Route path="/admin/prescriptions" element={<PrescriptionReview />} />
+              <Route path="/admin/staff" element={<StaffManagement />} />
+              <Route path="/admin/settings" element={<StoreSettings />} />
+              <Route path="/admin/audit-logs" element={<AuditLogs />} />
             </Route>
           </Route>
+
+          {/* Maintenance Page */}
+          <Route path="/maintenance" element={<Maintenance />} />
 
           {/* Catch-all Redirect */}
           <Route

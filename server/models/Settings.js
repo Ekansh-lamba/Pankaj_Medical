@@ -13,7 +13,17 @@ const SettingsSchema = new mongoose.Schema(
     estimatedDeliveryHours: { type: Number, default: 24 },
     pharmacyPhone: { type: String },
     pharmacyEmail: { type: String },
-    maintenanceMode: { type: Boolean, default: false }
+    maintenanceMode: { type: Boolean, default: false },
+    autoOffers: [
+      {
+        isActive: { type: Boolean, default: true },
+        title: { type: String, required: true },
+        minOrderValue: { type: Number, default: 0 },
+        discountType: { type: String, enum: ['flat', 'percentage'], default: 'percentage' },
+        discountValue: { type: Number, required: true },
+        maxDiscount: { type: Number }
+      }
+    ]
   },
   { timestamps: true }
 );

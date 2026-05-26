@@ -47,9 +47,12 @@ const productValidationSchema = z
     }, z.date().optional()),
     batchNumber: z.string().optional().nullable(),
     hsnCode: z.string().optional().nullable(),
-    gstRate: z.coerce.number().default(12).refine(val => [5, 12, 18].includes(val), {
-      message: 'GST rate must be 5, 12, or 18'
-    }),
+    gstRate: z.coerce
+      .number()
+      .default(12)
+      .refine((val) => [5, 12, 18].includes(val), {
+        message: 'GST rate must be 5, 12, or 18'
+      }),
     images: z.array(z.string()).max(3, 'Max 3 images allowed').optional().default([]),
     description: z.string().optional().nullable(),
     sideEffects: z.string().optional().nullable(),
@@ -617,32 +620,33 @@ exports.importCSV = async (req, res) => {
       // ── 1. Preview Mode ───────────────────────────────────────────────────
       if (previewMode) {
         // Single batch lookup instead of N individual findOnes
-        const names = validRows.map(r => r.name);
-        const existingDocs = await Product.find(
-          {},
-          { name: 1 }
-        ).collation({ locale: 'en', strength: 2 }); // case-insensitive
+        const names = validRows.map((r) => r.name);
+        const existingDocs = await Product.find({}, { name: 1 }).collation({
+          locale: 'en',
+          strength: 2
+        }); // case-insensitive
 
-        const existingNameSet = new Set(existingDocs.map(d => d.name.toLowerCase()));
+        const existingNameSet = new Set(existingDocs.map((d) => d.name.toLowerCase()));
         let wouldBeNew = 0;
         let wouldBeUpdated = 0;
-        names.forEach(n => {
+        names.forEach((n) => {
           if (existingNameSet.has(n.toLowerCase())) wouldBeUpdated++;
           else wouldBeNew++;
         });
 
-        const warningMsg = wouldBeNew > 0
-          ? `Purchase Order Import will create ${wouldBeNew} new product(s) as INACTIVE with MRP and selling price set to ₹1.00 (placeholder). Please update pricing in the Products page and activate them before they appear in the customer store.`
-          : null;
+        const warningMsg =
+          wouldBeNew > 0
+            ? `Purchase Order Import will create ${wouldBeNew} new product(s) as INACTIVE with MRP and selling price set to ₹1.00 (placeholder). Please update pricing in the Products page and activate them before they appear in the customer store.`
+            : null;
 
         return sendSuccess(res, {
-          previewRows:  validRows.slice(0, 10),
-          totalRows:    validRows.length,
+          previewRows: validRows.slice(0, 10),
+          totalRows: validRows.length,
           errors,
-          newCount:     wouldBeNew,
+          newCount: wouldBeNew,
           updatedCount: wouldBeUpdated,
-          errorCount:   errors.length,
-          warning:      warningMsg
+          errorCount: errors.length,
+          warning: warningMsg
         });
       }
 
@@ -650,11 +654,11 @@ exports.importCSV = async (req, res) => {
       // Build one bulkWrite operation per product row.
       // $inc increments stock for existing docs and seeds it for new ones.
       // $setOnInsert only fires on upsert (new doc) — never overwrites existing fields.
-      const bulkOps = validRows.map(row => {
-        const totalQty  = row.quantityPurchased + row.freeQuantity;
-        const escaped   = row.name.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+      const bulkOps = validRows.map((row) => {
+        const totalQty = row.quantityPurchased + row.freeQuantity;
+        const escaped = row.name.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
         // Generate unique slug: base + short random suffix avoids collision queries
-        const baseSlug  = slugify(row.name, { lower: true, strict: true });
+        const baseSlug = slugify(row.name, { lower: true, strict: true });
         const uniqueSlug = `${baseSlug}-${Math.random().toString(36).substring(2, 7)}`;
 
         return {
@@ -663,19 +667,19 @@ exports.importCSV = async (req, res) => {
             update: {
               $inc: { stock: totalQty },
               $setOnInsert: {
-                name:        row.name,
-                brand:       row.brand || 'Generic',
-                slug:        uniqueSlug,
-                category:    'Tablets & Capsules',
-                form:        detectFormFromName(row.name),
-                mrp:         1.00, // Placeholder — admin must set correct price before activating
-                sellingPrice: 1.00,
-                discount:    0,
-                gstRate:     12,
-                rxType:      'OTC',
-                isActive:    false,
-                isHidden:    false,
-                createdBy:   req.user._id
+                name: row.name,
+                brand: row.brand || 'Generic',
+                slug: uniqueSlug,
+                category: 'Tablets & Capsules',
+                form: detectFormFromName(row.name),
+                mrp: 1.0, // Placeholder — admin must set correct price before activating
+                sellingPrice: 1.0,
+                discount: 0,
+                gstRate: 12,
+                rxType: 'OTC',
+                isActive: false,
+                isHidden: false,
+                createdBy: req.user._id
               }
             },
             upsert: true
@@ -685,19 +689,20 @@ exports.importCSV = async (req, res) => {
 
       const bulkResult = await Product.bulkWrite(bulkOps, { ordered: false });
 
-      const imported = bulkResult.upsertedCount  || 0;
-      const updated  = bulkResult.modifiedCount  || 0;
+      const imported = bulkResult.upsertedCount || 0;
+      const updated = bulkResult.modifiedCount || 0;
 
       await logAuditAction(req, 'po_bulk_import_completed', null, null, {
         importedCount: imported,
-        updatedCount:  updated,
-        skippedCount:  errors.length,
+        updatedCount: updated,
+        skippedCount: errors.length,
         totalProducts: validRows.length
       });
 
-      const finalWarning = imported > 0
-        ? `Import complete. Created ${imported} new product(s) with INACTIVE status and ₹1.00 placeholder pricing. Go to Admin → Products to set correct MRP and selling price before activating.`
-        : null;
+      const finalWarning =
+        imported > 0
+          ? `Import complete. Created ${imported} new product(s) with INACTIVE status and ₹1.00 placeholder pricing. Go to Admin → Products to set correct MRP and selling price before activating.`
+          : null;
 
       return sendSuccess(
         res,
@@ -832,30 +837,15 @@ exports.downloadCSVTemplate = async (req, res) => {
         'Free quantity',
         'Net amount paid'
       ];
-      const sampleRow1 = [
-        'PAN-D CAP',
-        'ALKEM',
-        '27AAAAA1111A1Z1',
-        '50',
-        '5',
-        '4500.00'
-      ];
-      const sampleRow2 = [
-        'ACILOC-150MG TAB',
-        'CADILA',
-        '27BBBBB2222B2Z2',
-        '100',
-        '10',
-        '1200.00'
-      ];
-      const csvContent = [
-        headers.join(','),
-        sampleRow1.join(','),
-        sampleRow2.join(',')
-      ].join('\n');
+      const sampleRow1 = ['PAN-D CAP', 'ALKEM', '27AAAAA1111A1Z1', '50', '5', '4500.00'];
+      const sampleRow2 = ['ACILOC-150MG TAB', 'CADILA', '27BBBBB2222B2Z2', '100', '10', '1200.00'];
+      const csvContent = [headers.join(','), sampleRow1.join(','), sampleRow2.join(',')].join('\n');
 
       res.setHeader('Content-Type', 'text/csv');
-      res.setHeader('Content-Disposition', 'attachment; filename=pankaj_purchase_order_template.csv');
+      res.setHeader(
+        'Content-Disposition',
+        'attachment; filename=pankaj_purchase_order_template.csv'
+      );
       return res.status(200).send(csvContent);
     }
 
@@ -974,25 +964,34 @@ exports.bulkAction = async (req, res) => {
     if (!Array.isArray(ids) || ids.length === 0) {
       return sendError(res, 'No product IDs provided.', 'VALIDATION_ERROR', 400);
     }
-    if (!['activate', 'deactivate'].includes(action)) {
-      return sendError(res, 'Action must be "activate" or "deactivate".', 'VALIDATION_ERROR', 400);
+    if (!['activate', 'deactivate', 'delete'].includes(action)) {
+      return sendError(
+        res,
+        'Action must be "activate", "deactivate", or "delete".',
+        'VALIDATION_ERROR',
+        400
+      );
     }
 
-    const isActive = action === 'activate';
-    const result = await Product.updateMany(
-      { _id: { $in: ids } },
-      { $set: { isActive } }
-    );
+    let result;
+    if (action === 'delete') {
+      result = await Product.deleteMany({ _id: { $in: ids } });
+    } else {
+      const isActive = action === 'activate';
+      result = await Product.updateMany({ _id: { $in: ids } }, { $set: { isActive } });
+    }
+
+    const count = action === 'delete' ? result.deletedCount : result.modifiedCount;
 
     await logAuditAction(req, `bulk_${action}`, null, null, {
-      affectedCount: result.modifiedCount,
+      affectedCount: count,
       ids
     });
 
     return sendSuccess(
       res,
-      { modifiedCount: result.modifiedCount },
-      `${result.modifiedCount} product(s) ${action}d successfully.`
+      { modifiedCount: count },
+      `${count} product(s) ${action}d successfully.`
     );
   } catch (error) {
     console.error('bulkAction error:', error);
@@ -1007,10 +1006,7 @@ exports.bulkAction = async (req, res) => {
  */
 exports.bulkActivateAll = async (req, res) => {
   try {
-    const result = await Product.updateMany(
-      { isActive: false },
-      { $set: { isActive: true } }
-    );
+    const result = await Product.updateMany({ isActive: false }, { $set: { isActive: true } });
 
     await logAuditAction(req, 'bulk_activate_all_inactive', null, null, {
       activatedCount: result.modifiedCount
@@ -1026,4 +1022,3 @@ exports.bulkActivateAll = async (req, res) => {
     return sendError(res, 'Failed to activate all inactive products.', 'SERVER_ERROR', 500);
   }
 };
-

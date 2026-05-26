@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { AlertCircle, ChevronRight, ShoppingCart, Info, Activity, ShieldAlert, ArrowLeft } from 'lucide-react';
 import api from '../../services/api';
 import RxBadge from '../../components/shared/RxBadge';
@@ -123,6 +124,16 @@ export default function ProductDetail() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 md:px-6 py-8">
+      <Helmet>
+        <title>{name ? `${name} — Buy Online — Pankaj Medical` : 'Medicine Details — Pankaj Medical'}</title>
+        <meta
+          name="description"
+          content={`Buy ${name || 'medicine'} online from Pankaj Medical, Kanpur. Genuine stock, fast doorstep delivery. ${manufacturer ? `Manufactured by ${manufacturer}.` : ''}`}
+        />
+        {product?.slug && <link rel="canonical" href={`https://pankajmedical.in/products/${product.slug}`} />}
+        {images?.[0] && <meta property="og:image" content={images[0]} />}
+        <meta property="og:type" content="product" />
+      </Helmet>
       {/* Breadcrumb Navigation */}
       <nav className="flex items-center gap-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-6">
         <Link to="/" className="hover:text-teal-600 transition-colors">Home</Link>
