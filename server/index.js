@@ -12,7 +12,6 @@ const isProd = process.env.NODE_ENV === 'production';
 const envFile = isProd ? '.env.production' : '.env.development';
 dotenv.config({ path: envFile });
 
-
 const app = express();
 
 // Establish Mongoose Database Connection
@@ -63,9 +62,10 @@ app.use('/api/cart', require('./routes/cart.routes'));
 app.use('/api/admin', require('./routes/admin.routes'));
 app.use('/api/staff', require('./routes/staff.routes'));
 app.use('/api/notifications', require('./routes/notification.routes'));
+app.use('/api/settings', require('./routes/settings.routes'));
 
 // Fallback Route for Undefined Paths
-app.use((req, res, next) => {
+app.use((req, res) => {
   res.status(404).json({
     success: false,
     message: 'Requested API endpoint does not exist.',
@@ -74,7 +74,7 @@ app.use((req, res, next) => {
 });
 
 // Centralized Error-handling Middleware
-app.use((err, req, res, next) => {
+app.use((err, req, res, _next) => {
   console.error('Centralized Server Error handler caught:', err);
   res.status(err.status || 500).json({
     success: false,

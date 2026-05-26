@@ -1,10 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const { protect } = require('../middleware/auth.middleware');
+const {
+  getNotifications,
+  markAsRead,
+  markAllAsRead,
+  getUnreadCount
+} = require('../controllers/notification.controller');
 
-// Notification routes skeleton (Full notification dispatch implementation deferred to Phase 4)
-router.get('/', protect, (req, res) => {
-  res.json({ success: true, message: 'Notifications list placeholder' });
-});
+// All routes require auth
+router.use(protect);
+
+router.get('/', getNotifications);
+router.get('/unread-count', getUnreadCount);
+router.put('/read-all', markAllAsRead);
+router.put('/:id/read', markAsRead);
 
 module.exports = router;

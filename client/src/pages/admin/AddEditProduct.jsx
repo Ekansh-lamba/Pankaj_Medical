@@ -636,6 +636,7 @@ export default function AddEditProduct() {
               </label>
               <select
                 {...register('gstRate')}
+                onChange={e => setValue('gstRate', parseInt(e.target.value))}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
               >
                 <option value={5}>5% (Basic Medicines)</option>

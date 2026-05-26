@@ -22,8 +22,8 @@ const NAV_ITEMS = [
   { label: 'Products',      path: '/admin/products',        icon: Pill,            live: true  },
   { label: 'Import CSV',    path: '/admin/products/import', icon: FileUp,          live: true  },
   { label: 'Expiry',        path: '/admin/expiry',          icon: Clock,           live: true  },
-  { label: 'Orders',        path: '/admin/orders',          icon: ShoppingCart,    live: false, phase: 3 },
-  { label: 'Prescriptions', path: '/admin/prescriptions',   icon: FileText,        live: false, phase: 3 },
+  { label: 'Orders',        path: '/admin/orders',          icon: ShoppingCart,    live: true, phase: 3 },
+  { label: 'Prescriptions', path: '/admin/prescriptions',   icon: FileText,        live: true, phase: 3 },
   { label: 'Staff',         path: '/admin/staff',           icon: Users,           live: false, phase: 5 },
   { label: 'Settings',      path: '/admin/settings',        icon: Settings,        live: false, phase: 5 },
 ];

@@ -7,7 +7,8 @@ import {
   useLocation
 } from 'react-router-dom';
 import { useAuthStore } from './store/authStore';
-import { Landmark, LogIn, LayoutDashboard } from 'lucide-react';
+import { Landmark, LogIn, LayoutDashboard, ShoppingBag } from 'lucide-react';
+import { Toaster } from 'react-hot-toast';
 
 // Common components
 import ProtectedRoute from './components/common/ProtectedRoute';
@@ -15,6 +16,7 @@ import ProtectedRoute from './components/common/ProtectedRoute';
 // Layouts
 import AdminLayout from './components/layout/AdminLayout';
 import StaffLayout from './components/layout/StaffLayout';
+import CustomerLayout from './components/layout/CustomerLayout';
 
 // Page components
 import Home from './pages/public/Home';
@@ -35,6 +37,19 @@ import AddEditProduct from './pages/admin/AddEditProduct';
 import CsvImport from './pages/admin/CsvImport';
 import ExpiryPage from './pages/staff/ExpiryPage';
 
+// Phase 3 components
+import Cart from './pages/customer/Cart';
+import Checkout from './pages/customer/Checkout';
+import OrderHistory from './pages/customer/OrderHistory';
+import OrderDetail from './pages/customer/OrderDetail';
+import Profile from './pages/customer/Profile';
+import OrderQueue from './pages/staff/OrderQueue';
+import PrescriptionReview from './pages/staff/PrescriptionReview';
+
+// Shared UI & Hooks
+import { useCart } from './hooks/useCart';
+import NotificationBell from './components/shared/NotificationBell';
+
 // Protected Dashboard components
 import CustomerDashboard from './pages/customer/CustomerDashboard';
 import StaffDashboard from './pages/staff/StaffDashboard';
@@ -43,11 +58,21 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 // Layout component wrapping public pages
 const Layout = ({ children }) => {
   const { isAuthenticated, user, logoutUser } = useAuthStore();
+  const { itemCount, fetchCart } = useCart();
   const location = useLocation();
 
-  // Hide public header/footer inside dashboard, admin, and staff routes
+  // Load cart once on layout mount
+  useEffect(() => {
+    fetchCart();
+  }, [isAuthenticated]);
+
+  // Hide public header/footer inside all portal routes (admin, staff, customer)
   const isPortal = location.pathname.startsWith('/admin') ||
                    location.pathname.startsWith('/staff') ||
+                   location.pathname.startsWith('/customer') ||
+                   location.pathname.startsWith('/my-orders') ||
+                   location.pathname.startsWith('/checkout') ||
+                   location.pathname.startsWith('/profile') ||
                    location.pathname.includes('/dashboard');
 
   if (isPortal) return <>{children}</>;
@@ -110,8 +135,23 @@ const Layout = ({ children }) => {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {/* Always visible Cart icon */}
+            <Link
+              to="/cart"
+              style={{ textDecoration: 'none' }}
+              className="relative p-2 text-gray-500 hover:text-teal-600 hover:bg-gray-100 rounded-full transition-colors shrink-0"
+            >
+              <ShoppingBag className="w-5 h-5" />
+              {itemCount > 0 && (
+                <span className="absolute top-1 right-1 w-4 h-4 bg-teal-600 text-white text-[9px] font-black rounded-full flex items-center justify-center border border-white">
+                  {itemCount}
+                </span>
+              )}
+            </Link>
+
             {isAuthenticated ? (
               <>
+                <NotificationBell />
                 <Link
                   to={getDashboardLink()}
                   style={{ textDecoration: 'none' }}
@@ -185,6 +225,7 @@ const App = () => {
 
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      <Toaster position="top-right" toastOptions={{ className: 'font-sans text-xs font-bold' }} />
       <Layout>
         <Routes>
           {/* Public Pages */}
@@ -193,6 +234,7 @@ const App = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/products" element={<ProductList />} />
           <Route path="/products/:slug" element={<ProductDetail />} />
+          <Route path="/cart" element={<Cart />} />
 
           {/* Auth Pages */}
           <Route path="/login" element={<Login />} />
@@ -203,7 +245,13 @@ const App = () => {
 
           {/* Protected Customer Routes */}
           <Route element={<ProtectedRoute roles={['customer']} />}>
-            <Route path="/customer/dashboard" element={<CustomerDashboard />} />
+            <Route element={<CustomerLayout />}>
+              <Route path="/customer/dashboard" element={<CustomerDashboard />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/my-orders" element={<OrderHistory />} />
+              <Route path="/my-orders/:id" element={<OrderDetail />} />
+              <Route path="/profile" element={<Profile />} />
+            </Route>
           </Route>
 
           {/* Protected Staff & Admin Shared Routes */}
@@ -211,6 +259,8 @@ const App = () => {
             <Route element={<StaffLayout />}>
               <Route path="/staff/dashboard" element={<StaffDashboard />} />
               <Route path="/staff/expiry" element={<ExpiryPage />} />
+              <Route path="/staff/orders" element={<OrderQueue />} />
+              <Route path="/staff/prescriptions" element={<PrescriptionReview />} />
             </Route>
           </Route>
 
@@ -223,6 +273,8 @@ const App = () => {
               <Route path="/admin/products/edit/:id" element={<AddEditProduct />} />
               <Route path="/admin/products/import" element={<CsvImport />} />
               <Route path="/admin/expiry" element={<ExpiryPage />} />
+              <Route path="/admin/orders" element={<OrderQueue />} />
+              <Route path="/admin/prescriptions" element={<PrescriptionReview />} />
             </Route>
           </Route>
 
@@ -242,3 +294,4 @@ const App = () => {
 };
 
 export default App;
+

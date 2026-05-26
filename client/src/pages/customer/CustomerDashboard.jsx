@@ -1,132 +1,153 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
-import { LogOut, User, Mail, ShieldAlert, Phone, Trash2 } from 'lucide-react';
+import {
+  User, Mail, Phone, Pill, ShoppingCart,
+  ClipboardList, UserCircle, Trash2, ShieldAlert
+} from 'lucide-react';
 
-const CustomerDashboard = () => {
-  const { user, logoutUser, softDeleteUserAccount, isLoading } = useAuthStore();
+const QUICK_ACTIONS = [
+  {
+    to: '/products',
+    label: 'Browse Medicines',
+    description: 'Search & order from our full catalogue',
+    Icon: Pill,
+    color: 'teal',
+    bg: 'bg-teal-50',
+    border: 'border-teal-200',
+    icon: 'text-teal-600',
+    text: 'text-teal-800',
+  },
+  {
+    to: '/my-orders',
+    label: 'My Orders',
+    description: 'Track and manage your order history',
+    Icon: ClipboardList,
+    color: 'indigo',
+    bg: 'bg-indigo-50',
+    border: 'border-indigo-200',
+    icon: 'text-indigo-600',
+    text: 'text-indigo-800',
+  },
+  {
+    to: '/cart',
+    label: 'My Cart',
+    description: 'Review items and proceed to checkout',
+    Icon: ShoppingCart,
+    color: 'sky',
+    bg: 'bg-sky-50',
+    border: 'border-sky-200',
+    icon: 'text-sky-600',
+    text: 'text-sky-800',
+  },
+  {
+    to: '/profile',
+    label: 'My Profile',
+    description: 'Manage addresses and account settings',
+    Icon: UserCircle,
+    color: 'violet',
+    bg: 'bg-violet-50',
+    border: 'border-violet-200',
+    icon: 'text-violet-600',
+    text: 'text-violet-800',
+  },
+];
+
+export default function CustomerDashboard() {
+  const { user, softDeleteUserAccount, isLoading } = useAuthStore();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-  const handleLogout = async () => {
-    await logoutUser();
-  };
 
   const handleDeleteAccount = async () => {
     try {
       await softDeleteUserAccount();
-      alert('Your account has been deleted and anonymized successfully.');
-    } catch (err) {
+    } catch {
       alert('Failed to process account deletion.');
     }
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      {/* Top Navbar */}
-      <nav className="bg-teal-600 text-white shadow-sm py-4 px-6 md:px-8 flex justify-between items-center">
-        <h1 className="text-xl font-bold font-sans">Pankaj Medical Stores</h1>
-        <div className="flex items-center gap-4">
-          <span className="text-xs bg-teal-700 px-2.5 py-1 rounded-full font-semibold uppercase">
-            Customer Portal
-          </span>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-1.5 bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold py-1.5 px-3 rounded border border-teal-500 transition-colors"
-          >
-            <LogOut className="w-3.5 h-3.5" /> Sign Out
-          </button>
-        </div>
-      </nav>
+    <div className="max-w-4xl mx-auto py-8 px-4">
 
-      {/* Main Content */}
-      <main className="max-w-4xl mx-auto py-12 px-4">
-        {/* Welcome Card */}
-        <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-xs mb-8">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center text-teal-600">
-              <User className="w-6 h-6" />
+      {/* ── Welcome card ─────────────────────────────────────────────── */}
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-6 flex items-center gap-4">
+        <div className="w-14 h-14 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 shrink-0">
+          <User className="w-7 h-7" />
+        </div>
+        <div className="flex-grow min-w-0">
+          <h1 className="text-xl font-black text-gray-800 truncate">
+            Welcome back, {user?.name?.split(' ')[0] || 'Customer'}!
+          </h1>
+          <p className="text-sm text-gray-500 mt-0.5">Your Pankaj Medical account is active.</p>
+        </div>
+      </div>
+
+      {/* ── Account info ─────────────────────────────────────────────── */}
+      <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm mb-6 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+        <div className="flex items-center gap-2.5 text-gray-600">
+          <Mail className="w-4 h-4 text-teal-600 shrink-0" />
+          <div>
+            <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Email</div>
+            <div className="font-semibold text-gray-800">{user?.email || 'N/A'}</div>
+          </div>
+        </div>
+        <div className="flex items-center gap-2.5 text-gray-600">
+          <Phone className="w-4 h-4 text-teal-600 shrink-0" />
+          <div>
+            <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Phone</div>
+            <div className="font-semibold text-gray-800">{user?.phone || 'Not configured'}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Quick action cards ────────────────────────────────────────── */}
+      <h2 className="text-base font-black text-gray-700 mb-3 uppercase tracking-wider">Quick Actions</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+        {QUICK_ACTIONS.map(({ to, label, description, Icon, bg, border, icon, text }) => (
+          <Link
+            key={to}
+            to={to}
+            style={{ textDecoration: 'none' }}
+            className={`${bg} ${border} border rounded-2xl p-4 flex flex-col items-center gap-2 text-center transition-all hover:scale-[1.03] hover:shadow-md active:scale-[0.97]`}
+          >
+            <div className={`w-12 h-12 rounded-xl ${bg} flex items-center justify-center`}>
+              <Icon className={`w-6 h-6 ${icon}`} />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-gray-800">
-                Welcome, {user?.name || 'Customer'}!
-              </h2>
-              <p className="text-sm text-gray-500">Registered Customer Dashboard Shell</p>
+              <div className={`text-sm font-black ${text}`}>{label}</div>
+              <div className="text-[10px] text-gray-500 leading-tight mt-0.5">{description}</div>
             </div>
-          </div>
+          </Link>
+        ))}
+      </div>
 
-          <div className="border-t border-gray-100 pt-6 mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
-            <div className="flex items-center gap-2">
-              <Mail className="w-4 h-4 text-teal-600" />
-              <span>
-                Email: <strong className="text-gray-800">{user?.email || 'N/A'}</strong>
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Phone className="w-4 h-4 text-teal-600" />
-              <span>
-                Phone: <strong className="text-gray-800">{user?.phone || 'Not configured'}</strong>
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Phase 1 Feature Box */}
-        <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-xs space-y-6">
-          <div>
-            <h3 className="text-lg font-bold text-gray-800 mb-1">Phase 1 Delivery Completed</h3>
-            <p className="text-sm text-gray-500">
-              All authentication, JWT, and foundation operations are functional.
+      {/* ── Danger zone ──────────────────────────────────────────────── */}
+      <div className="border border-red-200 rounded-2xl p-5 bg-red-50/40">
+        <div className="flex items-start gap-3">
+          <ShieldAlert className="text-red-500 w-5 h-5 shrink-0 mt-0.5" />
+          <div className="flex-grow">
+            <h3 className="text-sm font-black text-red-800 mb-1">Delete My Account</h3>
+            <p className="text-xs text-red-700 leading-relaxed mb-3">
+              Permanently anonymize your profile data. Your name, phone, and addresses will be erased
+              and you will be signed out. This cannot be reversed.
             </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-            <div className="border border-teal-100 bg-teal-50/50 p-4 rounded-lg">
-              <h4 className="font-bold text-teal-900 mb-1">Custom JWT Authentication</h4>
-              <p className="text-xs text-gray-600 leading-normal">
-                Access tokens expire in 15 minutes. Secure httpOnly refresh token cookie
-                automatically keeps you logged in.
-              </p>
-            </div>
-
-            <div className="border border-teal-100 bg-teal-50/50 p-4 rounded-lg">
-              <h4 className="font-bold text-teal-900 mb-1">Role Security Guard</h4>
-              <p className="text-xs text-gray-600 leading-normal">
-                Prevents access to Staff or Admin dashboards. Attempts auto-redirect you back to
-                this screen.
-              </p>
-            </div>
-          </div>
-
-          {/* Destructive soft delete showcase */}
-          <div className="border border-red-200 rounded-lg p-6 bg-red-50/30">
-            <div className="flex items-start gap-3">
-              <ShieldAlert className="text-red-600 w-6 h-6 shrink-0 mt-0.5" />
-              <div>
-                <h4 className="font-bold text-red-900 mb-1">Soft Delete and Anonymize Profile</h4>
-                <p className="text-xs text-red-800 leading-relaxed mb-4">
-                  Test the GDPR/PII anonymization rule right now. Deleting your account will mark
-                  `isDeleted: true` in MongoDB, erase your name, phone, and addresses, generate a
-                  random mock email address, and immediately log you out.
-                </p>
-                <button
-                  onClick={() => setShowDeleteModal(true)}
-                  className="btn-white text-red-700 border-red-300 hover:bg-red-50 hover:text-red-800 flex items-center gap-1.5 py-2 px-3 text-xs"
-                >
-                  <Trash2 className="w-4 h-4" /> Soft-Delete Account
-                </button>
-              </div>
-            </div>
+            <button
+              onClick={() => setShowDeleteModal(true)}
+              className="flex items-center gap-1.5 text-xs font-bold py-1.5 px-3 rounded-lg border border-red-300 text-red-700 hover:bg-red-100 transition-colors"
+            >
+              <Trash2 className="w-3.5 h-3.5" /> Delete Account
+            </button>
           </div>
         </div>
-      </main>
+      </div>
 
-      {/* Delete Confirmation Modal */}
+      {/* Delete confirmation modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white border border-gray-200 rounded-xl max-w-sm w-full p-6 shadow-xl space-y-4">
-            <h3 className="text-lg font-bold text-gray-800">Confirm Account Deletion</h3>
+          <div className="bg-white border border-gray-200 rounded-2xl max-w-sm w-full p-6 shadow-xl space-y-4">
+            <h3 className="text-lg font-black text-gray-800">Confirm Account Deletion</h3>
             <p className="text-sm text-gray-500 leading-relaxed">
-              Are you sure you want to proceed? Your email, phone, name, and address data will be
-              anonymized. This action is permanent and cannot be reversed.
+              Your email, phone, name, and address data will be anonymized. This action is
+              permanent and cannot be reversed.
             </p>
             <div className="flex gap-3 justify-end pt-2">
               <button
@@ -148,6 +169,4 @@ const CustomerDashboard = () => {
       )}
     </div>
   );
-};
-
-export default CustomerDashboard;
+}

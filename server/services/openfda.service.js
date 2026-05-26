@@ -6,7 +6,7 @@
 async function fetchComposition(medicineName) {
   try {
     const url = `https://api.fda.gov/drug/label.json?search=openfda.brand_name:"${encodeURIComponent(medicineName)}"&limit=1`;
-    
+
     const response = await fetch(url);
     if (!response.ok) {
       return null;
@@ -17,16 +17,16 @@ async function fetchComposition(medicineName) {
       const label = data.results[0];
       const genericName = label.openfda?.generic_name?.[0] || '';
       const activeIngredient = label.active_ingredient?.[0] || '';
-      
+
       // Select best candidate for composition field
       const composition = genericName || activeIngredient || '';
-      
+
       return {
         composition: composition.substring(0, 200), // Safety truncation
         genericName: (genericName || activeIngredient).substring(0, 100)
       };
     }
-    
+
     return null;
   } catch (error) {
     console.error('OpenFDA API lookup error:', error.message);

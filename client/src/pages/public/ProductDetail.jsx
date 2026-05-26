@@ -5,6 +5,8 @@ import api from '../../services/api';
 import RxBadge from '../../components/shared/RxBadge';
 import ProductCard from '../../components/shared/ProductCard';
 import { formatCurrency } from '../../utils/formatCurrency';
+import { useCart } from '../../hooks/useCart';
+import toast from 'react-hot-toast';
 
 /**
  * Standard utility to verify if an expiry Date falls in the "Expiring Soon" category (31 to 90 days from now)
@@ -29,6 +31,21 @@ export default function ProductDetail() {
   
   const [activeTab, setActiveTab] = useState('description');
   const [activeImageIdx, setActiveImageIdx] = useState(0);
+
+  const { addToCart } = useCart();
+  const [adding, setAdding] = useState(false);
+
+  const handleAdd = async () => {
+    if (!product || product.stock <= 0) return;
+    setAdding(true);
+    const res = await addToCart(product, 1);
+    setAdding(false);
+    if (res && res.success) {
+      toast.success(`${product.name} added to cart!`);
+    } else if (res) {
+      toast.error(res.message || 'Failed to add item');
+    }
+  };
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -238,13 +255,13 @@ export default function ProductDetail() {
             </div>
           </div>
 
-          {/* Add to Cart button (Correction 5 Visually disabled) */}
+          {/* Add to Cart button */}
           <button
-            disabled
-            title="Cart coming soon"
-            className="w-full sm:w-auto sm:min-w-[200px] btn-teal bg-teal-600/50 border-teal-600/10 cursor-not-allowed hover:bg-teal-600/50 hover:scale-100 flex items-center justify-center gap-2 py-3.5 font-bold"
+            onClick={handleAdd}
+            disabled={adding || isOutOfStock}
+            className="w-full sm:w-auto sm:min-w-[200px] btn-teal flex items-center justify-center gap-2 py-3.5 font-bold"
           >
-            <ShoppingCart className="w-5 h-5" /> Add to Cart
+            <ShoppingCart className="w-5 h-5" /> {adding ? 'Adding...' : 'Add to Cart'}
           </button>
         </div>
       </div>

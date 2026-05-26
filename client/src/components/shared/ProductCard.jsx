@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingCart, AlertTriangle } from 'lucide-react';
 import RxBadge from './RxBadge';
 import { formatCurrency } from '../../utils/formatCurrency';
+import { useCart } from '../../hooks/useCart';
+import toast from 'react-hot-toast';
 
 /**
  * Standard utility to verify if an expiry Date falls in the "Expiring Soon" category (31 to 90 days from now)
@@ -36,9 +38,29 @@ export default function ProductCard({ product }) {
     images
   } = product;
 
+  const { addToCart } = useCart();
+  const [adding, setAdding] = useState(false);
+
   const isOutOfStock = stock <= 0;
   const isExpiringSoon = checkExpiringSoon(expiryDate);
   const productImage = images && images[0] ? images[0] : '';
+
+  const handleAdd = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (isOutOfStock) return;
+    
+    setAdding(true);
+    const res = await addToCart(product, 1);
+    setAdding(false);
+
+    if (res && res.success) {
+      toast.success(`${name} added to cart!`);
+    } else if (res) {
+      toast.error(res.message || 'Failed to add item');
+    }
+  };
 
   return (
     <div className="relative bg-white border border-gray-200 rounded-xl overflow-hidden shadow-xs hover:shadow-md transition-all duration-200 flex flex-col group h-full">
@@ -124,13 +146,13 @@ export default function ProductCard({ product }) {
           )}
         </div>
 
-        {/* Add to Cart button (Visually disabled with tooltip) */}
+        {/* Add to Cart button */}
         <button
-          disabled
-          title="Cart coming soon"
-          className="mt-4 w-full btn-teal bg-teal-600/50 border-teal-600/10 cursor-not-allowed hover:bg-teal-600/50 hover:scale-100 flex items-center justify-center gap-1.5 py-2 text-xs"
+          onClick={handleAdd}
+          disabled={adding || isOutOfStock}
+          className="mt-4 w-full btn-teal flex items-center justify-center gap-1.5 py-2.5 text-xs font-bold"
         >
-          <ShoppingCart className="w-3.5 h-3.5" /> Add to Cart
+          <ShoppingCart className="w-3.5 h-3.5" /> {adding ? 'Adding...' : 'Add to Cart'}
         </button>
       </div>
     </div>

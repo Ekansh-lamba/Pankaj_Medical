@@ -37,6 +37,7 @@ export const useAuthStore = create((set, get) => ({
           isAuthenticated: true,
           isLoading: false
         });
+        get().refreshUser().catch(err => console.warn('Failed to load profile on login:', err));
       }
       return response.data;
     } catch (err) {
@@ -58,6 +59,7 @@ export const useAuthStore = create((set, get) => ({
           isAuthenticated: true,
           isLoading: false
         });
+        get().refreshUser().catch(err => console.warn('Failed to load profile on Google login:', err));
       }
       return response.data;
     } catch (err) {
@@ -79,6 +81,7 @@ export const useAuthStore = create((set, get) => ({
           isAuthenticated: true,
           isLoading: false
         });
+        get().refreshUser().catch(err => console.warn('Failed to load profile on Phone login:', err));
       }
       return response.data;
     } catch (err) {
@@ -147,10 +150,38 @@ export const useAuthStore = create((set, get) => ({
           isAuthenticated: true,
           isLoading: false
         });
+
+        // Load full user profile details immediately
+        get().refreshUser().catch(err => console.warn('Failed to load profile on session restore:', err));
       }
     } catch (err) {
       // If refresh fails, they are guest/unauthenticated (perfectly normal on clean load)
       set({ isLoading: false });
+    }
+  },
+
+  refreshUser: async () => {
+    try {
+      const response = await api.get('/api/users/profile');
+      if (response.data && response.data.success) {
+        const u = response.data.data;
+        set((state) => ({
+          user: {
+            ...state.user,
+            id: u._id || u.id,
+            name: u.name,
+            email: u.email,
+            phone: u.phone,
+            permissions: u.permissions,
+            isVerified: u.isVerified,
+            addresses: u.addresses || []
+          }
+        }));
+        return response.data.data;
+      }
+    } catch (err) {
+      console.error('Failed to refresh user profile:', err);
+      throw err;
     }
   }
 }));

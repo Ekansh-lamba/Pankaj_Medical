@@ -1,5 +1,6 @@
 const cron = require('node-cron');
 const Product = require('../models/Product');
+const Order = require('../models/Order');
 const { sendLowStockAlert } = require('../services/email.service');
 
 /**
@@ -22,7 +23,9 @@ const runExpiryAndStockCheck = async () => {
       { $set: { isHidden: true } }
     );
 
-    console.log(`[Cron Job] Swept expired items. Automatically hid ${hideResult.modifiedCount} products.`);
+    console.log(
+      `[Cron Job] Swept expired items. Automatically hid ${hideResult.modifiedCount} products.`
+    );
 
     // 2. Sweeps and gathers low stock items
     const lowStockProducts = await Product.find({
@@ -31,10 +34,12 @@ const runExpiryAndStockCheck = async () => {
     }).select('name brand stock lowStockThreshold rackLocation');
 
     if (lowStockProducts.length > 0) {
-      console.log(`[Cron Job] Detected ${lowStockProducts.length} low-stock products. Dispatching alert...`);
-      
+      console.log(
+        `[Cron Job] Detected ${lowStockProducts.length} low-stock products. Dispatching alert...`
+      );
+
       const adminEmail = process.env.ADMIN_EMAIL || 'admin@pankajmedical.com';
-      
+
       try {
         await sendLowStockAlert(adminEmail, lowStockProducts);
         console.log('[Cron Job] Low stock warning email dispatched successfully.');
@@ -49,10 +54,59 @@ const runExpiryAndStockCheck = async () => {
   }
 };
 
-// Daily cron job running at 00:00 IST (18:30 UTC)
-const startCron = () => {
-  cron.schedule('30 18 * * *', runExpiryAndStockCheck);
-  console.log('[Cron Job] Automated expiry scheduler initialized (Sweeps daily at 00:00 IST / 18:30 UTC).');
+/**
+ * Hourly cron sweeping and auto-cancelling stale orders pending approval for 48+ hours
+ */
+const runHourlyPrescriptionAutoCancel = async () => {
+  try {
+    console.log('[Cron Job] Checking for stale prescription orders (48h cutoff)...');
+    const cutoff = new Date(Date.now() - 48 * 60 * 60 * 1000);
+
+    const staleOrders = await Order.find({
+      status: 'pending_approval',
+      createdAt: { $lt: cutoff }
+    });
+
+    if (staleOrders.length > 0) {
+      console.log(
+        `[Cron Job] Found ${staleOrders.length} stale pending approval orders. Auto-cancelling...`
+      );
+      for (const order of staleOrders) {
+        order.status = 'cancelled';
+        order.cancellationReason = 'Prescription verification expired (48-hour auto-cancellation)';
+        order.timeline.push({
+          status: 'cancelled',
+          timestamp: new Date(),
+          updatedBy: null // system auto-cancellation
+        });
+
+        order.payment.status = 'failed';
+        await order.save();
+
+        // Restore reserved stock levels atomically
+        for (const item of order.items) {
+          await Product.updateOne({ _id: item.product }, { $inc: { stock: item.quantity } });
+        }
+
+        console.log(`[Cron Job] Auto-cancelled stale order: ${order.orderNumber}`);
+      }
+    }
+  } catch (err) {
+    console.error('[Cron Job] Stale prescription auto-cancellation sweep failed:', err.message);
+  }
 };
 
-module.exports = { startCron, runExpiryAndStockCheck };
+// Start all cron schedulers
+const startCron = () => {
+  // Daily cron job running at 00:00 IST (18:30 UTC)
+  cron.schedule('30 18 * * *', runExpiryAndStockCheck);
+
+  // Hourly cron job running at the beginning of each hour
+  cron.schedule('0 * * * *', runHourlyPrescriptionAutoCancel);
+
+  console.log(
+    '[Cron Job] Automated schedulers successfully initialized (Daily Expiry Sweeps & Hourly Stale Prescriptions Lock-releases).'
+  );
+};
+
+module.exports = { startCron, runExpiryAndStockCheck, runHourlyPrescriptionAutoCancel };

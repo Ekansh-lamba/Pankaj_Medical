@@ -17,8 +17,8 @@ import {
 const NAV_ITEMS = [
   { label: 'Dashboard',     path: '/staff/dashboard',       icon: LayoutDashboard, live: true  },
   { label: 'Expiry',        path: '/staff/expiry',          icon: Clock,           live: true  },
-  { label: 'Orders',        path: '/staff/orders',          icon: ShoppingCart,    live: false, phase: 3 },
-  { label: 'Prescriptions', path: '/staff/prescriptions',   icon: FileText,        live: false, phase: 3 },
+  { label: 'Orders',        path: '/staff/orders',          icon: ShoppingCart,    live: true, phase: 3 },
+  { label: 'Prescriptions', path: '/staff/prescriptions',   icon: FileText,        live: true, phase: 3 },
   { label: 'Inventory',     path: '/staff/inventory',       icon: Package,         live: false, phase: 3 },
 ];
 

@@ -1,48 +1,67 @@
 const { z } = require('zod');
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 const Product = require('../models/Product');
 const AuditLog = require('../models/AuditLog');
 const { fetchComposition } = require('../services/openfda.service');
-const { parseAndValidateCSV } = require('../services/csv.service');
+const {
+  parseAndValidateCSV,
+  parseAndValidatePurchaseOrderFile,
+  detectFormFromName
+} = require('../services/csv.service');
 
 // Zod Validation Schema for Product
-const productValidationSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  brand: z.string().min(1, 'Brand is required'),
-  manufacturer: z.string().optional().nullable(),
-  composition: z.string().optional().nullable(),
-  category: z.enum([
-    'Tablets & Capsules', 'Syrups & Liquids', 'Injections',
-    'Surgical & Devices', 'Vitamins & Supplements',
-    'Baby Care', 'Personal Care', 'Ayurvedic & Herbal'
-  ], { required_error: 'Category is required' }),
-  form: z.enum(['TAB', 'CAP', 'SYP', 'INH', 'GEL', 'CREAM', 'DROP', 'INJ', 'POWDER', 'OTHER'], { required_error: 'Form is required' }),
-  dosage: z.string().optional().nullable(),
-  mrp: z.number().positive('MRP must be a positive number'),
-  sellingPrice: z.number().positive('Selling Price must be a positive number'),
-  discount: z.number().min(0).max(100).optional().default(0),
-  rxType: z.enum(['OTC', 'H', 'NRX', 'H1']).default('OTC'),
-  stock: z.number().int().nonnegative('Stock cannot be negative'),
-  lowStockThreshold: z.number().int().nonnegative().optional().default(10),
-  expiryDate: z.preprocess((arg) => {
-    if (!arg) return undefined;
-    if (typeof arg === 'string' || arg instanceof Date) return new Date(arg);
-    return arg;
-  }, z.date().optional()),
-  batchNumber: z.string().optional().nullable(),
-  hsnCode: z.string().optional().nullable(),
-  gstRate: z.enum([5, 12, 18]).default(12),
-  images: z.array(z.string()).max(3, 'Max 3 images allowed').optional().default([]),
-  description: z.string().optional().nullable(),
-  sideEffects: z.string().optional().nullable(),
-  storageInstructions: z.string().optional().nullable(),
-  rackLocation: z.string().optional().nullable(),
-  isActive: z.boolean().optional().default(true),
-  tags: z.array(z.string()).optional().default([])
-}).refine(data => data.sellingPrice <= data.mrp, {
-  message: 'Selling price cannot exceed MRP',
-  path: ['sellingPrice']
-});
+const productValidationSchema = z
+  .object({
+    name: z.string().min(1, 'Name is required'),
+    brand: z.string().min(1, 'Brand is required'),
+    manufacturer: z.string().optional().nullable(),
+    composition: z.string().optional().nullable(),
+    category: z.enum(
+      [
+        'Tablets & Capsules',
+        'Syrups & Liquids',
+        'Injections',
+        'Surgical & Devices',
+        'Vitamins & Supplements',
+        'Baby Care',
+        'Personal Care',
+        'Ayurvedic & Herbal'
+      ],
+      { required_error: 'Category is required' }
+    ),
+    form: z.enum(['TAB', 'CAP', 'SYP', 'INH', 'GEL', 'CREAM', 'DROP', 'INJ', 'POWDER', 'OTHER'], {
+      required_error: 'Form is required'
+    }),
+    dosage: z.string().optional().nullable(),
+    mrp: z.number().positive('MRP must be a positive number'),
+    sellingPrice: z.number().positive('Selling Price must be a positive number'),
+    discount: z.number().min(0).max(100).optional().default(0),
+    rxType: z.enum(['OTC', 'H', 'NRX', 'H1']).default('OTC'),
+    stock: z.number().int().nonnegative('Stock cannot be negative'),
+    lowStockThreshold: z.number().int().nonnegative().optional().default(10),
+    expiryDate: z.preprocess((arg) => {
+      if (!arg) return undefined;
+      if (typeof arg === 'string' || arg instanceof Date) return new Date(arg);
+      return arg;
+    }, z.date().optional()),
+    batchNumber: z.string().optional().nullable(),
+    hsnCode: z.string().optional().nullable(),
+    gstRate: z.coerce.number().default(12).refine(val => [5, 12, 18].includes(val), {
+      message: 'GST rate must be 5, 12, or 18'
+    }),
+    images: z.array(z.string()).max(3, 'Max 3 images allowed').optional().default([]),
+    description: z.string().optional().nullable(),
+    sideEffects: z.string().optional().nullable(),
+    storageInstructions: z.string().optional().nullable(),
+    rackLocation: z.string().optional().nullable(),
+    isActive: z.boolean().optional().default(true),
+    tags: z.array(z.string()).optional().default([])
+  })
+  .refine((data) => data.sellingPrice <= data.mrp, {
+    message: 'Selling price cannot exceed MRP',
+    path: ['sellingPrice']
+  });
 
 // Helper for structured responses
 const sendSuccess = (res, data, message = '', statusCode = 200) => {
@@ -185,7 +204,15 @@ exports.searchProducts = async (req, res) => {
     if (suggest === 'true') {
       const suggestions = await Product.find(
         { $text: { $search: searchQuery }, isActive: true, isHidden: false },
-        { name: 1, slug: 1, rxType: 1, sellingPrice: 1, form: 1, brand: 1, score: { $meta: 'textScore' } }
+        {
+          name: 1,
+          slug: 1,
+          rxType: 1,
+          sellingPrice: 1,
+          form: 1,
+          brand: 1,
+          score: { $meta: 'textScore' }
+        }
       )
         .sort({ score: { $meta: 'textScore' } })
         .limit(8);
@@ -215,15 +242,17 @@ exports.searchProducts = async (req, res) => {
 exports.getProductBySlug = async (req, res) => {
   try {
     const { slug } = req.params;
-    
+
     // Support fetching by ObjectId (for admin edits) or slug (for public view)
     let query = { slug };
     if (mongoose.Types.ObjectId.isValid(slug)) {
       query = { _id: slug };
     }
 
-    const product = await Product.findOne(query)
-      .populate('substitutes', 'name slug brand mrp sellingPrice stock images rxType form');
+    const product = await Product.findOne(query).populate(
+      'substitutes',
+      'name slug brand mrp sellingPrice stock images rxType form'
+    );
 
     if (!product) {
       return sendError(res, 'Product not found.', 'NOT_FOUND', 404);
@@ -250,12 +279,14 @@ exports.createProduct = async (req, res) => {
   try {
     const parsedData = productValidationSchema.safeParse(req.body);
     if (!parsedData.success) {
-      const errorMsg = parsedData.error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ');
+      const errorMsg = parsedData.error.errors
+        .map((e) => `${e.path.join('.')}: ${e.message}`)
+        .join(', ');
       return sendError(res, errorMsg, 'VALIDATION_ERROR', 400);
     }
 
     const productData = parsedData.data;
-    
+
     // Auto-calculate discount percentage if not custom specified
     if (!productData.discount) {
       const mrp = productData.mrp;
@@ -283,7 +314,12 @@ exports.createProduct = async (req, res) => {
     return sendSuccess(res, product, 'Product created successfully.', 201);
   } catch (error) {
     console.error('Error creating product:', error);
-    return sendError(res, error.message || 'An error occurred while creating the product.', 'CREATE_ERROR', 500);
+    return sendError(
+      res,
+      error.message || 'An error occurred while creating the product.',
+      'CREATE_ERROR',
+      500
+    );
   }
 };
 
@@ -293,7 +329,7 @@ exports.createProduct = async (req, res) => {
 exports.updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return sendError(res, 'Invalid product identifier.', 'INVALID_ID', 400);
     }
@@ -303,19 +339,14 @@ exports.updateProduct = async (req, res) => {
       return sendError(res, 'Product not found.', 'NOT_FOUND', 404);
     }
 
-    const parsedData = productValidationSchema.partial().safeParse(req.body);
-    if (!parsedData.success) {
-      const errorMsg = parsedData.error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ');
-      return sendError(res, errorMsg, 'VALIDATION_ERROR', 400);
-    }
+    const updateData = req.body;
 
-    const updateData = parsedData.data;
-    
     // MRP/Selling price discount recalcs
     if (updateData.mrp || updateData.sellingPrice) {
       const mrp = updateData.mrp !== undefined ? updateData.mrp : product.mrp;
-      const selling = updateData.sellingPrice !== undefined ? updateData.sellingPrice : product.sellingPrice;
-      
+      const selling =
+        updateData.sellingPrice !== undefined ? updateData.sellingPrice : product.sellingPrice;
+
       if (selling > mrp) {
         return sendError(res, 'Selling Price cannot be greater than MRP.', 'PRICE_ERROR', 400);
       }
@@ -432,8 +463,12 @@ exports.getExpiryList = async (req, res) => {
 
     // Calculate sum of at risk value (sellingPrice * stock for expired and nearExpiry)
     let valueAtRisk = 0;
-    expired.forEach(p => { valueAtRisk += (p.sellingPrice || 0) * (p.stock || 0); });
-    nearExpiry.forEach(p => { valueAtRisk += (p.sellingPrice || 0) * (p.stock || 0); });
+    expired.forEach((p) => {
+      valueAtRisk += (p.sellingPrice || 0) * (p.stock || 0);
+    });
+    nearExpiry.forEach((p) => {
+      valueAtRisk += (p.sellingPrice || 0) * (p.stock || 0);
+    });
 
     return sendSuccess(res, {
       expired,
@@ -443,7 +478,12 @@ exports.getExpiryList = async (req, res) => {
     });
   } catch (error) {
     console.error('Error fetching expiry lists:', error);
-    return sendError(res, 'An error occurred while fetching expiry categories.', 'EXPIRY_FETCH_ERROR', 500);
+    return sendError(
+      res,
+      'An error occurred while fetching expiry categories.',
+      'EXPIRY_FETCH_ERROR',
+      500
+    );
   }
 };
 
@@ -469,15 +509,30 @@ exports.toggleVisibility = async (req, res) => {
     await product.save();
 
     // Log to AuditLog with manual override reason
-    await logAuditAction(req, `visibility_toggle_${product.isHidden ? 'hide' : 'show'}`, product._id, prevObj, {
-      ...product.toObject(),
-      overrideReason: reason || 'Manual Admin Overrule'
-    });
+    await logAuditAction(
+      req,
+      `visibility_toggle_${product.isHidden ? 'hide' : 'show'}`,
+      product._id,
+      prevObj,
+      {
+        ...product.toObject(),
+        overrideReason: reason || 'Manual Admin Overrule'
+      }
+    );
 
-    return sendSuccess(res, product, `Product successfully ${product.isHidden ? 'hidden from' : 'made visible in'} customer portal.`);
+    return sendSuccess(
+      res,
+      product,
+      `Product successfully ${product.isHidden ? 'hidden from' : 'made visible in'} customer portal.`
+    );
   } catch (error) {
     console.error('Error toggling product visibility:', error);
-    return sendError(res, 'An error occurred while overriding visibility.', 'VISIBILITY_TOGGLE_ERROR', 500);
+    return sendError(
+      res,
+      'An error occurred while overriding visibility.',
+      'VISIBILITY_TOGGLE_ERROR',
+      500
+    );
   }
 };
 
@@ -494,7 +549,12 @@ exports.setSubstitutes = async (req, res) => {
     }
 
     if (!Array.isArray(substituteIds)) {
-      return sendError(res, 'Substitutes list must be an array of identifiers.', 'VALIDATION_ERROR', 400);
+      return sendError(
+        res,
+        'Substitutes list must be an array of identifiers.',
+        'VALIDATION_ERROR',
+        400
+      );
     }
 
     const product = await Product.findById(id);
@@ -503,19 +563,32 @@ exports.setSubstitutes = async (req, res) => {
     }
 
     const prevObj = product.toObject();
-    
+
     // Verify substituteIds are valid mongoose ObjectIds and not self-linking
-    const validSubIds = substituteIds.filter(subId => mongoose.Types.ObjectId.isValid(subId) && subId !== id);
-    
+    const validSubIds = substituteIds.filter(
+      (subId) => mongoose.Types.ObjectId.isValid(subId) && subId !== id
+    );
+
     product.substitutes = validSubIds;
     await product.save();
 
-    await logAuditAction(req, 'product_substitutes_linked', product._id, prevObj, product.toObject());
+    await logAuditAction(
+      req,
+      'product_substitutes_linked',
+      product._id,
+      prevObj,
+      product.toObject()
+    );
 
     return sendSuccess(res, product, 'Medicine substitutes linked successfully.');
   } catch (error) {
     console.error('Error linking substitutes:', error);
-    return sendError(res, 'An error occurred while setting product substitutes.', 'SUBSTITUTE_LINK_ERROR', 500);
+    return sendError(
+      res,
+      'An error occurred while setting product substitutes.',
+      'SUBSTITUTE_LINK_ERROR',
+      500
+    );
   }
 };
 
@@ -525,39 +598,145 @@ exports.setSubstitutes = async (req, res) => {
 exports.importCSV = async (req, res) => {
   try {
     const previewMode = req.query.preview === 'true';
+    const importMode = req.query.importMode || 'catalogue';
 
     if (!req.file) {
-      return sendError(res, 'A CSV stock file is required for bulk imports.', 'FILE_REQUIRED', 400);
+      return sendError(res, 'A stock file is required for bulk imports.', 'FILE_REQUIRED', 400);
     }
 
-    const { validRows, errors } = parseAndValidateCSV(req.file.buffer);
+    let parsedResult;
+    if (importMode === 'purchase_order') {
+      parsedResult = parseAndValidatePurchaseOrderFile(req.file.buffer, req.file.originalname);
+    } else {
+      parsedResult = parseAndValidateCSV(req.file.buffer);
+    }
 
-    // If it's preview mode, do not perform DB updates. Just return statistics + preview rows
+    const { validRows, errors } = parsedResult;
+
+    if (importMode === 'purchase_order') {
+      // ── 1. Preview Mode ───────────────────────────────────────────────────
+      if (previewMode) {
+        // Single batch lookup instead of N individual findOnes
+        const names = validRows.map(r => r.name);
+        const existingDocs = await Product.find(
+          {},
+          { name: 1 }
+        ).collation({ locale: 'en', strength: 2 }); // case-insensitive
+
+        const existingNameSet = new Set(existingDocs.map(d => d.name.toLowerCase()));
+        let wouldBeNew = 0;
+        let wouldBeUpdated = 0;
+        names.forEach(n => {
+          if (existingNameSet.has(n.toLowerCase())) wouldBeUpdated++;
+          else wouldBeNew++;
+        });
+
+        const warningMsg = wouldBeNew > 0
+          ? `Purchase Order Import will create ${wouldBeNew} new product(s) as INACTIVE with MRP and selling price set to ₹1.00 (placeholder). Please update pricing in the Products page and activate them before they appear in the customer store.`
+          : null;
+
+        return sendSuccess(res, {
+          previewRows:  validRows.slice(0, 10),
+          totalRows:    validRows.length,
+          errors,
+          newCount:     wouldBeNew,
+          updatedCount: wouldBeUpdated,
+          errorCount:   errors.length,
+          warning:      warningMsg
+        });
+      }
+
+      // ── 2. Bulk Ingest ────────────────────────────────────────────────────
+      // Build one bulkWrite operation per product row.
+      // $inc increments stock for existing docs and seeds it for new ones.
+      // $setOnInsert only fires on upsert (new doc) — never overwrites existing fields.
+      const bulkOps = validRows.map(row => {
+        const totalQty  = row.quantityPurchased + row.freeQuantity;
+        const escaped   = row.name.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+        // Generate unique slug: base + short random suffix avoids collision queries
+        const baseSlug  = slugify(row.name, { lower: true, strict: true });
+        const uniqueSlug = `${baseSlug}-${Math.random().toString(36).substring(2, 7)}`;
+
+        return {
+          updateOne: {
+            filter: { name: { $regex: new RegExp(`^${escaped}$`, 'i') } },
+            update: {
+              $inc: { stock: totalQty },
+              $setOnInsert: {
+                name:        row.name,
+                brand:       row.brand || 'Generic',
+                slug:        uniqueSlug,
+                category:    'Tablets & Capsules',
+                form:        detectFormFromName(row.name),
+                mrp:         1.00, // Placeholder — admin must set correct price before activating
+                sellingPrice: 1.00,
+                discount:    0,
+                gstRate:     12,
+                rxType:      'OTC',
+                isActive:    false,
+                isHidden:    false,
+                createdBy:   req.user._id
+              }
+            },
+            upsert: true
+          }
+        };
+      });
+
+      const bulkResult = await Product.bulkWrite(bulkOps, { ordered: false });
+
+      const imported = bulkResult.upsertedCount  || 0;
+      const updated  = bulkResult.modifiedCount  || 0;
+
+      await logAuditAction(req, 'po_bulk_import_completed', null, null, {
+        importedCount: imported,
+        updatedCount:  updated,
+        skippedCount:  errors.length,
+        totalProducts: validRows.length
+      });
+
+      const finalWarning = imported > 0
+        ? `Import complete. Created ${imported} new product(s) with INACTIVE status and ₹1.00 placeholder pricing. Go to Admin → Products to set correct MRP and selling price before activating.`
+        : null;
+
+      return sendSuccess(
+        res,
+        {
+          imported,
+          updated,
+          skipped: errors.length,
+          errors,
+          warning: finalWarning
+        },
+        `Purchase Order bulk import complete — ${imported} created, ${updated} stock-updated.`
+      );
+    }
+
+    // --- Existing Catalogue Ingestion Flow ---
     if (previewMode) {
       return sendSuccess(res, {
-        previewRows: validRows.slice(0, 10), // return max first 10 rows
-        totalRows: validRows.length + Math.round(errors.length / 2), // rough total estimation
+        previewRows: validRows.slice(0, 10),
+        totalRows: validRows.length + Math.round(errors.length / 2),
         errors,
-        newCount: validRows.length, // approximation
+        newCount: validRows.length,
         errorCount: errors.length
       });
     }
 
-    // Write to DB mode
     let imported = 0;
     let updated = 0;
 
     for (const row of validRows) {
-      // Look for duplicate using name + brand (case insensitive match)
       const existingProduct = await Product.findOne({
         name: { $regex: new RegExp(`^${row.name.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}$`, 'i') },
-        brand: { $regex: new RegExp(`^${row.brand.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}$`, 'i') }
+        brand: {
+          $regex: new RegExp(`^${row.brand.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')}$`, 'i')
+        }
       });
 
       if (existingProduct) {
         const prevObj = existingProduct.toObject();
-        
-        // Merge updates
+
         existingProduct.mrp = row.mrp;
         existingProduct.sellingPrice = row.sellingPrice;
         existingProduct.discount = row.discount;
@@ -567,7 +746,7 @@ exports.importCSV = async (req, res) => {
         existingProduct.hsnCode = row.hsnCode;
         existingProduct.gstRate = row.gstRate;
         existingProduct.rackLocation = row.rackLocation;
-        existingProduct.isActive = true; // reactivate if previously inactive
+        existingProduct.isActive = true;
 
         if (row.expiryDate) {
           const today = new Date();
@@ -578,15 +757,19 @@ exports.importCSV = async (req, res) => {
         await existingProduct.save();
         updated++;
 
-        // Log audit log
-        await logAuditAction(req, 'csv_import_row_update', existingProduct._id, prevObj, existingProduct.toObject());
+        await logAuditAction(
+          req,
+          'csv_import_row_update',
+          existingProduct._id,
+          prevObj,
+          existingProduct.toObject()
+        );
       } else {
-        // Create new
         const newProduct = new Product({
           ...row,
           createdBy: req.user._id
         });
-        
+
         if (row.expiryDate) {
           const today = new Date();
           const thirtyDaysFromNow = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
@@ -596,26 +779,40 @@ exports.importCSV = async (req, res) => {
         await newProduct.save();
         imported++;
 
-        await logAuditAction(req, 'csv_import_row_create', newProduct._id, null, newProduct.toObject());
+        await logAuditAction(
+          req,
+          'csv_import_row_create',
+          newProduct._id,
+          null,
+          newProduct.toObject()
+        );
       }
     }
 
-    // Complete audit log for batch action
     await logAuditAction(req, 'csv_bulk_import_completed', null, null, {
       importedCount: imported,
       updatedCount: updated,
       skippedCount: errors.length
     });
 
-    return sendSuccess(res, {
-      imported,
-      updated,
-      skipped: errors.length,
-      errors
-    }, 'CSV bulk stock import completed successfully.');
+    return sendSuccess(
+      res,
+      {
+        imported,
+        updated,
+        skipped: errors.length,
+        errors
+      },
+      'CSV bulk stock import completed successfully.'
+    );
   } catch (error) {
-    console.error('CSV import error:', error);
-    return sendError(res, error.message || 'An error occurred during CSV parsing.', 'IMPORT_ERROR', 500);
+    console.error('File import error:', error);
+    return sendError(
+      res,
+      error.message || 'An error occurred during file parsing.',
+      'IMPORT_ERROR',
+      500
+    );
   }
 };
 
@@ -624,25 +821,130 @@ exports.importCSV = async (req, res) => {
  */
 exports.downloadCSVTemplate = async (req, res) => {
   try {
+    const importMode = req.query.importMode || 'catalogue';
+
+    if (importMode === 'purchase_order') {
+      const headers = [
+        'Product name',
+        'Supplier/Party name',
+        'Supplier GSTIN',
+        'Quantity purchased',
+        'Free quantity',
+        'Net amount paid'
+      ];
+      const sampleRow1 = [
+        'PAN-D CAP',
+        'ALKEM',
+        '27AAAAA1111A1Z1',
+        '50',
+        '5',
+        '4500.00'
+      ];
+      const sampleRow2 = [
+        'ACILOC-150MG TAB',
+        'CADILA',
+        '27BBBBB2222B2Z2',
+        '100',
+        '10',
+        '1200.00'
+      ];
+      const csvContent = [
+        headers.join(','),
+        sampleRow1.join(','),
+        sampleRow2.join(',')
+      ].join('\n');
+
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', 'attachment; filename=pankaj_purchase_order_template.csv');
+      return res.status(200).send(csvContent);
+    }
+
     const headers = [
-      'name', 'brand', 'manufacturer', 'composition', 'category', 'form', 'dosage',
-      'mrp', 'sellingPrice', 'rxType', 'stock', 'expiryDate', 'batchNumber',
-      'hsnCode', 'gstRate', 'rackLocation', 'description', 'sideEffects', 'storageInstructions'
+      'name',
+      'brand',
+      'manufacturer',
+      'composition',
+      'category',
+      'form',
+      'dosage',
+      'mrp',
+      'sellingPrice',
+      'rxType',
+      'stock',
+      'expiryDate',
+      'batchNumber',
+      'hsnCode',
+      'gstRate',
+      'rackLocation',
+      'description',
+      'sideEffects',
+      'storageInstructions'
     ];
 
     const sampleRow1 = [
-      'ACILOC-150MG TAB', 'CADILA', 'Cadila Pharmaceuticals', 'Ranitidine 150mg', 'Tablets & Capsules', 'TAB', '150mg',
-      '45.50', '38.00', 'OTC', '120', '12/2027', 'B1042', '3004', '12', 'Rack-A3', 'Used for acidity relief', 'Headache, dizziness', 'Store in dry place'
+      'ACILOC-150MG TAB',
+      'CADILA',
+      'Cadila Pharmaceuticals',
+      'Ranitidine 150mg',
+      'Tablets & Capsules',
+      'TAB',
+      '150mg',
+      '45.50',
+      '38.00',
+      'OTC',
+      '120',
+      '12/2027',
+      'B1042',
+      '3004',
+      '12',
+      'Rack-A3',
+      'Used for acidity relief',
+      'Headache, dizziness',
+      'Store in dry place'
     ];
 
     const sampleRow2 = [
-      'PAN-D CAP', 'ALKEM', 'Alkem Labs', 'Pantoprazole 40mg + Domperidone 30mg', 'Tablets & Capsules', 'CAP', '40mg',
-      '180.00', '162.00', 'H', '50', '08/2026', 'P2391', '3004', '12', 'Rack-A5', 'Prescription antacid capsule', 'Dry mouth', 'Protect from light'
+      'PAN-D CAP',
+      'ALKEM',
+      'Alkem Labs',
+      'Pantoprazole 40mg + Domperidone 30mg',
+      'Tablets & Capsules',
+      'CAP',
+      '40mg',
+      '180.00',
+      '162.00',
+      'H',
+      '50',
+      '08/2026',
+      'P2391',
+      '3004',
+      '12',
+      'Rack-A5',
+      'Prescription antacid capsule',
+      'Dry mouth',
+      'Protect from light'
     ];
 
     const sampleRow3 = [
-      'BECOSULES CAPSULES', 'PFIZER', 'Pfizer India', 'Vitamin B-Complex', 'Vitamins & Supplements', 'CAP', 'Standard',
-      '60.00', '54.00', 'OTC', '200', '05/2028', 'BC9902', '2936', '12', 'Rack-B2', 'Daily Vitamin supplements', 'None reported', 'Keep cool'
+      'BECOSULES CAPSULES',
+      'PFIZER',
+      'Pfizer India',
+      'Vitamin B-Complex',
+      'Vitamins & Supplements',
+      'CAP',
+      'Standard',
+      '60.00',
+      '54.00',
+      'OTC',
+      '200',
+      '05/2028',
+      'BC9902',
+      '2936',
+      '12',
+      'Rack-B2',
+      'Daily Vitamin supplements',
+      'None reported',
+      'Keep cool'
     ];
 
     const csvContent = [
@@ -660,3 +962,68 @@ exports.downloadCSVTemplate = async (req, res) => {
     return res.status(500).json({ success: false, message: 'Failed to generate template.' });
   }
 };
+
+/**
+ * PUT /api/products/bulk-action
+ * Body: { ids: string[], action: 'activate' | 'deactivate' }
+ * Activates or deactivates a specific list of product IDs in one bulkWrite call.
+ */
+exports.bulkAction = async (req, res) => {
+  try {
+    const { ids, action } = req.body;
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return sendError(res, 'No product IDs provided.', 'VALIDATION_ERROR', 400);
+    }
+    if (!['activate', 'deactivate'].includes(action)) {
+      return sendError(res, 'Action must be "activate" or "deactivate".', 'VALIDATION_ERROR', 400);
+    }
+
+    const isActive = action === 'activate';
+    const result = await Product.updateMany(
+      { _id: { $in: ids } },
+      { $set: { isActive } }
+    );
+
+    await logAuditAction(req, `bulk_${action}`, null, null, {
+      affectedCount: result.modifiedCount,
+      ids
+    });
+
+    return sendSuccess(
+      res,
+      { modifiedCount: result.modifiedCount },
+      `${result.modifiedCount} product(s) ${action}d successfully.`
+    );
+  } catch (error) {
+    console.error('bulkAction error:', error);
+    return sendError(res, 'Bulk action failed.', 'SERVER_ERROR', 500);
+  }
+};
+
+/**
+ * PUT /api/products/bulk-activate-all
+ * Activates every product that currently has isActive: false.
+ * Intended for the PO-import workflow where all new products arrive inactive.
+ */
+exports.bulkActivateAll = async (req, res) => {
+  try {
+    const result = await Product.updateMany(
+      { isActive: false },
+      { $set: { isActive: true } }
+    );
+
+    await logAuditAction(req, 'bulk_activate_all_inactive', null, null, {
+      activatedCount: result.modifiedCount
+    });
+
+    return sendSuccess(
+      res,
+      { activatedCount: result.modifiedCount },
+      `${result.modifiedCount} inactive product(s) activated successfully.`
+    );
+  } catch (error) {
+    console.error('bulkActivateAll error:', error);
+    return sendError(res, 'Failed to activate all inactive products.', 'SERVER_ERROR', 500);
+  }
+};
+

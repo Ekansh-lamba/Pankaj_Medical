@@ -1,9 +1,37 @@
 const express = require('express');
 const router = express.Router();
+const { protect } = require('../middleware/auth.middleware');
+const { requireRole } = require('../middleware/role.middleware');
+const {
+  placeOrder,
+  getMyOrders,
+  getMyOrderDetail,
+  cancelOrder,
+  rateOrder,
+  requestReturn,
+  getAllOrders,
+  updateOrderStatus,
+  markCodCollected,
+  handleReturnAction
+} = require('../controllers/order.controller');
 
-// Order routes skeleton (Full order implementation deferred to Phase 3)
-router.get('/', (req, res) => {
-  res.json({ success: true, message: 'Orders list placeholder' });
-});
+// All routes require auth
+router.use(protect);
+
+// Customer endpoints
+router.post('/', placeOrder);
+router.get('/my-orders', getMyOrders);
+router.get('/my-orders/:id', getMyOrderDetail);
+router.post('/my-orders/:id/cancel', cancelOrder);
+router.post('/my-orders/:id/rate', rateOrder);
+router.post('/my-orders/:id/return', requestReturn);
+
+// Staff & Admin endpoints
+router.get('/', requireRole(['staff', 'admin']), getAllOrders);
+router.put('/:id/status', requireRole(['staff', 'admin']), updateOrderStatus);
+router.put('/:id/cod-collected', requireRole(['staff', 'admin']), markCodCollected);
+
+// Admin-only endpoints
+router.put('/:id/return-action', requireRole(['admin']), handleReturnAction);
 
 module.exports = router;

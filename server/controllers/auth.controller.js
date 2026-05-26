@@ -72,7 +72,7 @@ exports.signup = async (req, res) => {
       passwordHash: password, // Schema hook hashes this
       authProviders: ['email'],
       role,
-      isVerified: false,
+      isVerified: process.env.NODE_ENV === 'development',
       emailVerificationToken: verificationToken,
       emailVerificationExpires: verificationExpires
     });

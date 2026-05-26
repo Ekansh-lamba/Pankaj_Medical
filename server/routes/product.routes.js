@@ -42,11 +42,31 @@ router.delete('/:id', protect, requireRole(['admin']), productController.deleteP
 router.get('/openfda-lookup', protect, requireRole(['admin']), productController.openFdaLookup);
 
 // CSV upload / download operations
-router.get('/import-template', protect, requireRole(['admin']), productController.downloadCSVTemplate);
-router.post('/import-csv', protect, requireRole(['admin']), upload.single('file'), productController.importCSV);
+router.get(
+  '/import-template',
+  protect,
+  requireRole(['admin']),
+  productController.downloadCSVTemplate
+);
+router.post(
+  '/import-csv',
+  protect,
+  requireRole(['admin']),
+  upload.single('file'),
+  productController.importCSV
+);
 
 // Visibility overrides and substitutions
-router.put('/:id/toggle-visibility', protect, requireRole(['admin']), productController.toggleVisibility);
+router.put(
+  '/:id/toggle-visibility',
+  protect,
+  requireRole(['admin']),
+  productController.toggleVisibility
+);
 router.put('/:id/substitutes', protect, requireRole(['admin']), productController.setSubstitutes);
+
+// Bulk operations
+router.put('/bulk-action',       protect, requireRole(['admin']), productController.bulkAction);
+router.put('/bulk-activate-all', protect, requireRole(['admin']), productController.bulkActivateAll);
 
 module.exports = router;

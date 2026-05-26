@@ -75,7 +75,7 @@ const ProductSchema = new mongoose.Schema(
 ProductSchema.pre('validate', async function (next) {
   if (this.isModified('name') || !this.slug) {
     let baseSlug = slugify(this.name, { lower: true, strict: true });
-    
+
     // Check if slug already exists to prevent collisions
     try {
       const ProductModel = mongoose.model('Product');
