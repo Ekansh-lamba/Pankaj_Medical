@@ -8,11 +8,13 @@ const { startCron } = require('./jobs/expiryChecker');
 const maintenanceMiddleware = require('./middleware/maintenance.middleware');
 const { apiRateLimiter } = require('./middleware/rateLimit.middleware');
 
-// Load environment variables (local overrides in .env take precedence)
-dotenv.config();
-const isProd = process.env.NODE_ENV === 'production';
-const envFile = isProd ? '.env.production' : '.env.development';
-dotenv.config({ path: envFile });
+// Load environment variables
+// On Render/production: env vars come from the dashboard — do NOT try to load .env files
+// In development: load from .env then .env.development for local overrides
+dotenv.config(); // always load root .env first (no-op on Render where the file doesn't exist)
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config({ path: '.env.development' });
+}
 
 const app = express();
 
