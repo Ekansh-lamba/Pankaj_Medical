@@ -4,7 +4,7 @@ import { CheckCircle2, Circle, Clock, Ban } from 'lucide-react';
 const STATUS_DETAILS = {
   pending_payment: { label: 'Order Placed', desc: 'Awaiting payment confirmation' },
   payment_failed: { label: 'Payment Failed', desc: 'Online transaction was unsuccessful' },
-  pending_approval: { label: 'Prescription Pending', desc: 'Pharmacist is reviewing uploaded documents' },
+  pending_approval: { label: 'Awaiting Store Approval', desc: 'Pharmacist is reviewing order details' },
   confirmed: { label: 'Order Confirmed', desc: 'Stock reserved, preparation starting' },
   processing: { label: 'Processing', desc: 'Medicines are being picked and verified' },
   packed: { label: 'Packed & Ready', desc: 'Dispatched package sealed and invoiced' },

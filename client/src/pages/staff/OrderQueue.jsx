@@ -34,7 +34,7 @@ const OrderQueue = () => {
   // Status labels for select dropdowns
   const ALL_STATUSES = [
     { value: 'pending_payment', label: 'Pending Payment' },
-    { value: 'pending_approval', label: 'Pending Rx Approval' },
+    { value: 'pending_approval', label: 'Pending Store Approval' },
     { value: 'confirmed', label: 'Confirmed' },
     { value: 'processing', label: 'Processing' },
     { value: 'packed', label: 'Packed' },
@@ -176,7 +176,7 @@ const OrderQueue = () => {
         {/* Quick status counters */}
         <div className="flex gap-2 flex-wrap">
           <span className="text-[10px] font-black uppercase border border-purple-200 bg-purple-50 text-purple-700 px-3 py-1 rounded-full">
-            Pending Rx: {orders.filter(o => o.status === 'pending_approval').length}
+            Awaiting Approval: {orders.filter(o => o.status === 'pending_approval').length}
           </span>
           <span className="text-[10px] font-black uppercase border border-pink-250 bg-pink-50 text-pink-700 px-3 py-1 rounded-full">
             Returns: {orders.filter(o => o.status === 'return_requested').length}

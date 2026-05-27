@@ -804,16 +804,16 @@ export default function Checkout() {
                   <AlertCircle className="w-4 h-4 shrink-0 text-amber-600" /> Action: Prescription Verification Pending
                 </h4>
                 <p className="text-[11px] text-amber-700 font-medium">
-                  We have received your uploaded prescription. Pharmacy auditors will review and cross-check the medicines during operational hours. We will notify you via dashboard alerts once verified.
+                  Your order has been placed and is awaiting store prescription review and approval. You will be notified once confirmed.
                 </p>
               </div>
             ) : (
               <div className="space-y-1 text-teal-800">
                 <h4 className="font-extrabold text-teal-900 uppercase tracking-wide flex items-center gap-1.5">
-                  <CheckCircle className="w-4 h-4 shrink-0 text-teal-600" /> Order Confirmed
+                  <CheckCircle className="w-4 h-4 shrink-0 text-teal-600" /> Awaiting Store Approval
                 </h4>
-                <p className="text-[11px] text-teal-700 font-medium">
-                  Your Cash-on-Delivery order contains standard OTC medicines and has been confirmed immediately. prepararation has begun. Expected dispatch is within 24 hours.
+                <p className="text-[11px] text-teal-750 font-medium">
+                  Your order has been placed and is awaiting store approval. You will be notified once confirmed.
                 </p>
               </div>
             )}

@@ -128,9 +128,8 @@ exports.verify = async (req, res) => {
       order.payment.razorpayPaymentId = razorpay_payment_id;
       order.payment.paidAt = new Date();
 
-      // Check if prescription verification is needed
-      const hasRxItems = order.items.some((i) => i.rxType === 'H' || i.rxType === 'NRX');
-      const nextStatus = hasRxItems ? 'pending_approval' : 'confirmed';
+      // All orders require store approval before confirmation
+      const nextStatus = 'pending_approval';
 
       order.status = nextStatus;
       order.timeline.push({
@@ -184,16 +183,25 @@ exports.verify = async (req, res) => {
         `/my-orders/${order._id}`
       );
 
-      // Staff warnings for prescription items
-      if (hasRxItems) {
-        const staffUsers = await User.find({ role: { $in: ['staff', 'admin'] } });
-        for (const u of staffUsers) {
+      // Staff warnings for review
+      const hasRxItems = order.items.some((i) => i.rxType === 'H' || i.rxType === 'NRX');
+      const staffUsers = await User.find({ role: { $in: ['staff', 'admin'] } });
+      for (const u of staffUsers) {
+        if (hasRxItems) {
           await createNotification(
             u._id,
             'new_rx_order',
             'Prescription Verification Required',
             `Order ${order.orderNumber} requires RX review.`,
             '/staff/prescriptions'
+          );
+        } else {
+          await createNotification(
+            u._id,
+            'new_rx_order',
+            'New Order Awaiting Approval',
+            `Order ${order.orderNumber} has been paid and requires store approval.`,
+            '/staff/orders'
           );
         }
       }
@@ -453,8 +461,8 @@ exports.webhook = async (req, res) => {
         order.payment.razorpayPaymentId = paymentId;
         order.payment.paidAt = new Date();
 
-        const hasRxItems = order.items.some((i) => i.rxType === 'H' || i.rxType === 'NRX');
-        const nextStatus = hasRxItems ? 'pending_approval' : 'confirmed';
+        // All orders require store approval before confirmation
+        const nextStatus = 'pending_approval';
 
         order.status = nextStatus;
         order.timeline.push({ status: nextStatus, updatedBy: null });
@@ -487,6 +495,33 @@ exports.webhook = async (req, res) => {
           await emailService.sendOrderConfirmed(order.customer.email, order.customer.name, order);
         } catch (emailErr) {
           console.error('Email dispatch failed on webhook capture:', emailErr);
+        }
+
+        // Create staff alert notifications for captured webhook orders
+        try {
+          const hasRxItems = order.items.some((i) => i.rxType === 'H' || i.rxType === 'NRX');
+          const staffUsers = await User.find({ role: { $in: ['staff', 'admin'] } });
+          for (const u of staffUsers) {
+            if (hasRxItems) {
+              await createNotification(
+                u._id,
+                'new_rx_order',
+                'Prescription Verification Required',
+                `Order ${order.orderNumber} requires RX review.`,
+                '/staff/prescriptions'
+              );
+            } else {
+              await createNotification(
+                u._id,
+                'new_rx_order',
+                'New Order Awaiting Approval',
+                `Order ${order.orderNumber} has been paid and requires store approval.`,
+                '/staff/orders'
+              );
+            }
+          }
+        } catch (err) {
+          console.error('Webhook: Staff notification failed:', err);
         }
 
         await createNotification(

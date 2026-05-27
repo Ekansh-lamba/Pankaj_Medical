@@ -214,13 +214,13 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Pending RX Approvals */}
+        {/* Awaiting Store Approvals */}
         <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-xs flex items-center gap-4">
           <div className="w-11 h-11 rounded-xl bg-red-50 text-red-700 flex items-center justify-center shrink-0">
             <FileText className="w-5.5 h-5.5" />
           </div>
           <div>
-            <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Pending RX Approvals</span>
+            <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Awaiting Store Approval</span>
             <h2 className={`text-base md:text-lg font-black mt-0.5 ${summary?.pendingPrescriptions > 0 ? 'text-red-600 animate-pulse' : 'text-gray-800'}`}>
               {summary?.pendingPrescriptions || 0}
             </h2>

@@ -21,7 +21,7 @@ const STATUS_BADGES = {
 const STATUS_LABELS = {
   pending_payment: 'Pending Payment',
   payment_failed: 'Payment Failed',
-  pending_approval: 'Pending Prescription Approval',
+  pending_approval: 'Awaiting Store Approval',
   confirmed: 'Confirmed',
   processing: 'Processing',
   packed: 'Packed & Ready',

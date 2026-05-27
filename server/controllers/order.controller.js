@@ -288,7 +288,7 @@ exports.placeOrder = async (req, res) => {
 
     if (paymentMethod === 'cod') {
       paymentStatus = 'pending';
-      status = hasRxItems ? 'pending_approval' : 'confirmed';
+      status = 'pending_approval'; // All COD orders require store approval before confirmation
     }
 
     // Create Order document
@@ -403,18 +403,27 @@ exports.placeOrder = async (req, res) => {
       `/my-orders/${order._id}`
     );
 
-    // If RX order, create staff alert notification
-    if (hasRxItems && paymentMethod === 'cod') {
-      // Find a staff or admin user to flag new prescription alerts
+    // Create staff alert notifications for all orders awaiting approval
+    if (paymentMethod === 'cod') {
       const users = await mongoose.model('User').find({ role: { $in: ['staff', 'admin'] } });
       for (const u of users) {
-        await createNotification(
-          u._id,
-          'new_rx_order',
-          'New Prescription Verification Required',
-          `Order ${order.orderNumber} contains H/NRX medicines and requires prescription review.`,
-          '/staff/prescriptions'
-        );
+        if (hasRxItems) {
+          await createNotification(
+            u._id,
+            'new_rx_order',
+            'New Prescription Verification Required',
+            `Order ${order.orderNumber} contains H/NRX medicines and requires prescription review.`,
+            '/staff/prescriptions'
+          );
+        } else {
+          await createNotification(
+            u._id,
+            'new_rx_order',
+            'New Order Awaiting Approval',
+            `Order ${order.orderNumber} has been placed and requires store approval.`,
+            '/staff/orders'
+          );
+        }
       }
     }
 

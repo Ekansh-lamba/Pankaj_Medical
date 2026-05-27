@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ShieldCheck, Truck, ClipboardList, Clock, Search } from 'lucide-react';
+import { ShieldCheck, Truck, ClipboardList, Clock } from 'lucide-react';
+import SearchBar from '../../components/shared/SearchBar';
 
 const Home = () => {
   return (
@@ -108,23 +109,15 @@ const Home = () => {
 
       {/* Quick Search Showcase */}
       <section className="bg-gray-50 border-t border-b border-gray-200 py-16 px-4 md:px-8 text-center">
-        <div className="max-w-xl mx-auto">
+        <div className="max-w-xl mx-auto flex flex-col items-center">
           <h2 className="text-2xl font-bold text-gray-800 mb-3">
             Looking for a specific salt or brand?
           </h2>
           <p className="text-gray-600 mb-6 text-sm">
-            We list Tablets, Syrups, Injections, Supplements, and baby care items. Log in to search
-            our active inventory database.
+            We list Tablets, Syrups, Injections, Supplements, and baby care items. Search our active inventory database.
           </p>
-          <div className="relative max-w-md mx-auto">
-            <input
-              type="text"
-              placeholder="Search Aciloc, Paracetamol, Dolo..."
-              className="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white"
-              readOnly
-              onClick={() => (window.location.href = '/login')}
-            />
-            <Search className="absolute right-3 top-3 text-gray-400 w-5 h-5" />
+          <div className="w-full max-w-md mx-auto flex justify-center">
+            <SearchBar />
           </div>
         </div>
       </section>
