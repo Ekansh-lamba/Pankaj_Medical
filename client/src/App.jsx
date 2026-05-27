@@ -59,163 +59,9 @@ import StoreSettings from './pages/admin/StoreSettings';
 import AuditLogs from './pages/admin/AuditLogs';
 import Maintenance from './pages/Maintenance';
 
-// Layout component wrapping public pages
+// Legacy Layout wrapper (deprecated in favor of unified CustomerLayout)
 const Layout = ({ children }) => {
-  const { isAuthenticated, user, logoutUser } = useAuthStore();
-  const { itemCount, fetchCart } = useCart();
-  const location = useLocation();
-
-  // Load cart once on layout mount
-  useEffect(() => {
-    fetchCart();
-  }, [isAuthenticated]);
-
-  // Hide public header/footer inside all portal routes (admin, staff, customer)
-  const isPortal = location.pathname.startsWith('/admin') ||
-                   location.pathname.startsWith('/staff') ||
-                   location.pathname.startsWith('/customer') ||
-                   location.pathname.startsWith('/my-orders') ||
-                   location.pathname.startsWith('/checkout') ||
-                   location.pathname.startsWith('/profile') ||
-                   location.pathname.includes('/dashboard');
-
-  if (isPortal) return <>{children}</>;
-
-  const getDashboardLink = () => {
-    if (!user) return '/login';
-    if (user.role === 'admin') return '/admin/dashboard';
-    if (user.role === 'staff') return '/staff/dashboard';
-    return '/customer/dashboard';
-  };
-
-  return (
-    <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
-      {/* Sticky Top Header Navbar */}
-      <header className="sticky top-0 bg-white border-b border-gray-200 z-40 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between gap-4">
-          <Link
-            to="/"
-            style={{ textDecoration: 'none' }}
-            className="flex items-center gap-2 text-teal-700 font-extrabold text-lg shrink-0"
-          >
-            <Landmark className="w-6 h-6" />
-            <span className="hidden xs:inline">Pankaj Medical</span>
-          </Link>
-
-          <nav className="hidden lg:flex items-center gap-6 text-sm font-semibold text-gray-500 shrink-0">
-            <Link
-              to="/"
-              style={{ textDecoration: 'none' }}
-              className="hover:text-teal-600 transition-colors"
-            >
-              Home
-            </Link>
-            <Link
-              to="/products"
-              style={{ textDecoration: 'none' }}
-              className="hover:text-teal-600 transition-colors"
-            >
-              Medicines
-            </Link>
-            <Link
-              to="/about"
-              style={{ textDecoration: 'none' }}
-              className="hover:text-teal-600 transition-colors"
-            >
-              About
-            </Link>
-            <Link
-              to="/contact"
-              style={{ textDecoration: 'none' }}
-              className="hover:text-teal-600 transition-colors"
-            >
-              Contact
-            </Link>
-          </nav>
-
-          {/* Autocomplete SearchBar wired into the main Navbar */}
-          <div className="flex-grow max-w-sm sm:max-w-xs md:max-w-md mx-2">
-            <SearchBar />
-          </div>
-
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            {/* Always visible Cart icon */}
-            <Link
-              to="/cart"
-              style={{ textDecoration: 'none' }}
-              className="relative p-2 text-gray-500 hover:text-teal-600 hover:bg-gray-100 rounded-full transition-colors shrink-0"
-            >
-              <ShoppingBag className="w-5 h-5" />
-              {itemCount > 0 && (
-                <span className="absolute top-1 right-1 w-4 h-4 bg-teal-600 text-white text-[9px] font-black rounded-full flex items-center justify-center border border-white">
-                  {itemCount}
-                </span>
-              )}
-            </Link>
-
-            {isAuthenticated ? (
-              <>
-                <NotificationBell />
-                <Link
-                  to={getDashboardLink()}
-                  style={{ textDecoration: 'none' }}
-                  className="btn-teal-outline flex items-center gap-1.5 py-1.5 px-3 text-xs font-bold"
-                >
-                  <LayoutDashboard className="w-3.5 h-3.5" /> Dashboard
-                </Link>
-                <button onClick={() => logoutUser()} className="btn-white text-xs py-1.5 px-3 font-bold">
-                  Sign Out
-                </button>
-              </>
-            ) : (
-              <Link
-                to="/login"
-                style={{ textDecoration: 'none' }}
-                className="btn-teal flex items-center gap-1.5 py-1.5 px-4 text-xs font-bold"
-              >
-                <LogIn className="w-3.5 h-3.5" /> Sign In
-              </Link>
-            )}
-          </div>
-        </div>
-      </header>
-
-      {/* Main Viewport */}
-      <main className="flex-grow">{children}</main>
-
-      {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 py-10 px-4 md:px-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 text-center md:text-left text-sm text-gray-500">
-          <div>
-            <h4 className="font-extrabold text-teal-800 text-base mb-3">
-              PANKAJ MEDICAL & GENERAL STORES
-            </h4>
-            <p className="leading-relaxed max-w-sm">
-              Your neighborhood digital pharmacy. Providing batch-verified genuine medicines and
-              supplements inside Kanpur.
-            </p>
-          </div>
-          <div className="space-y-2 md:text-right">
-            <h4 className="font-bold text-gray-700 uppercase tracking-wider text-xs mb-1">
-              Corporate Registration
-            </h4>
-            <p>
-              <strong>GSTIN:</strong> 09ACPPL2448G1ZB
-            </p>
-            <p>
-              <strong>Registered Address:</strong> 133/17 M Block, Kidwainagar, Kanpur Nagar, UP
-            </p>
-          </div>
-        </div>
-        <div className="max-w-6xl mx-auto border-t border-gray-100 mt-8 pt-6 text-center text-xs text-gray-400">
-          <p>
-            © {new Date().getFullYear()} Pankaj Medical and General Stores. All Rights Reserved.
-            Compliant with UP Drugs Department.
-          </p>
-        </div>
-      </footer>
-    </div>
-  );
+  return <>{children}</>;
 };
 
 // Main routing config
@@ -232,24 +78,18 @@ const App = () => {
       <Toaster position="top-right" toastOptions={{ className: 'font-sans text-xs font-bold' }} />
       <Layout>
         <Routes>
-          {/* Public Pages */}
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/products" element={<ProductList />} />
-          <Route path="/products/:slug" element={<ProductDetail />} />
-          <Route path="/cart" element={<Cart />} />
+          {/* Public & Protected Customer Pages (All share CustomerLayout sidebar) */}
+          <Route element={<CustomerLayout />}>
+            {/* Public Pages */}
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/products" element={<ProductList />} />
+            <Route path="/products/:slug" element={<ProductDetail />} />
+            <Route path="/cart" element={<Cart />} />
 
-          {/* Auth Pages */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/verify-email" element={<VerifyEmail />} />
-
-          {/* Protected Customer Routes */}
-          <Route element={<ProtectedRoute roles={['customer']} />}>
-            <Route element={<CustomerLayout />}>
+            {/* Protected Customer Routes */}
+            <Route element={<ProtectedRoute roles={['customer']} />}>
               <Route path="/customer/dashboard" element={<CustomerDashboard />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/my-orders" element={<OrderHistory />} />
@@ -257,6 +97,13 @@ const App = () => {
               <Route path="/profile" element={<Profile />} />
             </Route>
           </Route>
+
+          {/* Auth Pages */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
 
           {/* Protected Staff & Admin Shared Routes */}
           <Route element={<ProtectedRoute roles={['staff', 'admin']} />}>
