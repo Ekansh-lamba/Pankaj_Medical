@@ -63,23 +63,23 @@ export default function ProductCard({ product }) {
   };
 
   return (
-    <div className="relative bg-white border border-gray-200 rounded-xl overflow-hidden shadow-xs hover:shadow-md transition-all duration-200 flex flex-col group h-full">
+    <div className="relative bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col group h-full">
       {/* Expiring Soon Banner Alert */}
       {isExpiringSoon && (
-        <div className="absolute top-2 left-2 z-10 bg-amber-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold flex items-center gap-1 shadow-sm">
+        <div className="absolute top-2 left-2 z-10 bg-amber-500 text-white text-[10px] px-2.5 py-1 rounded-full font-bold flex items-center gap-1 shadow-sm">
           <AlertTriangle className="w-3 h-3" /> Expiring Soon
         </div>
       )}
 
       {/* Out of Stock Overlay */}
       {isOutOfStock && (
-        <div className="absolute inset-0 bg-white/70 z-20 flex flex-col items-center justify-center p-4 text-center">
-          <span className="bg-red-600 text-white text-xs font-bold px-3 py-1 rounded shadow-sm mb-2">
+        <div className="absolute inset-0 bg-white/80 z-20 flex flex-col items-center justify-center p-4 text-center">
+          <span className="bg-slate-400 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-sm mb-2">
             Out of Stock
           </span>
           <Link
             to={`/products/${slug}`}
-            className="text-xs font-bold text-teal-600 hover:text-teal-800 hover:underline"
+            className="text-xs font-bold text-primary-600 hover:text-primary-700 hover:underline"
           >
             See Alternatives
           </Link>
@@ -87,7 +87,7 @@ export default function ProductCard({ product }) {
       )}
 
       {/* Product Image section */}
-      <Link to={`/products/${slug}`} className="block relative aspect-square bg-gray-50 flex items-center justify-center p-6 border-b border-gray-100 overflow-hidden">
+      <Link to={`/products/${slug}`} className="block relative aspect-square bg-gradient-to-br from-primary-50/40 to-primary-100/20 flex items-center justify-center p-6 border-b border-slate-100 overflow-hidden">
         {productImage ? (
           <img
             src={productImage}
@@ -96,7 +96,7 @@ export default function ProductCard({ product }) {
           />
         ) : (
           <svg
-            className="w-16 h-16 text-gray-200 group-hover:scale-105 transition-transform duration-300"
+            className="w-16 h-16 text-primary-200 group-hover:scale-105 transition-transform duration-300"
             fill="currentColor"
             viewBox="0 0 24 24"
           >
@@ -108,7 +108,7 @@ export default function ProductCard({ product }) {
       {/* Card Info Details */}
       <div className="p-4 flex flex-col flex-grow">
         {/* Brand Name */}
-        <span className="text-[10px] font-bold text-teal-700 uppercase tracking-wider mb-1">
+        <span className="text-[10px] font-bold text-primary-900 uppercase tracking-wider mb-1">
           {brand}
         </span>
 
@@ -116,31 +116,31 @@ export default function ProductCard({ product }) {
         <Link
           to={`/products/${slug}`}
           style={{ textDecoration: 'none' }}
-          className="text-sm font-bold text-gray-800 hover:text-teal-600 line-clamp-2 min-h-[40px] leading-tight mb-2"
+          className="text-sm font-bold text-slate-800 hover:text-primary-600 line-clamp-2 min-h-[40px] leading-tight mb-2"
         >
           {name}
         </Link>
 
         {/* Sub-details (Form + RxBadge) */}
         <div className="flex items-center gap-2 mb-3 min-h-[22px]">
-          <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">{form}</span>
+          <span className="text-xs text-slate-400 font-medium uppercase tracking-wider">{form}</span>
           <RxBadge rxType={rxType} />
         </div>
 
         {/* Pricing Segment */}
         <div className="mt-auto pt-2 flex items-baseline justify-between gap-1.5">
           <div className="flex items-baseline gap-1">
-            <span className="text-base font-extrabold text-teal-800">
+            <span className="text-base font-extrabold text-primary-600">
               {formatCurrency(sellingPrice)}
             </span>
             {discount > 0 && (
-              <span className="text-xs text-gray-400 line-through">
+              <span className="text-xs text-slate-400 line-through">
                 {formatCurrency(mrp)}
               </span>
             )}
           </div>
           {discount > 0 && (
-            <span className="text-[10px] font-bold bg-teal-50 text-teal-600 px-1.5 py-0.5 rounded">
+            <span className="text-[10px] font-bold bg-green-50 text-green-600 px-1.5 py-0.5 rounded border border-green-200">
               {discount}% OFF
             </span>
           )}
@@ -150,7 +150,7 @@ export default function ProductCard({ product }) {
         <button
           onClick={handleAdd}
           disabled={adding || isOutOfStock}
-          className="mt-4 w-full btn-teal flex items-center justify-center gap-1.5 py-2.5 text-xs font-bold"
+          className="mt-4 w-full btn-primary flex items-center justify-center gap-1.5 py-2.5 text-xs font-bold"
         >
           <ShoppingCart className="w-3.5 h-3.5" /> {adding ? 'Adding...' : 'Add to Cart'}
         </button>

@@ -46,26 +46,26 @@ export default function CustomerLayout() {
   }, [isAuthenticated]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 font-sans">
+    <div className="flex flex-col min-h-screen bg-slate-50 font-sans">
 
       {/* ── Unified top navbar (All screen sizes) ────────────────────────── */}
-      <header className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
+      <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
           
           {/* Left Side: Hamburger Icon & Brand Brand Logo */}
           <div className="flex items-center gap-2.5 shrink-0">
             <button
               onClick={() => setIsSidebarOpen(true)}
-              className="p-1.5 text-gray-500 hover:text-teal-650 hover:bg-gray-100 rounded-lg transition-colors focus:outline-none"
+              className="p-1.5 text-slate-500 hover:text-primary-600 hover:bg-slate-100 rounded-lg transition-colors focus:outline-none"
             >
               <Menu className="w-6 h-6" />
             </button>
             <Link
               to="/"
               style={{ textDecoration: 'none' }}
-              className="flex items-center gap-1.5 text-teal-700 font-extrabold text-base"
+              className="flex items-center gap-1.5 text-primary-900 hover:text-primary-800 font-extrabold text-base"
             >
-              <Landmark className="w-5 h-5" />
+              <Landmark className="w-5 h-5 text-primary-600" />
               <span className="hidden xs:inline">Pankaj Medical</span>
             </Link>
           </div>
@@ -80,11 +80,11 @@ export default function CustomerLayout() {
             <Link
               to="/cart"
               style={{ textDecoration: 'none' }}
-              className="relative p-2 text-gray-500 hover:text-teal-600 hover:bg-gray-100 rounded-full transition-colors shrink-0"
+              className="relative p-2 text-slate-500 hover:text-primary-600 hover:bg-slate-100 rounded-full transition-colors shrink-0"
             >
               <ShoppingCart className="w-5 h-5" />
               {itemCount > 0 && (
-                <span className="absolute top-1 right-1 w-4 h-4 bg-teal-600 text-white text-[9px] font-black rounded-full flex items-center justify-center border border-white">
+                <span className="absolute top-1 right-1 w-4 h-4 bg-primary-600 text-white text-[9px] font-black rounded-full flex items-center justify-center border border-white">
                   {itemCount}
                 </span>
               )}
@@ -93,13 +93,13 @@ export default function CustomerLayout() {
             {isAuthenticated ? (
               <>
                 <NotificationBell />
-                <div className="hidden sm:flex items-center gap-1.5 text-sm text-gray-600 font-semibold px-3 py-1.5 bg-gray-100 rounded-lg max-w-[130px] truncate">
-                  <User className="w-3.5 h-3.5 text-teal-600 shrink-0" />
+                <div className="hidden sm:flex items-center gap-1.5 text-sm text-slate-600 font-semibold px-3 py-1.5 bg-slate-100 rounded-lg max-w-[130px] truncate">
+                  <User className="w-3.5 h-3.5 text-primary-600 shrink-0" />
                   <span className="truncate">{user?.name?.split(' ')[0] || 'Account'}</span>
                 </div>
                 <button
                   onClick={() => logoutUser()}
-                  className="hidden sm:flex items-center gap-1.5 text-xs font-bold py-1.5 px-3 rounded-lg border border-gray-200 text-gray-500 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors"
+                  className="hidden sm:flex items-center gap-1.5 text-xs font-bold py-1.5 px-3 rounded-lg border border-slate-200 text-slate-500 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors"
                 >
                   <LogOut className="w-3.5 h-3.5" /> Sign Out
                 </button>
@@ -108,7 +108,7 @@ export default function CustomerLayout() {
               <Link
                 to="/login"
                 style={{ textDecoration: 'none' }}
-                className="btn-teal flex items-center gap-1.5 py-1.5 px-4 text-xs font-bold"
+                className="btn-primary flex items-center gap-1.5 py-1.5 px-4 text-xs font-bold"
               >
                 <LogIn className="w-3.5 h-3.5" /> Sign In
               </Link>
@@ -126,27 +126,50 @@ export default function CustomerLayout() {
       )}
 
       <div
-        className={`fixed top-0 bottom-0 left-0 w-72 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-out flex flex-col ${
+        className={`fixed top-0 bottom-0 left-0 w-[280px] bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-out flex flex-col ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="h-16 px-6 border-b border-gray-150 flex items-center justify-between shrink-0">
+        <div className="h-16 px-6 border-b border-slate-150 flex items-center justify-between shrink-0">
           <Link
             to="/"
             onClick={() => setIsSidebarOpen(false)}
             style={{ textDecoration: 'none' }}
-            className="flex items-center gap-2 text-teal-700 font-extrabold text-base"
+            className="flex items-center gap-2 text-primary-900 font-extrabold text-base"
           >
-            <Landmark className="w-5 h-5" />
+            <Landmark className="w-5 h-5 text-primary-600" />
             <span>Pankaj Medical</span>
           </Link>
           <button
             onClick={() => setIsSidebarOpen(false)}
-            className="p-1 text-gray-400 hover:text-teal-600 hover:bg-gray-100 rounded-full transition-colors focus:outline-none"
+            className="p-1 text-slate-400 hover:text-primary-600 hover:bg-slate-100 rounded-full transition-colors focus:outline-none"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
+
+        {/* User Info Section (when logged in) */}
+        {isAuthenticated ? (
+          <div className="px-6 py-4 bg-slate-50 border-b border-slate-100 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-primary-600 text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-sm">
+              {user?.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : 'U'}
+            </div>
+            <div className="flex flex-col min-w-0">
+              <span className="font-bold text-slate-800 text-sm truncate">{user?.name}</span>
+              <span className="text-slate-400 text-xs truncate">{user?.email}</span>
+            </div>
+          </div>
+        ) : (
+          <div className="px-6 py-4 bg-slate-50 border-b border-slate-100 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center font-bold text-sm shrink-0">
+              G
+            </div>
+            <div className="flex flex-col min-w-0">
+              <span className="font-bold text-slate-800 text-sm">Welcome Guest</span>
+              <span className="text-slate-400 text-xs">Sign in to place orders</span>
+            </div>
+          </div>
+        )}
 
         <nav className="flex-grow py-4 px-4 space-y-1.5 overflow-y-auto">
           <Link
@@ -155,8 +178,8 @@ export default function CustomerLayout() {
             style={{ textDecoration: 'none' }}
             className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-bold transition-colors ${
               isActive('/')
-                ? 'bg-teal-50 text-teal-800'
-                : 'text-gray-600 hover:text-teal-700 hover:bg-gray-50'
+                ? 'bg-primary-50 text-primary-900'
+                : 'text-slate-600 hover:text-primary-700 hover:bg-slate-50'
             }`}
           >
             <Home className="w-5 h-5 shrink-0" />
@@ -169,8 +192,8 @@ export default function CustomerLayout() {
             style={{ textDecoration: 'none' }}
             className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-bold transition-colors ${
               isActive('/products')
-                ? 'bg-teal-50 text-teal-800'
-                : 'text-gray-600 hover:text-teal-700 hover:bg-gray-50'
+                ? 'bg-primary-50 text-primary-900'
+                : 'text-slate-600 hover:text-primary-700 hover:bg-slate-50'
             }`}
           >
             <Pill className="w-5 h-5 shrink-0" />
@@ -183,8 +206,8 @@ export default function CustomerLayout() {
             style={{ textDecoration: 'none' }}
             className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold transition-colors ${
               isActive('/cart')
-                ? 'bg-teal-50 text-teal-800'
-                : 'text-gray-600 hover:text-teal-700 hover:bg-gray-50'
+                ? 'bg-primary-50 text-primary-900'
+                : 'text-slate-600 hover:text-primary-700 hover:bg-slate-50'
             }`}
           >
             <div className="flex items-center gap-3.5">
@@ -192,7 +215,7 @@ export default function CustomerLayout() {
               <span>Cart</span>
             </div>
             {itemCount > 0 && (
-              <span className="bg-teal-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full shrink-0">
+              <span className="bg-primary-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full shrink-0">
                 {itemCount}
               </span>
             )}
@@ -206,8 +229,8 @@ export default function CustomerLayout() {
                 style={{ textDecoration: 'none' }}
                 className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-bold transition-colors ${
                   isActive('/my-orders')
-                    ? 'bg-teal-50 text-teal-800'
-                    : 'text-gray-600 hover:text-teal-700 hover:bg-gray-50'
+                    ? 'bg-primary-50 text-primary-900'
+                    : 'text-slate-600 hover:text-primary-700 hover:bg-slate-50'
                 }`}
               >
                 <ClipboardList className="w-5 h-5 shrink-0" />
@@ -220,8 +243,8 @@ export default function CustomerLayout() {
                 style={{ textDecoration: 'none' }}
                 className={`flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-bold transition-colors ${
                   isActive('/profile')
-                    ? 'bg-teal-50 text-teal-800'
-                    : 'text-gray-600 hover:text-teal-700 hover:bg-gray-50'
+                    ? 'bg-primary-50 text-primary-900'
+                    : 'text-slate-600 hover:text-primary-700 hover:bg-slate-50'
                 }`}
               >
                 <User className="w-5 h-5 shrink-0" />
@@ -234,8 +257,8 @@ export default function CustomerLayout() {
                 style={{ textDecoration: 'none' }}
                 className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold transition-colors ${
                   isActive('/notifications')
-                    ? 'bg-teal-50 text-teal-800'
-                    : 'text-gray-600 hover:text-teal-700 hover:bg-gray-50'
+                    ? 'bg-primary-50 text-primary-900'
+                    : 'text-slate-600 hover:text-primary-700 hover:bg-slate-50'
                 }`}
               >
                 <div className="flex items-center gap-3.5">
@@ -252,14 +275,21 @@ export default function CustomerLayout() {
           )}
         </nav>
 
-        <div className="p-4 border-t border-gray-150 shrink-0">
+        {/* Sidebar Footer with Pharmacy Address */}
+        <div className="p-4 bg-slate-50 border-t border-slate-100 text-[11px] text-slate-400 text-center shrink-0">
+          <p className="font-bold text-primary-900 mb-0.5">Pankaj Medical & General Stores</p>
+          <p className="truncate">133/17 M Block, Kidwainagar, Kanpur</p>
+          <p className="mt-1 font-semibold text-primary-600">GSTIN: 09ACPPL2448G1ZB</p>
+        </div>
+
+        <div className="p-4 border-t border-slate-150 shrink-0">
           {isAuthenticated ? (
             <button
               onClick={() => {
                 setIsSidebarOpen(false);
                 logoutUser();
               }}
-              className="w-full flex items-center justify-center gap-2 text-sm font-bold py-3 px-4 rounded-xl border border-gray-250 text-gray-500 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors"
+              className="w-full flex items-center justify-center gap-2 text-sm font-bold py-3 px-4 rounded-xl border border-slate-200 text-slate-500 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors"
             >
               <LogOut className="w-4 h-4" /> Sign Out
             </button>
@@ -268,7 +298,7 @@ export default function CustomerLayout() {
               to="/login"
               onClick={() => setIsSidebarOpen(false)}
               style={{ textDecoration: 'none' }}
-              className="w-full flex items-center justify-center gap-2 text-sm font-bold py-3 px-4 rounded-xl border border-teal-500 text-teal-700 bg-teal-50/10 hover:bg-teal-50 hover:text-teal-800 transition-colors text-center"
+              className="w-full flex items-center justify-center gap-2 text-sm font-bold py-3 px-4 rounded-xl border border-primary-500 text-primary-700 bg-primary-50/10 hover:bg-primary-50 hover:text-primary-800 transition-colors text-center"
             >
               <LogIn className="w-4 h-4" /> Sign In
             </Link>
@@ -282,10 +312,10 @@ export default function CustomerLayout() {
       </main>
 
       {/* ── Footer ──────────────────────────────────────────────────────── */}
-      <footer className="bg-white border-t border-gray-200 py-10 px-4 md:px-6 shrink-0">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 text-center md:text-left text-sm text-gray-500">
+      <footer className="bg-white border-t border-slate-200 py-10 px-4 md:px-6 shrink-0">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 text-center md:text-left text-sm text-slate-500">
           <div>
-            <h4 className="font-extrabold text-teal-800 text-base mb-3">
+            <h4 className="font-extrabold text-primary-900 text-base mb-3">
               PANKAJ MEDICAL & GENERAL STORES
             </h4>
             <p className="leading-relaxed max-w-sm">
@@ -294,7 +324,7 @@ export default function CustomerLayout() {
             </p>
           </div>
           <div className="space-y-2 md:text-right">
-            <h4 className="font-bold text-gray-700 uppercase tracking-wider text-xs mb-1">
+            <h4 className="font-bold text-slate-700 uppercase tracking-wider text-xs mb-1">
               Corporate Registration
             </h4>
             <p>
@@ -305,7 +335,7 @@ export default function CustomerLayout() {
             </p>
           </div>
         </div>
-        <div className="max-w-6xl mx-auto border-t border-gray-100 mt-8 pt-6 text-center text-xs text-gray-400">
+        <div className="max-w-6xl mx-auto border-t border-slate-100 mt-8 pt-6 text-center text-xs text-slate-400">
           <p>
             © {new Date().getFullYear()} Pankaj Medical and General Stores. All Rights Reserved.
             Compliant with UP Drugs Department.

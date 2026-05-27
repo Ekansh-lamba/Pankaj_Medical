@@ -9,7 +9,7 @@ import {
   RecaptchaVerifier,
   isFirebaseConfigured
 } from '../../services/firebase';
-import { ShieldAlert, LogIn, Phone, Chrome, Key, Mail, CheckCircle } from 'lucide-react';
+import { ShieldAlert, LogIn, Phone, Chrome, Key, Mail, CheckCircle, Landmark } from 'lucide-react';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -215,232 +215,258 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
-        {/* Header */}
-        <div className="text-center mb-6">
-          <h2 className="text-2xl font-extrabold text-teal-900">Pankaj Medical Stores</h2>
-          <p className="mt-1.5 text-sm text-gray-500">Sign in to manage prescriptions and orders</p>
+    <div className="min-h-screen bg-slate-50 flex flex-col lg:flex-row">
+      {/* Navy Left Panel - Hidden on mobile */}
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary-900 via-[#1b3455] to-[#12253f] text-white p-16 flex-col justify-between relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary-600/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-primary-800/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        {/* Brand */}
+        <div className="flex items-center gap-2">
+          <Landmark className="w-8 h-8 text-primary-300" />
+          <span className="text-2xl font-black tracking-tight">Pankaj Medical & General Stores</span>
         </div>
 
-        {/* Error Alerts */}
-        {(error || localError) && (
-          <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4 rounded flex items-start gap-2 text-sm text-red-800">
-            <ShieldAlert className="w-5 h-5 shrink-0 mt-0.5" />
-            <div>{localError || error}</div>
-          </div>
-        )}
+        {/* Value Prop / Taglines */}
+        <div className="space-y-8 max-w-md my-auto">
+          <h1 className="text-4xl font-extrabold tracking-tight leading-tight">
+            Your Trusted Local Pharmacy, <span className="text-primary-300">Now Online.</span>
+          </h1>
+          <p className="text-slate-300 text-sm leading-relaxed">
+            Order prescription medicines, over-the-counter wellness products, healthcare devices, and baby care essentials with direct home delivery inside Kanpur.
+          </p>
 
-        {/* Success Alerts */}
-        {successMsg && (
-          <div className="bg-teal-50 border-l-4 border-teal-500 p-4 mb-4 rounded flex items-start gap-2 text-sm text-teal-800">
-            <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" />
-            <div>{successMsg}</div>
-          </div>
-        )}
-
-        {/* Method Toggles */}
-        {/* OTP Login disabled - requires Firebase Blaze plan. This can be re-enabled after Firebase billing is configured.
-        <div className="flex border-b border-gray-200 mb-6">
-          <button
-            onClick={() => {
-              setAuthMethod('email');
-              clearErrors();
-              setLocalError('');
-            }}
-            className={`flex-1 pb-3 text-sm font-semibold text-center border-b-2 transition-all ${
-              authMethod === 'email'
-                ? 'border-teal-600 text-teal-600'
-                : 'border-transparent text-gray-400 hover:text-gray-600'
-            }`}
-          >
-            Email Login
-          </button>
-          <button
-            onClick={() => {
-              setAuthMethod('phone');
-              clearErrors();
-              setLocalError('');
-            }}
-            className={`flex-1 pb-3 text-sm font-semibold text-center border-b-2 transition-all ${
-              authMethod === 'phone'
-                ? 'border-teal-600 text-teal-600'
-                : 'border-transparent text-gray-400 hover:text-gray-600'
-            }`}
-          >
-            OTP Login
-          </button>
-        </div>
-        */}
-
-        {/* Form area */}
-        {authMethod === 'email' ? (
-          <form className="space-y-4" onSubmit={handleEmailSubmit}>
-            <div>
-              <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">
-                Email Address
-              </label>
-              <div className="relative">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@example.com"
-                  className="input-teal pl-9"
-                  required
-                />
-                <Mail className="absolute left-3 top-3.5 text-gray-400 w-4 h-4" />
-              </div>
-            </div>
-
-            <div>
-              <div className="flex justify-between items-center mb-1">
-                <label className="block text-xs font-semibold text-gray-500 uppercase">
-                  Password
-                </label>
-                <Link
-                  to="/forgot-password"
-                  style={{ textDecoration: 'none' }}
-                  className="text-xs text-teal-600 hover:underline"
-                >
-                  Forgot Password?
-                </Link>
-              </div>
-              <div className="relative">
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="input-teal pl-9"
-                  required
-                />
-                <Key className="absolute left-3 top-3.5 text-gray-400 w-4 h-4" />
-              </div>
-            </div>
-
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-                className="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded"
-              />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
-                Remember me (30 days)
-              </label>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="btn-teal w-full flex items-center justify-center gap-2"
-            >
-              <LogIn className="w-5 h-5" /> {isLoading ? 'Authenticating...' : 'Sign In'}
-            </button>
-          </form>
-        ) : (
           <div className="space-y-4">
-            {!otpSent ? (
-              <form className="space-y-4" onSubmit={handleSendOtp}>
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">
-                    Mobile Phone Number
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="tel"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      placeholder="+919876543210"
-                      className="input-teal pl-9"
-                      required
-                    />
-                    <Phone className="absolute left-3 top-3.5 text-gray-400 w-4 h-4" />
-                  </div>
-                  <p className="mt-1 text-xs text-gray-400">
-                    Include country code (e.g. +91 for India)
-                  </p>
-                </div>
+            <div className="flex items-start gap-3">
+              <CheckCircle className="w-5 h-5 text-primary-300 shrink-0 mt-0.5" />
+              <div>
+                <h4 className="font-bold text-sm text-white">100% Genuine Medicines</h4>
+                <p className="text-xs text-slate-400">Direct distributor sourcing with complete batch tracking</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <CheckCircle className="w-5 h-5 text-primary-300 shrink-0 mt-0.5" />
+              <div>
+                <h4 className="font-bold text-sm text-white">Express Delivery inside Kanpur</h4>
+                <p className="text-xs text-slate-400">Same-day delivery directly to your home from Kidwainagar</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <CheckCircle className="w-5 h-5 text-primary-300 shrink-0 mt-0.5" />
+              <div>
+                <h4 className="font-bold text-sm text-white">GST Verified Licensed Chemist</h4>
+                <p className="text-xs text-slate-400">UP Drugs Department registered physical pharmacy since years</p>
+              </div>
+            </div>
+          </div>
+        </div>
 
-                <div id="recaptcha-container"></div>
+        {/* Footer info in left pane */}
+        <div className="text-xs text-slate-400 space-y-1">
+          <p><strong>Physical Address:</strong> 133/17 M Block, Kidwainagar, Kanpur, UP</p>
+          <p>© {new Date().getFullYear()} Pankaj Medical. Licensed wholesale & retail pharmacists.</p>
+        </div>
+      </div>
 
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="btn-teal w-full flex items-center justify-center gap-2"
-                >
-                  <Phone className="w-5 h-5" /> Send Verification OTP
-                </button>
-              </form>
-            ) : (
-              <form className="space-y-4" onSubmit={handleVerifyOtp}>
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">
-                    Enter SMS OTP Code
-                  </label>
+      {/* Right Form Panel */}
+      <div className="flex-1 flex items-center justify-center p-8 sm:p-12 lg:p-16">
+        <div className="max-w-md w-full bg-white border border-slate-200 rounded-2xl p-8 shadow-md">
+          {/* Header */}
+          <div className="text-center mb-8">
+            {/* Show logo on mobile only */}
+            <div className="flex lg:hidden items-center justify-center gap-2 mb-4">
+              <Landmark className="w-8 h-8 text-primary-600" />
+              <span className="text-xl font-black text-primary-900">Pankaj Medical</span>
+            </div>
+            <h2 className="text-2xl font-black text-slate-900 tracking-tight">Welcome Back</h2>
+            <p className="mt-1.5 text-sm text-slate-500">Sign in to manage prescriptions, orders & profile</p>
+          </div>
+
+          {/* Error Alerts */}
+          {(error || localError) && (
+            <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-5 rounded-lg flex items-start gap-2 text-sm text-red-800">
+              <ShieldAlert className="w-5 h-5 shrink-0 mt-0.5" />
+              <div>{localError || error}</div>
+            </div>
+          )}
+
+          {/* Success Alerts */}
+          {successMsg && (
+            <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 mb-5 rounded-lg flex items-start gap-2 text-sm text-emerald-800">
+              <CheckCircle className="w-5 h-5 shrink-0 mt-0.5" />
+              <div>{successMsg}</div>
+            </div>
+          )}
+
+          {/* Form area */}
+          {authMethod === 'email' ? (
+            <form className="space-y-5" onSubmit={handleEmailSubmit}>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                  Email Address
+                </label>
+                <div className="relative flex items-center">
                   <input
-                    type="text"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                    placeholder="6-digit code"
-                    className="input-teal text-center text-lg tracking-widest font-mono"
-                    maxLength={6}
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="name@example.com"
+                    className="input-base pl-10"
                     required
                   />
+                  <Mail className="absolute left-3.5 text-slate-400 w-4 h-4" />
                 </div>
+              </div>
 
-                <div className="flex gap-2">
-                  <button type="submit" disabled={isLoading} className="btn-teal flex-1">
-                    {isLoading ? 'Verifying...' : 'Verify OTP'}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setOtpSent(false);
-                      setSuccessMsg('');
-                    }}
-                    className="btn-white"
+              <div>
+                <div className="flex justify-between items-center mb-1.5">
+                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">
+                    Password
+                  </label>
+                  <Link
+                    to="/forgot-password"
+                    style={{ textDecoration: 'none' }}
+                    className="text-xs text-primary-650 font-bold hover:underline"
                   >
-                    Change Number
-                  </button>
+                    Forgot Password?
+                  </Link>
                 </div>
-              </form>
-            )}
-          </div>
-        )}
+                <div className="relative flex items-center">
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="input-base pl-10"
+                    required
+                  />
+                  <Key className="absolute left-3.5 text-slate-400 w-4 h-4" />
+                </div>
+              </div>
 
-        {/* Divider */}
-        <div className="relative my-6">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200"></div>
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-2 text-gray-400">Or continue with</span>
-          </div>
-        </div>
+              <div className="flex items-center">
+                <input
+                  id="remember-me"
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-slate-300 rounded"
+                />
+                <label htmlFor="remember-me" className="ml-2.5 block text-sm font-semibold text-slate-700">
+                  Remember me (30 days)
+                </label>
+              </div>
 
-        {/* Social Authentication */}
-        <button
-          onClick={handleGoogleLogin}
-          disabled={isLoading}
-          className="btn-white w-full flex items-center justify-center gap-2"
-        >
-          <Chrome className="w-4 h-4 text-red-500" /> Use Google OAuth
-        </button>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="btn-primary w-full flex items-center justify-center gap-2 py-3 mt-2"
+              >
+                <LogIn className="w-4 h-4" /> {isLoading ? 'Authenticating...' : 'Sign In'}
+              </button>
+            </form>
+          ) : (
+            <div className="space-y-4">
+              {!otpSent ? (
+                <form className="space-y-4" onSubmit={handleSendOtp}>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                      Mobile Phone Number
+                    </label>
+                    <div className="relative flex items-center">
+                      <input
+                        type="tel"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        placeholder="+919876543210"
+                        className="input-base pl-10"
+                        required
+                      />
+                      <Phone className="absolute left-3.5 text-slate-400 w-4 h-4" />
+                    </div>
+                    <p className="mt-1 text-xs text-slate-400">
+                      Include country code (e.g. +91 for India)
+                    </p>
+                  </div>
 
-        {/* Footnotes */}
-        <p className="mt-6 text-center text-sm text-gray-600">
-          New Customer?{' '}
-          <Link
-            to="/signup"
-            style={{ textDecoration: 'none' }}
-            className="font-semibold text-teal-600 hover:underline"
+                  <div id="recaptcha-container"></div>
+
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="btn-primary w-full flex items-center justify-center gap-2 py-3"
+                  >
+                    <Phone className="w-4 h-4" /> Send Verification OTP
+                  </button>
+                </form>
+              ) : (
+                <form className="space-y-4" onSubmit={handleVerifyOtp}>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                      Enter SMS OTP Code
+                    </label>
+                    <input
+                      type="text"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      placeholder="6-digit code"
+                      className="input-base text-center text-lg tracking-widest font-mono py-3"
+                      maxLength={6}
+                      required
+                    />
+                  </div>
+
+                  <div className="flex gap-2">
+                    <button type="submit" disabled={isLoading} className="btn-primary flex-1 py-3">
+                      {isLoading ? 'Verifying...' : 'Verify OTP'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOtpSent(false);
+                        setSuccessMsg('');
+                      }}
+                      className="bg-white hover:bg-slate-50 border border-slate-300 text-slate-750 font-bold px-4 rounded-lg transition-all"
+                    >
+                      Change Number
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          )}
+
+          {/* Divider */}
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-slate-200"></div>
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-3 text-slate-400 font-semibold">Or continue with</span>
+            </div>
+          </div>
+
+          {/* Social Authentication */}
+          <button
+            onClick={handleGoogleLogin}
+            disabled={isLoading}
+            className="w-full bg-white hover:bg-slate-50 border border-slate-300 text-slate-750 font-bold py-2.5 px-4 rounded-lg shadow-sm transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2 text-sm"
           >
-            Register Account
-          </Link>
-        </p>
+            <Chrome className="w-4 h-4 text-red-500 shrink-0" /> Use Google OAuth
+          </button>
+
+          {/* Footnotes */}
+          <p className="mt-8 text-center text-sm text-slate-650">
+            New Customer?{' '}
+            <Link
+              to="/signup"
+              style={{ textDecoration: 'none' }}
+              className="font-bold text-primary-600 hover:text-primary-700 hover:underline"
+            >
+              Register Account
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

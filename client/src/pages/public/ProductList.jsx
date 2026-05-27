@@ -8,16 +8,16 @@ import FilterSidebar from '../../components/shared/FilterSidebar';
 
 // Skeleton Loader Component for cards
 const ProductCardSkeleton = () => (
-  <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-xs p-4 flex flex-col space-y-4 animate-pulse">
-    <div className="aspect-square bg-gray-150 rounded-lg"></div>
+  <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm p-4 flex flex-col space-y-4 animate-pulse">
+    <div className="aspect-square bg-primary-50/70 rounded-lg"></div>
     <div className="space-y-2 flex-grow">
-      <div className="h-3 w-1/4 bg-gray-150 rounded"></div>
-      <div className="h-4 w-3/4 bg-gray-150 rounded"></div>
-      <div className="h-3 w-1/2 bg-gray-150 rounded"></div>
+      <div className="h-3 w-1/4 bg-primary-50/70 rounded"></div>
+      <div className="h-4 w-3/4 bg-primary-50/70 rounded"></div>
+      <div className="h-3 w-1/2 bg-primary-50/70 rounded"></div>
     </div>
     <div className="pt-2 flex justify-between items-center">
-      <div className="h-5 w-1/3 bg-gray-150 rounded"></div>
-      <div className="h-8 w-1/3 bg-gray-150 rounded"></div>
+      <div className="h-5 w-1/3 bg-primary-50/70 rounded"></div>
+      <div className="h-8 w-1/3 bg-primary-50/70 rounded"></div>
     </div>
   </div>
 );
@@ -76,21 +76,21 @@ export default function ProductList() {
       {/* Category/Query Header Banner */}
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl md:text-2xl font-extrabold text-teal-900">
+          <h1 className="text-xl md:text-2xl font-extrabold text-primary-900">
             {filters.q ? `Search results for "${filters.q}"` : filters.category ? filters.category : 'Browse All Medicines'}
           </h1>
-          <p className="mt-1 text-sm text-gray-500 font-medium">
+          <p className="mt-1 text-sm text-slate-500 font-medium">
             {loading ? 'Finding matching stock...' : `${pagination.total} genuine medicines available`}
           </p>
         </div>
 
         {/* Sorting Dropdown */}
         <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
-          <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Sort by:</span>
+          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Sort by:</span>
           <select
             value={filters.sortBy || 'newest'}
             onChange={handleSortChange}
-            className="border border-gray-300 rounded-lg text-sm bg-white py-1.5 px-3 focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 font-medium text-gray-700"
+            className="border border-slate-300 rounded-lg text-sm bg-white py-1.5 px-3 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 font-medium text-slate-700 transition-all"
           >
             <option value="newest">Newest Additions</option>
             <option value="price_asc">Price: Low to High</option>
@@ -135,7 +135,7 @@ export default function ProductList() {
                   <button
                     onClick={handleLoadMore}
                     disabled={loading}
-                    className="btn-teal-outline flex items-center justify-center gap-1.5 py-2.5 px-6 font-semibold"
+                    className="btn-secondary flex items-center justify-center gap-1.5 py-2.5 px-6 font-semibold"
                   >
                     {loading ? (
                       <>
@@ -152,12 +152,12 @@ export default function ProductList() {
             </>
           ) : (
             /* Empty Illustration State */
-            <div className="bg-white border border-gray-200 rounded-xl p-12 text-center max-w-lg mx-auto shadow-xs">
-              <div className="w-16 h-16 rounded-full bg-teal-50 flex items-center justify-center mx-auto mb-4">
-                <SlidersHorizontal className="w-6 h-6 text-teal-600" />
+            <div className="bg-white border border-slate-200 rounded-xl p-12 text-center max-w-lg mx-auto shadow-sm">
+              <div className="w-16 h-16 rounded-full bg-primary-50 flex items-center justify-center mx-auto mb-4">
+                <SlidersHorizontal className="w-6 h-6 text-primary-600" />
               </div>
-              <h3 className="text-lg font-bold text-teal-900 mb-1.5">No matching medicines found</h3>
-              <p className="text-sm text-gray-500 leading-relaxed mb-6">
+              <h3 className="text-lg font-bold text-primary-900 mb-1.5">No matching medicines found</h3>
+              <p className="text-sm text-slate-500 leading-relaxed mb-6">
                 We couldn't find any products matching your active filters. Try adjusting your price ranges, clearing composition search keywords, or showing out-of-stock items.
               </p>
               <button
@@ -170,7 +170,7 @@ export default function ProductList() {
                   maxPrice: '',
                   q: ''
                 })}
-                className="btn-teal"
+                className="btn-primary"
               >
                 Clear All Filters
               </button>
