@@ -51,7 +51,7 @@ const sendVerificationEmail = async (email, name, token) => {
   const verificationLink = `${process.env.CLIENT_URL || 'http://localhost:5173'}/verify-email?token=${token}`;
 
   const mailOptions = {
-    from: `"Pankaj Medical Stores" <${process.env.EMAIL_USER || 'no-reply@pankajmedical.com'}>`,
+    from: '"Pankaj Medical and General Stores" <ekanshlamba6226@gmail.com>',
     to: email,
     subject: 'Verify Your Email Address - Pankaj Medical',
     html: `
@@ -88,7 +88,7 @@ const sendPasswordResetEmail = async (email, name, token) => {
   const resetLink = `${process.env.CLIENT_URL || 'http://localhost:5173'}/reset-password?token=${token}`;
 
   const mailOptions = {
-    from: `"Pankaj Medical Stores" <${process.env.EMAIL_USER || 'no-reply@pankajmedical.com'}>`,
+    from: '"Pankaj Medical and General Stores" <ekanshlamba6226@gmail.com>',
     to: email,
     subject: 'Reset Your Password - Pankaj Medical',
     html: `
@@ -124,7 +124,7 @@ const sendPasswordResetEmail = async (email, name, token) => {
  */
 const sendWelcomeEmail = async (email, name) => {
   const mailOptions = {
-    from: `"Pankaj Medical Stores" <${process.env.EMAIL_USER || 'no-reply@pankajmedical.com'}>`,
+    from: '"Pankaj Medical and General Stores" <ekanshlamba6226@gmail.com>',
     to: email,
     subject: 'Welcome to Pankaj Medical and General Stores!',
     html: `
@@ -169,7 +169,7 @@ const sendLowStockAlert = async (email, products) => {
     .join('');
 
   const mailOptions = {
-    from: `"Pankaj Medical Stores" <${process.env.EMAIL_USER || 'no-reply@pankajmedical.com'}>`,
+    from: '"Pankaj Medical and General Stores" <ekanshlamba6226@gmail.com>',
     to: email,
     subject: `[Pankaj Medical] Low Stock Alert — ${products.length} Products Need Restocking`,
     html: `
@@ -224,7 +224,7 @@ const sendOrderConfirmed = async (email, name, order) => {
     .join('');
 
   const mailOptions = {
-    from: `"Pankaj Medical Stores" <${process.env.EMAIL_USER || 'no-reply@pankajmedical.com'}>`,
+    from: '"Pankaj Medical and General Stores" <ekanshlamba6226@gmail.com>',
     to: email,
     subject: `Order Confirmed — ${order.orderNumber} - Pankaj Medical`,
     html: `
@@ -281,7 +281,7 @@ const sendOrderShipped = async (email, name, order) => {
       : '<p>Your order is packed and ready for pickup! You can visit our store located at <strong>133/17 M Block, Kidwainagar, Kanpur Nagar</strong> during open hours to collect your package.</p>';
 
   const mailOptions = {
-    from: `"Pankaj Medical Stores" <${process.env.EMAIL_USER || 'no-reply@pankajmedical.com'}>`,
+    from: '"Pankaj Medical and General Stores" <ekanshlamba6226@gmail.com>',
     to: email,
     subject: `Order Dispatch Update — ${order.orderNumber} - Pankaj Medical`,
     html: `
@@ -315,7 +315,7 @@ const sendRefundProcessed = async (email, name, order) => {
   const refundAmt = order.payment.refundAmount || order.grandTotal;
 
   const mailOptions = {
-    from: `"Pankaj Medical Stores" <${process.env.EMAIL_USER || 'no-reply@pankajmedical.com'}>`,
+    from: '"Pankaj Medical and General Stores" <ekanshlamba6226@gmail.com>',
     to: email,
     subject: `Refund Processed Successfully — ${order.orderNumber} - Pankaj Medical`,
     html: `
@@ -350,7 +350,7 @@ const sendStaffInvite = async (email, name, tempPassword) => {
   const portalUrl = `${process.env.CLIENT_URL || 'http://localhost:5173'}/login`;
 
   const mailOptions = {
-    from: `"Pankaj Medical Stores" <${process.env.EMAIL_USER || 'no-reply@pankajmedical.com'}>`,
+    from: '"Pankaj Medical and General Stores" <ekanshlamba6226@gmail.com>',
     to: email,
     subject: 'Portal Staff Account Invitation - Pankaj Medical',
     html: `
@@ -388,7 +388,7 @@ const sendStaffInvite = async (email, name, tempPassword) => {
 
 const sendDailySummary = async (email, stats) => {
   const mailOptions = {
-    from: `"Pankaj Medical Stores" <${process.env.EMAIL_USER || 'no-reply@pankajmedical.com'}>`,
+    from: '"Pankaj Medical and General Stores" <ekanshlamba6226@gmail.com>',
     to: email,
     subject: `Daily Pharmacy Operations Summary — ${new Date().toLocaleDateString('en-IN')}`,
     html: `
