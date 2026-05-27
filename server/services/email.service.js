@@ -7,15 +7,35 @@ console.log('EMAIL_HOST value:', process.env.EMAIL_HOST ? 'SET' : 'MISSING');
 console.log('EMAIL_PORT value:', process.env.EMAIL_PORT ? 'SET' : 'MISSING');
 console.log('NODE_ENV:', process.env.NODE_ENV);
 
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: parseInt(process.env.EMAIL_PORT) || 587,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
+let transporter;
+
+if (process.env.EMAIL_HOST && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+  transporter = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: parseInt(process.env.EMAIL_PORT) || 2525,
+    secure: false,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
+    }
+  });
+  console.log('Nodemailer SMTP Transporter configured successfully.');
+} else {
+  console.log('SMTP Credentials missing. Nodemailer will run in dev/logging fallback mode.');
+  transporter = {
+    sendMail: async (mailOptions) => {
+      console.log('=============== MOCK EMAIL DISPATCH ===============');
+      console.log(`To: ${mailOptions.to}`);
+      console.log(`Subject: ${mailOptions.subject}`);
+      console.log(`Body (HTML length): ${mailOptions.html.length}`);
+      console.log('----------------------------------------------------');
+      console.log(mailOptions.html);
+      console.log('====================================================');
+      return { messageId: 'mock-id-' + Math.random().toString(36).substr(2, 9) };
+    }
+  };
+}
+
 
 
 const pharmacyDetails = {
