@@ -112,6 +112,7 @@ const App = () => {
               <Route path="/staff/expiry" element={<ExpiryPage />} />
               <Route path="/staff/orders" element={<OrderQueue />} />
               <Route path="/staff/prescriptions" element={<PrescriptionReview />} />
+              <Route path="/staff/profile" element={<Profile />} />
             </Route>
           </Route>
 
@@ -129,6 +130,7 @@ const App = () => {
               <Route path="/admin/staff" element={<StaffManagement />} />
               <Route path="/admin/settings" element={<StoreSettings />} />
               <Route path="/admin/audit-logs" element={<AuditLogs />} />
+              <Route path="/admin/profile" element={<Profile />} />
             </Route>
           </Route>
 

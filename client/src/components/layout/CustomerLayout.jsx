@@ -93,10 +93,14 @@ export default function CustomerLayout() {
             {isAuthenticated ? (
               <>
                 <NotificationBell />
-                <div className="hidden sm:flex items-center gap-1.5 text-sm text-slate-600 font-semibold px-3 py-1.5 bg-slate-100 rounded-lg max-w-[130px] truncate">
+                <Link
+                  to="/profile"
+                  style={{ textDecoration: 'none' }}
+                  className="hidden sm:flex items-center gap-1.5 text-sm text-slate-600 font-semibold px-3 py-1.5 bg-slate-100 rounded-lg max-w-[130px] truncate hover:bg-slate-200 transition-colors"
+                >
                   <User className="w-3.5 h-3.5 text-primary-600 shrink-0" />
                   <span className="truncate">{user?.name?.split(' ')[0] || 'Account'}</span>
-                </div>
+                </Link>
                 <button
                   onClick={() => logoutUser()}
                   className="hidden sm:flex items-center gap-1.5 text-xs font-bold py-1.5 px-3 rounded-lg border border-slate-200 text-slate-500 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors"

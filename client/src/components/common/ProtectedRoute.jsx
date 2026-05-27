@@ -38,7 +38,7 @@ const ProtectedRoute = ({ roles }) => {
     } else if (user.role === 'staff') {
       return <Navigate to="/staff/dashboard" replace />;
     } else {
-      return <Navigate to="/customer/dashboard" replace />;
+      return <Navigate to="/products" replace />;
     }
   }
 

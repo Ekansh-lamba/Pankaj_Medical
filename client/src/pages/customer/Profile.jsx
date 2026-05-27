@@ -283,8 +283,9 @@ const Profile = () => {
           </div>
 
           {/* Address Book Card */}
-          <div className="card-base p-6 shadow-xs">
-            <div className="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
+          {user?.role === 'customer' && (
+            <div className="card-base p-6 shadow-xs">
+              <div className="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
               <h3 className="text-xs font-black text-primary-800 uppercase tracking-wider flex items-center gap-1.5">
                 <MapPin className="w-4 h-4" /> Saved Delivery Addresses
               </h3>
@@ -491,7 +492,8 @@ const Profile = () => {
                 <p className="text-[10px] text-gray-400 mt-0.5">Add an address to speed up checkout delivery</p>
               </div>
             )}
-          </div>
+            </div>
+          )}
         </div>
 
         {/* Right Col: Password change and danger actions */}
@@ -557,22 +559,24 @@ const Profile = () => {
           </div>
 
           {/* Danger Zone */}
-          <div className="bg-white border border-red-200 rounded-xl p-6 shadow-xs">
-            <h3 className="text-xs font-black text-red-800 uppercase tracking-wider mb-4 pb-2 border-b border-red-100 flex items-center gap-1.5">
-              <ShieldAlert className="w-4 h-4 text-red-600" /> Danger Zone
-            </h3>
+          {user?.role === 'customer' && (
+            <div className="bg-white border border-red-200 rounded-xl p-6 shadow-xs">
+              <h3 className="text-xs font-black text-red-800 uppercase tracking-wider mb-4 pb-2 border-b border-red-100 flex items-center gap-1.5">
+                <ShieldAlert className="w-4 h-4 text-red-600" /> Danger Zone
+              </h3>
 
-            <p className="text-[11px] text-gray-500 font-semibold leading-relaxed mb-4">
-              Deleting your account is permanent. All address information and PII details will be fully anonymized.
-            </p>
+              <p className="text-[11px] text-gray-500 font-semibold leading-relaxed mb-4">
+                Deleting your account is permanent. All address information and PII details will be fully anonymized.
+              </p>
 
-            <button
-              onClick={() => setShowDeleteModal(true)}
-              className="w-full border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 text-xs font-bold py-2.5 rounded-lg transition-colors flex items-center justify-center gap-1.5"
-            >
-              <Trash2 className="w-4 h-4" /> Delete Account Permanently
-            </button>
-          </div>
+              <button
+                onClick={() => setShowDeleteModal(true)}
+                className="w-full border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 text-xs font-bold py-2.5 rounded-lg transition-colors flex items-center justify-center gap-1.5"
+              >
+                <Trash2 className="w-4 h-4" /> Delete Account Permanently
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

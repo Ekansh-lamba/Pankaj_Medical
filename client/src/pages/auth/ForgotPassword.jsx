@@ -77,10 +77,10 @@ const ForgotPassword = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@example.com"
-                    className="input-base pl-9"
+                    className="input-base input-with-icon"
                     required
                   />
-                  <Mail className="absolute left-3 top-3.5 text-gray-400 w-4 h-4" />
+                  <Mail className="input-icon w-4 h-4" />
                 </div>
                 <p className="mt-1 text-[10px] text-gray-400">
                   Provide the email registered to your account

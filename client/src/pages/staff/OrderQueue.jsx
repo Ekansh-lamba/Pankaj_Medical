@@ -192,13 +192,13 @@ const OrderQueue = () => {
         {/* Search */}
         <form onSubmit={handleSearchSubmit} className="flex items-center gap-2 max-w-sm w-full">
           <div className="relative w-full">
-            <Search className="absolute left-3 top-3 w-4 h-4 text-slate-400" />
+            <Search className="input-icon w-4 h-4" />
             <input
               type="text"
               placeholder="Search by Order ID, customer, email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full text-xs font-semibold text-slate-800 border border-slate-250 pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:border-blue-500"
+              className="w-full text-xs font-semibold text-slate-800 border border-slate-250 input-with-icon pr-4 py-2.5 rounded-lg focus:outline-none focus:border-blue-500"
             />
           </div>
           <button type="submit" className="btn-primary py-2.5 px-4 text-xs font-bold shrink-0">

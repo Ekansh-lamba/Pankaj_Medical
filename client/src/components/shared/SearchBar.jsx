@@ -86,11 +86,11 @@ export default function SearchBar() {
           }}
           onFocus={() => setShowDropdown(true)}
           placeholder="Search medicines or composition salts..."
-          className="w-full pl-9 pr-9 py-2 border border-gray-300 rounded-lg text-sm bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all placeholder:text-gray-400"
+          className="w-full input-with-icon pr-9 py-2 border border-gray-300 rounded-lg text-sm bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all placeholder:text-gray-400"
         />
         
         {/* Search Icon */}
-        <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
+        <Search className="input-icon w-4 h-4" />
         
         {/* Loading Spinner */}
         {loading && (

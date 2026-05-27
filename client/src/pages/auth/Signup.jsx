@@ -154,10 +154,10 @@ const Signup = () => {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="John Doe"
-                      className="input-base pl-10"
+                      className="input-base input-with-icon"
                       required
                     />
-                    <User className="absolute left-3.5 text-slate-400 w-4 h-4" />
+                    <User className="input-icon w-4 h-4" />
                   </div>
                 </div>
 
@@ -171,10 +171,10 @@ const Signup = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="johndoe@example.com"
-                      className="input-base pl-10"
+                      className="input-base input-with-icon"
                       required
                     />
-                    <Mail className="absolute left-3.5 text-slate-400 w-4 h-4" />
+                    <Mail className="input-icon w-4 h-4" />
                   </div>
                 </div>
 
@@ -188,9 +188,9 @@ const Signup = () => {
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="9876543210"
-                      className="input-base pl-10"
+                      className="input-base input-with-icon"
                     />
-                    <Phone className="absolute left-3.5 text-slate-400 w-4 h-4" />
+                    <Phone className="input-icon w-4 h-4" />
                   </div>
                   <p className="mt-1 text-[10px] text-slate-400">10-digit mobile number</p>
                 </div>
@@ -205,10 +205,10 @@ const Signup = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Min 8 characters"
-                      className="input-base pl-10"
+                      className="input-base input-with-icon"
                       required
                     />
-                    <Key className="absolute left-3.5 text-slate-400 w-4 h-4" />
+                    <Key className="input-icon w-4 h-4" />
                   </div>
                 </div>
 
@@ -222,10 +222,10 @@ const Signup = () => {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="Repeat password"
-                      className="input-base pl-10"
+                      className="input-base input-with-icon"
                       required
                     />
-                    <Key className="absolute left-3.5 text-slate-400 w-4 h-4" />
+                    <Key className="input-icon w-4 h-4" />
                   </div>
                 </div>
 

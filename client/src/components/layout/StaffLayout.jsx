@@ -11,15 +11,16 @@ import {
   Package,
   Menu,
   X,
+  User,
 } from 'lucide-react';
 
 // Staff sidebar nav items
 const NAV_ITEMS = [
-  { label: 'Dashboard',     path: '/staff/dashboard',       icon: LayoutDashboard, live: true  },
-  { label: 'Expiry',        path: '/staff/expiry',          icon: Clock,           live: true  },
-  { label: 'Orders',        path: '/staff/orders',          icon: ShoppingCart,    live: true, phase: 3 },
-  { label: 'Prescriptions', path: '/staff/prescriptions',   icon: FileText,        live: true, phase: 3 },
-  { label: 'Inventory',     path: '/staff/inventory',       icon: Package,         live: false, phase: 3 },
+  { label: 'Dashboard',      path: '/staff/dashboard',     icon: LayoutDashboard, live: true  },
+  { label: 'Orders',         path: '/staff/orders',        icon: ShoppingCart,    live: true  },
+  { label: 'Prescriptions',  path: '/staff/prescriptions', icon: FileText,        live: true  },
+  { label: 'Expiry & Stock', path: '/staff/expiry',        icon: Package,         live: true  },
+  { label: 'Profile',        path: '/staff/profile',       icon: User,            live: true  },
 ];
 
 const StaffLayout = ({ children }) => {
@@ -35,7 +36,7 @@ const StaffLayout = ({ children }) => {
   const SidebarContent = () => (
     <div className="flex flex-col h-full">
       {/* Brand */}
-      <div className="px-5 py-5 border-b border-slate-700/60">
+      <div className="px-5 py-5 border-b border-slate-700/60 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shrink-0">
             <Landmark className="w-4 h-4 text-white" />
@@ -45,6 +46,17 @@ const StaffLayout = ({ children }) => {
             <p className="text-slate-400 text-[10px] uppercase tracking-widest font-semibold">Staff Portal</p>
           </div>
         </div>
+        <NavLink
+          to="/staff/profile"
+          className={({ isActive }) =>
+            `p-1.5 rounded-lg text-slate-350 hover:bg-white/10 hover:text-white transition-all ${
+              isActive ? 'bg-blue-600 text-white' : ''
+            }`
+          }
+          title="My Profile"
+        >
+          <User className="w-4.5 h-4.5" />
+        </NavLink>
       </div>
 
       {/* Nav Links */}
@@ -145,9 +157,14 @@ const StaffLayout = ({ children }) => {
             <Landmark className="w-5 h-5 text-white" />
             <span className="font-bold text-sm">Pankaj Medical</span>
           </div>
-          <button onClick={() => setSidebarOpen(true)} className="text-slate-300 hover:text-white">
-            <Menu className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-3">
+            <NavLink to="/staff/profile" className="text-slate-350 hover:text-white" title="My Profile">
+              <User className="w-5 h-5" />
+            </NavLink>
+            <button onClick={() => setSidebarOpen(true)} className="text-slate-300 hover:text-white">
+              <Menu className="w-5 h-5" />
+            </button>
+          </div>
         </header>
 
         <main className="flex-1 overflow-y-auto">

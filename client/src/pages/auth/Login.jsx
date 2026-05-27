@@ -64,7 +64,7 @@ const Login = () => {
       } else if (user.role === 'staff') {
         navigate('/staff/dashboard');
       } else {
-        navigate('/customer/dashboard');
+        navigate('/products');
       }
     }
   }, [isAuthenticated, user, navigate]);
@@ -311,10 +311,10 @@ const Login = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@example.com"
-                    className="input-base pl-10"
+                    className="input-base input-with-icon"
                     required
                   />
-                  <Mail className="absolute left-3.5 text-slate-400 w-4 h-4" />
+                  <Mail className="input-icon w-4 h-4" />
                 </div>
               </div>
 
@@ -337,10 +337,10 @@ const Login = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="input-base pl-10"
+                    className="input-base input-with-icon"
                     required
                   />
-                  <Key className="absolute left-3.5 text-slate-400 w-4 h-4" />
+                  <Key className="input-icon w-4 h-4" />
                 </div>
               </div>
 
@@ -379,10 +379,10 @@ const Login = () => {
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="+919876543210"
-                        className="input-base pl-10"
+                        className="input-base input-with-icon"
                         required
                       />
-                      <Phone className="absolute left-3.5 text-slate-400 w-4 h-4" />
+                      <Phone className="input-icon w-4 h-4" />
                     </div>
                     <p className="mt-1 text-xs text-slate-400">
                       Include country code (e.g. +91 for India)
@@ -450,12 +450,15 @@ const Login = () => {
           <button
             onClick={handleGoogleLogin}
             disabled={isLoading}
-            className="w-full bg-white hover:bg-slate-50 border border-gray-300 text-[#374151] font-semibold py-2.5 px-4 rounded-lg shadow-sm transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2.5 text-sm"
+            className="w-full flex items-center justify-center gap-3 border border-gray-300 bg-white text-gray-700 font-medium py-2.5 px-4 rounded-lg hover:bg-gray-50 transition-colors active:scale-[0.98]"
           >
-            <svg width="18" height="18" viewBox="0 0 18 18" className="shrink-0">
-              <path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1.32-1.31 3.83-4.3 3.83-2.6 0-4.71-2.15-4.71-4.8s2.11-4.8 4.71-4.8c1.48 0 2.47.63 3.04 1.18l2.07-2c-1.33-1.24-3.06-2-5.11-2C4.03 3.21 1 6.24 1 9.99s3.03 6.78 6.98 6.78c4.03 0 6.7-2.83 6.7-6.82 0-.46-.05-.8-.17-1.15z"/>
+            <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+              <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
+              <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
+              <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.548 0 9s.348 2.825.957 4.039l3.007-2.332z"/>
+              <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/>
             </svg>
-            <span>Continue with Google</span>
+            Continue with Google
           </button>
 
           {/* Footnotes */}

@@ -96,11 +96,11 @@ const ResetPassword = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Min 8 characters"
-                    className="input-base pl-9"
+                    className="input-base input-with-icon"
                     required
                     disabled={!token}
                   />
-                  <Key className="absolute left-3 top-3.5 text-gray-400 w-4 h-4" />
+                  <Key className="input-icon w-4 h-4" />
                 </div>
               </div>
 
@@ -114,11 +114,11 @@ const ResetPassword = () => {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Repeat new password"
-                    className="input-base pl-9"
+                    className="input-base input-with-icon"
                     required
                     disabled={!token}
                   />
-                  <Key className="absolute left-3 top-3.5 text-gray-400 w-4 h-4" />
+                  <Key className="input-icon w-4 h-4" />
                 </div>
               </div>
 

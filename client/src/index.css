@@ -73,3 +73,18 @@ p {
 .card-teal {
   @apply card-base p-6;
 }
+
+/* ── Input fields with left-aligned icons ───────────────────────────────── */
+.input-with-icon {
+  padding-left: 40px !important; /* make room for icon */
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  pointer-events: none;
+}
+
