@@ -240,6 +240,7 @@ const Login = () => {
         )}
 
         {/* Method Toggles */}
+        {/* OTP Login disabled - requires Firebase Blaze plan. This can be re-enabled after Firebase billing is configured.
         <div className="flex border-b border-gray-200 mb-6">
           <button
             onClick={() => {
@@ -270,6 +271,7 @@ const Login = () => {
             OTP Login
           </button>
         </div>
+        */}
 
         {/* Form area */}
         {authMethod === 'email' ? (
