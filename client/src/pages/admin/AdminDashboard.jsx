@@ -74,7 +74,7 @@ const QUICK_ACTIONS = [
 ];
 
 const COLOR_MAP = {
-  teal: 'bg-teal-50 text-teal-700 hover:border-teal-300',
+  teal: 'bg-blue-50 text-blue-700 hover:border-blue-300',
   amber: 'bg-amber-50 text-amber-700 hover:border-amber-300',
   indigo: 'bg-indigo-50 text-indigo-700 hover:border-indigo-300',
   slate: 'bg-slate-50 text-slate-700 hover:border-slate-300'
@@ -127,7 +127,7 @@ export default function AdminDashboard() {
   if (loading) {
     return (
       <div className="py-32 text-center text-sm text-gray-400 flex flex-col items-center justify-center">
-        <span className="w-8 h-8 border-3 border-teal-600 border-t-transparent rounded-full animate-spin mb-3" />
+        <span className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mb-3" />
         Compiling business intelligence reports...
       </div>
     );
@@ -140,7 +140,7 @@ export default function AdminDashboard() {
           <AlertCircle className="w-10 h-10 text-red-500" />
           <h3 className="font-extrabold text-red-900">Analytics Loading Failed</h3>
           <p className="text-xs text-red-700 max-w-sm">{error}</p>
-          <button onClick={fetchAnalytics} className="btn-teal py-2 px-5 text-xs font-bold flex items-center gap-1.5 mt-2">
+          <button onClick={fetchAnalytics} className="btn-primary py-2 px-5 text-xs font-bold flex items-center gap-1.5 mt-2">
             <RefreshCw className="w-3.5 h-3.5" /> Try Again
           </button>
         </div>
@@ -154,7 +154,7 @@ export default function AdminDashboard() {
       {/* ── Header ──────────────────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
         <div>
-          <h1 className="text-xl md:text-2xl font-black text-teal-900">
+          <h1 className="text-xl md:text-2xl font-black text-blue-900">
             Operations & Analytics Control
           </h1>
           <p className="text-xs md:text-sm text-gray-500 font-medium mt-0.5">
@@ -165,7 +165,7 @@ export default function AdminDashboard() {
         <div className="flex flex-wrap gap-2.5">
           <button
             onClick={handleExportCSV}
-            className="flex items-center gap-1.5 text-xs py-2.5 px-4 font-extrabold rounded-lg border border-teal-600 bg-teal-50 text-teal-700 hover:bg-teal-100 transition-colors shadow-xs"
+            className="flex items-center gap-1.5 text-xs py-2.5 px-4 font-extrabold rounded-lg border border-blue-600 bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors shadow-xs"
           >
             <FileSpreadsheet className="w-4 h-4" />
             Export Sales Report (CSV)
@@ -177,12 +177,12 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Revenue */}
         <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-xs flex items-center gap-4">
-          <div className="w-11 h-11 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center shrink-0">
+          <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center shrink-0">
             <TrendingUp className="w-5.5 h-5.5" />
           </div>
           <div>
             <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Total Sales (Paid)</span>
-            <h2 className="text-base md:text-lg font-black text-teal-900 mt-0.5">
+            <h2 className="text-base md:text-lg font-black text-blue-900 mt-0.5">
               {formatCurrency(summary?.totalRevenue || 0)}
             </h2>
           </div>
@@ -235,7 +235,7 @@ export default function AdminDashboard() {
         <div className="lg:col-span-2 bg-white border border-gray-200 rounded-2xl p-5 shadow-xs space-y-4">
           <div className="flex justify-between items-center">
             <h3 className="text-xs font-black text-gray-400 uppercase tracking-widest">30-Day Sales Trend</h3>
-            <span className="bg-teal-50 text-teal-700 text-[10px] px-2 py-0.5 rounded font-black uppercase">Paid Orders Only</span>
+            <span className="bg-blue-50 text-blue-700 text-[10px] px-2 py-0.5 rounded font-black uppercase">Paid Orders Only</span>
           </div>
           <div className="h-72 w-full text-xs">
             <ResponsiveContainer width="100%" height="100%">
@@ -282,7 +282,7 @@ export default function AdminDashboard() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs text-gray-500 border-collapse">
               <thead>
-                <tr className="bg-slate-50 font-bold uppercase tracking-wider text-teal-900 border-b border-gray-200">
+                <tr className="bg-slate-50 font-bold uppercase tracking-wider text-blue-900 border-b border-gray-200">
                   <th className="px-4 py-3">Medicine Name</th>
                   <th className="px-4 py-3">Brand</th>
                   <th className="px-4 py-3 text-center">Quantity Sold</th>
@@ -296,7 +296,7 @@ export default function AdminDashboard() {
                       <td className="px-4 py-3.5 font-extrabold text-gray-800">{p.name}</td>
                       <td className="px-4 py-3.5 uppercase text-[10px] tracking-wider font-semibold text-gray-400">{p.brand}</td>
                       <td className="px-4 py-3.5 text-center font-bold text-gray-700">{p.quantitySold}</td>
-                      <td className="px-4 py-3.5 text-right font-black text-teal-800">{formatCurrency(p.revenue)}</td>
+                      <td className="px-4 py-3.5 text-right font-black text-blue-800">{formatCurrency(p.revenue)}</td>
                     </tr>
                   ))
                 ) : (
@@ -341,7 +341,7 @@ export default function AdminDashboard() {
       
       {/* ── System Info Strip ──────────────────────────────────────────── */}
       <div className="bg-slate-900 rounded-2xl p-4 flex flex-wrap gap-x-8 gap-y-2 text-[10px] font-mono text-slate-400 shadow-sm items-center">
-        <span className="flex items-center gap-1"><ShieldCheck className="w-3.5 h-3.5 text-teal-500" /> SYSTEM ONLINE</span>
+        <span className="flex items-center gap-1"><ShieldCheck className="w-3.5 h-3.5 text-blue-500" /> SYSTEM ONLINE</span>
         <span>OPERATOR: <span className="text-slate-200 uppercase">{user?.email || 'N/A'}</span></span>
         <span>HOST IP: <span className="text-slate-200">127.0.0.1</span></span>
       </div>

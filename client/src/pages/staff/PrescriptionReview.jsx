@@ -127,7 +127,7 @@ const PrescriptionReview = () => {
     <div className="max-w-6xl mx-auto px-4 md:px-6 py-8 bg-slate-50 min-h-screen">
       <div className="mb-8">
         <h1 className="text-xl md:text-2xl font-black text-slate-900 flex items-center gap-2">
-          <FileText className="w-6 h-6 text-teal-600" /> Prescription Review Desk
+          <FileText className="w-6 h-6 text-blue-600" /> Prescription Review Desk
         </h1>
         <p className="text-xs text-slate-500 font-semibold mt-0.5">
           Verify uploaded customer Rx files for Schedule H and NRx medications before dispensing.
@@ -136,7 +136,7 @@ const PrescriptionReview = () => {
 
       {loading ? (
         <div className="py-20 text-center text-sm text-slate-400 flex flex-col items-center justify-center bg-white border border-slate-200 rounded-xl">
-          <div className="w-8 h-8 border-4 border-teal-600 border-t-transparent rounded-full animate-spin mb-2" />
+          <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-2" />
           Loading prescription logs...
         </div>
       ) : prescriptions.length > 0 ? (
@@ -155,7 +155,7 @@ const PrescriptionReview = () => {
                   onClick={() => setActiveRx(rx)}
                   className={`p-4 cursor-pointer transition-colors ${
                     activeRx?._id === rx._id
-                      ? 'bg-teal-50/40 border-l-4 border-teal-600'
+                      ? 'bg-blue-50/40 border-l-4 border-blue-600'
                       : 'hover:bg-slate-50 bg-white'
                   }`}
                 >
@@ -171,7 +171,7 @@ const PrescriptionReview = () => {
                   <div className="text-[11px] font-semibold text-slate-500 space-y-0.5">
                     <p className="font-extrabold text-slate-700 uppercase">{rx.customer?.name}</p>
                     <p>Uploaded: {new Date(rx.createdAt).toLocaleDateString()}</p>
-                    <p className="text-teal-800 font-bold">Value: {formatCurrency(rx.order?.grandTotal || 0)}</p>
+                    <p className="text-blue-800 font-bold">Value: {formatCurrency(rx.order?.grandTotal || 0)}</p>
                   </div>
                 </div>
               ))}
@@ -189,7 +189,7 @@ const PrescriptionReview = () => {
                     <span>Uploaded Rx Image</span>
                     <button
                       onClick={() => setZoomImage(activeRx.imageUrl)}
-                      className="text-teal-700 hover:text-teal-800 text-[10px] font-bold flex items-center gap-0.5 bg-teal-50 px-2 py-0.5 rounded"
+                      className="text-blue-700 hover:text-blue-800 text-[10px] font-bold flex items-center gap-0.5 bg-blue-50 px-2 py-0.5 rounded"
                     >
                       <ZoomIn className="w-3.5 h-3.5" /> Fullscreen Zoom
                     </button>
@@ -197,7 +197,7 @@ const PrescriptionReview = () => {
                   <div className="prescription-image-container">
                     <button
                       onClick={() => window.open(activeRx.imageUrl, '_blank')}
-                      className="w-full py-3 border-2 border-dashed border-teal-400 rounded-lg text-teal-600 font-bold hover:bg-teal-50 transition-colors text-xs uppercase tracking-wider flex items-center justify-center gap-1.5"
+                      className="w-full py-3 border-2 border-dashed border-blue-400 rounded-lg text-blue-600 font-bold hover:bg-blue-50 transition-colors text-xs uppercase tracking-wider flex items-center justify-center gap-1.5"
                     >
                       🔍 Click to View Prescription Image
                     </button>
@@ -238,13 +238,13 @@ const PrescriptionReview = () => {
                       </h4>
                       <div className="text-xs font-semibold text-slate-700 leading-normal">
                         <p className="font-extrabold text-slate-800">ID: {activeRx.order?.orderNumber}</p>
-                        <p className="text-teal-800 font-bold">Total: {formatCurrency(activeRx.order?.grandTotal || 0)}</p>
+                        <p className="text-blue-800 font-bold">Total: {formatCurrency(activeRx.order?.grandTotal || 0)}</p>
                         <a
                           href={activeRx.imageUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                           download="prescription"
-                          className="text-xs font-bold text-teal-600 hover:text-teal-700 underline mt-2 block"
+                          className="text-xs font-bold text-blue-600 hover:text-blue-700 underline mt-2 block"
                         >
                           Download Prescription
                         </a>
@@ -253,7 +253,7 @@ const PrescriptionReview = () => {
                           {activeRx.order?.items?.map((item) => (
                             <div key={item.product} className="flex justify-between items-center text-[11px] bg-slate-50 p-2 border border-slate-150 rounded-lg">
                               <span className="font-extrabold uppercase text-slate-700 truncate max-w-[130px]">{item.name}</span>
-                              <span className="font-black text-teal-800 shrink-0">Qty: {item.quantity}</span>
+                              <span className="font-black text-blue-800 shrink-0">Qty: {item.quantity}</span>
                             </div>
                           ))}
                         </div>
@@ -266,7 +266,7 @@ const PrescriptionReview = () => {
                     <button
                       onClick={() => handleApprove(activeRx._id)}
                       disabled={actionLoading}
-                      className="w-full btn-teal py-2.5 font-bold text-xs rounded-lg flex items-center justify-center gap-1"
+                      className="w-full btn-primary py-2.5 font-bold text-xs rounded-lg flex items-center justify-center gap-1"
                     >
                       <CheckCircle className="w-4 h-4" /> Approve Prescription
                     </button>
@@ -275,7 +275,7 @@ const PrescriptionReview = () => {
                       <button
                         onClick={() => setShowReuploadModal(true)}
                         disabled={actionLoading}
-                        className="btn-teal-outline py-2 font-bold text-[10px] rounded-lg uppercase flex items-center justify-center gap-1 bg-white"
+                        className="btn-secondary py-2 font-bold text-[10px] rounded-lg uppercase flex items-center justify-center gap-1 bg-white"
                       >
                         <AlertTriangle className="w-3.5 h-3.5 text-amber-600" /> Request Re-upload
                       </button>
@@ -299,7 +299,7 @@ const PrescriptionReview = () => {
         </div>
       ) : (
         <div className="bg-white border border-slate-200 rounded-xl p-20 text-center max-w-lg mx-auto shadow-xs flex flex-col items-center justify-center">
-          <CheckCircle className="w-10 h-10 text-teal-600 mb-3" />
+          <CheckCircle className="w-10 h-10 text-blue-600 mb-3" />
           <h2 className="text-base font-bold text-slate-900 mb-1">Desk is clear!</h2>
           <p className="text-xs text-slate-500 font-semibold max-w-xs leading-relaxed">
             No customers have pending prescriptions requiring verification at this time.
@@ -325,7 +325,7 @@ const PrescriptionReview = () => {
               placeholder="e.g. Prescription has expired or contains a different patient name."
               value={reasonText}
               onChange={(e) => setReasonText(e.target.value)}
-              className="w-full text-xs font-semibold text-slate-800 border border-slate-250 p-2.5 rounded-lg focus:outline-none focus:border-teal-500"
+              className="w-full text-xs font-semibold text-slate-800 border border-slate-250 p-2.5 rounded-lg focus:outline-none focus:border-blue-500"
             />
 
             <div className="flex gap-2 justify-end pt-2 border-t border-slate-100">
@@ -339,7 +339,7 @@ const PrescriptionReview = () => {
               <button
                 type="submit"
                 disabled={actionLoading}
-                className="btn-teal bg-red-600 hover:bg-red-700 text-[11px] py-2 px-4 text-white"
+                className="btn-primary bg-red-600 hover:bg-red-700 text-[11px] py-2 px-4 text-white"
               >
                 {actionLoading ? 'Rejecting...' : 'Reject Prescription'}
               </button>
@@ -366,7 +366,7 @@ const PrescriptionReview = () => {
               placeholder="e.g. The uploaded scan is blurry. Please upload a high-resolution, clear prescription image showing doctor name."
               value={reasonText}
               onChange={(e) => setReasonText(e.target.value)}
-              className="w-full text-xs font-semibold text-slate-800 border border-slate-250 p-2.5 rounded-lg focus:outline-none focus:border-teal-500"
+              className="w-full text-xs font-semibold text-slate-800 border border-slate-250 p-2.5 rounded-lg focus:outline-none focus:border-blue-500"
             />
 
             <div className="flex gap-2 justify-end pt-2 border-t border-slate-100">
@@ -380,7 +380,7 @@ const PrescriptionReview = () => {
               <button
                 type="submit"
                 disabled={actionLoading}
-                className="btn-teal bg-amber-600 hover:bg-amber-700 text-[11px] py-2 px-4 text-white"
+                className="btn-primary bg-amber-600 hover:bg-amber-700 text-[11px] py-2 px-4 text-white"
               >
                 {actionLoading ? 'Submitting...' : 'Request Clarification'}
               </button>

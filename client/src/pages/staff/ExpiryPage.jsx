@@ -97,7 +97,7 @@ export default function ExpiryPage() {
       {/* Header and subtitle */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-xl md:text-2xl font-black text-teal-900">Inventory Expiry Sweeper</h1>
+          <h1 className="text-xl md:text-2xl font-black text-blue-900">Inventory Expiry Sweeper</h1>
           <p className="mt-1 text-sm text-gray-500 font-medium">
             Monitor batches nearing or past their expiry, log disposals, or override search visibilities.
           </p>
@@ -154,13 +154,13 @@ export default function ExpiryPage() {
         </div>
 
         {/* Value at Risk */}
-        <div className="bg-white border border-teal-200 rounded-xl p-5 shadow-xs flex items-center justify-between">
+        <div className="bg-white border border-blue-200 rounded-xl p-5 shadow-xs flex items-center justify-between">
           <div>
-            <p className="text-2xl font-black text-teal-800">{formatCurrency(valueAtRisk)}</p>
-            <p className="text-[10px] text-teal-650 font-bold uppercase tracking-wider mt-0.5">Stock Value At Risk</p>
+            <p className="text-2xl font-black text-blue-800">{formatCurrency(valueAtRisk)}</p>
+            <p className="text-[10px] text-blue-600 font-bold uppercase tracking-wider mt-0.5">Stock Value At Risk</p>
           </div>
-          <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center shrink-0">
-            <CheckCircle className="w-5 h-5 text-teal-600" />
+          <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
+            <CheckCircle className="w-5 h-5 text-blue-600" />
           </div>
         </div>
       </div>
@@ -203,13 +203,13 @@ export default function ExpiryPage() {
       <div className="bg-white border border-gray-200 rounded-xl shadow-xs overflow-hidden">
         {loading ? (
           <div className="py-20 text-center text-sm text-gray-400 flex flex-col items-center justify-center">
-            <Loader2 className="w-6 h-6 border-2 border-teal-600 border-t-transparent rounded-full animate-spin mb-2" />
+            <Loader2 className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mb-2" />
             Generating stock expiry lists...
           </div>
         ) : getActiveList().length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-left text-sm text-gray-500">
-              <thead className="bg-gray-55/60 border-b border-gray-200 text-xs font-bold uppercase tracking-wider text-teal-900">
+              <thead className="bg-gray-55/60 border-b border-gray-200 text-xs font-bold uppercase tracking-wider text-blue-900">
                 <tr>
                   <th scope="col" className="px-6 py-4">Medicine Specifications</th>
                   <th scope="col" className="px-4 py-4 text-center">Batch Number</th>
@@ -259,7 +259,7 @@ export default function ExpiryPage() {
                       </td>
 
                       {/* Selling Price Value */}
-                      <td className="px-4 py-4 text-right font-black text-teal-800">
+                      <td className="px-4 py-4 text-right font-black text-blue-800">
                         {formatCurrency(itemValue)}
                       </td>
 
@@ -278,7 +278,7 @@ export default function ExpiryPage() {
                               Hidden
                             </span>
                           ) : (
-                            <span className="bg-teal-50 border border-teal-100 text-teal-700 text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider flex items-center gap-0.5">
+                            <span className="bg-blue-50 border border-blue-100 text-blue-700 text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider flex items-center gap-0.5">
                               Visible
                             </span>
                           )}
@@ -293,7 +293,7 @@ export default function ExpiryPage() {
                             <button
                               onClick={() => handleToggleVisibility(p._id, p.isHidden, p.name)}
                               title={p.isHidden ? 'Show in Customer Portal' : 'Hide from Customer Portal'}
-                              className="p-1.5 rounded border border-gray-200 bg-white hover:border-teal-300 text-gray-400 hover:text-teal-600 transition-colors"
+                              className="p-1.5 rounded border border-gray-200 bg-white hover:border-blue-300 text-gray-400 hover:text-blue-600 transition-colors"
                             >
                               {p.isHidden ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                             </button>

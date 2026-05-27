@@ -118,11 +118,11 @@ export default function CsvImport() {
     <div className="max-w-5xl mx-auto px-4 md:px-6 py-8">
       {/* Header */}
       <div className="flex items-center gap-3 mb-8">
-        <Link to="/admin/products" className="p-2 border border-gray-200 rounded-lg text-gray-500 hover:text-teal-700 hover:border-teal-100 transition-colors bg-white">
+        <Link to="/admin/products" className="p-2 border border-gray-200 rounded-lg text-gray-500 hover:text-blue-700 hover:border-blue-100 transition-colors bg-white">
           <ArrowLeft className="w-4 h-4" />
         </Link>
         <div>
-          <h1 className="text-xl md:text-2xl font-black text-teal-900">Bulk Stock Spreadsheet Import</h1>
+          <h1 className="text-xl md:text-2xl font-black text-blue-900">Bulk Stock Spreadsheet Import</h1>
           <p className="text-xs text-gray-500 font-semibold mt-0.5">
             Ingest and merge distributor sheets or purchase order billing exports.
           </p>
@@ -142,8 +142,8 @@ export default function CsvImport() {
           }}
           className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs font-extrabold rounded-lg transition-all ${
             importMode === 'catalogue'
-              ? 'bg-white text-teal-850 shadow-sm border border-gray-200/20'
-              : 'text-gray-500 hover:text-teal-850'
+              ? 'bg-white text-blue-850 shadow-sm border border-gray-200/20'
+              : 'text-gray-500 hover:text-blue-850'
           }`}
         >
           <FileSpreadsheet className="w-4 h-4" /> Catalogue Import
@@ -159,11 +159,11 @@ export default function CsvImport() {
           }}
           className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs font-extrabold rounded-lg transition-all ${
             importMode === 'purchase_order'
-              ? 'bg-white text-teal-850 shadow-sm border border-gray-200/20'
-              : 'text-gray-500 hover:text-teal-850'
+              ? 'bg-white text-blue-850 shadow-sm border border-gray-200/20'
+              : 'text-gray-500 hover:text-blue-850'
           }`}
         >
-          <Sparkles className="w-4 h-4 animate-pulse text-teal-600" /> Purchase Order Import
+          <Sparkles className="w-4 h-4 animate-pulse text-blue-600" /> Purchase Order Import
         </button>
       </div>
 
@@ -201,7 +201,7 @@ export default function CsvImport() {
         {/* Left Side: Upload zone and Instructions */}
         <div className="lg:col-span-1 space-y-6">
           <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs">
-            <h3 className="text-sm font-extrabold text-teal-900 mb-3 uppercase tracking-wider">
+            <h3 className="text-sm font-extrabold text-blue-900 mb-3 uppercase tracking-wider">
               1. Setup and Guidelines
             </h3>
             
@@ -213,14 +213,14 @@ export default function CsvImport() {
 
             <button
               onClick={handleDownloadTemplate}
-              className="w-full btn-teal-outline flex items-center justify-center gap-2 text-xs py-2 px-4 shadow-xs"
+              className="w-full btn-secondary flex items-center justify-center gap-2 text-xs py-2 px-4 shadow-xs"
             >
               <Download className="w-4 h-4" /> Download {importMode === 'purchase_order' ? 'PO' : 'Catalogue'} Template
             </button>
           </div>
 
           <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs">
-            <h3 className="text-sm font-extrabold text-teal-900 mb-3 uppercase tracking-wider">
+            <h3 className="text-sm font-extrabold text-blue-900 mb-3 uppercase tracking-wider">
               2. Select File
             </h3>
 
@@ -228,18 +228,18 @@ export default function CsvImport() {
               {...getRootProps()}
               className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all ${
                 isDragActive
-                  ? 'border-teal-500 bg-teal-50/30'
+                  ? 'border-blue-500 bg-blue-50/30'
                   : file
-                  ? 'border-teal-300 bg-teal-50/10'
-                  : 'border-gray-300 hover:border-teal-400 bg-gray-50/50 hover:bg-white'
+                  ? 'border-blue-300 bg-blue-50/10'
+                  : 'border-gray-300 hover:border-blue-400 bg-gray-50/50 hover:bg-white'
               }`}
             >
               <input {...getInputProps()} />
-              <FileSpreadsheet className={`w-10 h-10 mx-auto mb-2.5 ${file ? 'text-teal-600' : 'text-gray-400'}`} />
+              <FileSpreadsheet className={`w-10 h-10 mx-auto mb-2.5 ${file ? 'text-blue-600' : 'text-gray-400'}`} />
               
               {file ? (
                 <div className="space-y-1">
-                  <p className="text-xs font-bold text-teal-900 break-all">{file.name}</p>
+                  <p className="text-xs font-bold text-blue-900 break-all">{file.name}</p>
                   <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">
                     {(file.size / 1024).toFixed(1)} KB &bull; Change file
                   </p>
@@ -263,7 +263,7 @@ export default function CsvImport() {
           
           {loading && (
             <div className="bg-white border border-gray-200 rounded-xl p-10 text-center text-sm text-gray-400 flex flex-col items-center justify-center shadow-xs">
-              <Loader2 className="w-8 h-8 animate-spin text-teal-600 mb-3" />
+              <Loader2 className="w-8 h-8 animate-spin text-blue-600 mb-3" />
               Parsing file buffer and checking validation rules...
             </div>
           )}
@@ -272,24 +272,24 @@ export default function CsvImport() {
           {resultData && (
             <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-xs animate-fadeIn space-y-6">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center shrink-0">
-                  <CheckCircle className="w-6 h-6 text-teal-600" />
+                <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
+                  <CheckCircle className="w-6 h-6 text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="text-base font-black text-teal-900">Import Successfully Completed</h3>
+                  <h3 className="text-base font-black text-blue-900">Import Successfully Completed</h3>
                   <p className="text-xs text-gray-500 font-semibold">Bulk stock changes have been applied to MongoDB Atlas.</p>
                 </div>
               </div>
 
               {/* Stats card */}
               <div className="grid grid-cols-3 gap-4">
-                <div className="bg-teal-50/50 border border-teal-100/50 rounded-xl p-4 text-center">
-                  <p className="text-2xl font-black text-teal-850">{resultData.imported}</p>
-                  <p className="text-[10px] text-teal-600 font-bold uppercase tracking-wider mt-0.5">New Products</p>
+                <div className="bg-blue-50/50 border border-blue-100/50 rounded-xl p-4 text-center">
+                  <p className="text-2xl font-black text-blue-850">{resultData.imported}</p>
+                  <p className="text-[10px] text-blue-600 font-bold uppercase tracking-wider mt-0.5">New Products</p>
                 </div>
-                <div className="bg-teal-50/50 border border-teal-100/50 rounded-xl p-4 text-center">
-                  <p className="text-2xl font-black text-teal-850">{resultData.updated}</p>
-                  <p className="text-[10px] text-teal-600 font-bold uppercase tracking-wider mt-0.5">Updated Stock</p>
+                <div className="bg-blue-50/50 border border-blue-100/50 rounded-xl p-4 text-center">
+                  <p className="text-2xl font-black text-blue-850">{resultData.updated}</p>
+                  <p className="text-[10px] text-blue-600 font-bold uppercase tracking-wider mt-0.5">Updated Stock</p>
                 </div>
                 <div className="bg-red-50/30 border border-red-100/40 rounded-xl p-4 text-center">
                   <p className="text-2xl font-black text-red-700">{resultData.skipped}</p>
@@ -315,7 +315,7 @@ export default function CsvImport() {
               )}
 
               <div className="flex justify-end pt-2">
-                <Link to="/admin/products" className="btn-teal py-2 px-6 font-semibold shadow-xs">
+                <Link to="/admin/products" className="btn-primary py-2 px-6 font-semibold shadow-xs">
                   Return to Inventory
                 </Link>
               </div>
@@ -327,10 +327,10 @@ export default function CsvImport() {
             <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-xs animate-fadeIn space-y-6">
               <div className="flex items-center justify-between gap-4 border-b border-gray-100 pb-4">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-teal-600" />
-                  <h3 className="text-sm font-extrabold text-teal-900 uppercase tracking-wider">Spreadsheet Diagnostic Preview</h3>
+                  <Sparkles className="w-5 h-5 text-blue-600" />
+                  <h3 className="text-sm font-extrabold text-blue-900 uppercase tracking-wider">Spreadsheet Diagnostic Preview</h3>
                 </div>
-                <span className="bg-teal-50 border border-teal-100 text-teal-700 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
+                <span className="bg-blue-50 border border-blue-100 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
                   Ingestion Validated
                 </span>
               </div>
@@ -338,13 +338,13 @@ export default function CsvImport() {
               {/* Ingestion Stats card */}
               {importMode === 'purchase_order' ? (
                 <div className="grid grid-cols-3 gap-4">
-                  <div className="bg-teal-50/50 border border-teal-100/50 rounded-xl p-4 text-center">
-                    <p className="text-2xl font-black text-teal-850">{previewData.newCount}</p>
-                    <p className="text-[10px] text-teal-600 font-bold uppercase tracking-wider mt-0.5">New Products</p>
+                  <div className="bg-blue-50/50 border border-blue-100/50 rounded-xl p-4 text-center">
+                    <p className="text-2xl font-black text-blue-850">{previewData.newCount}</p>
+                    <p className="text-[10px] text-blue-600 font-bold uppercase tracking-wider mt-0.5">New Products</p>
                   </div>
-                  <div className="bg-teal-50/50 border border-teal-100/50 rounded-xl p-4 text-center">
-                    <p className="text-2xl font-black text-teal-850">{previewData.updatedCount}</p>
-                    <p className="text-[10px] text-teal-600 font-bold uppercase tracking-wider mt-0.5">Matched & Updated Stock</p>
+                  <div className="bg-blue-50/50 border border-blue-100/50 rounded-xl p-4 text-center">
+                    <p className="text-2xl font-black text-blue-850">{previewData.updatedCount}</p>
+                    <p className="text-[10px] text-blue-600 font-bold uppercase tracking-wider mt-0.5">Matched & Updated Stock</p>
                   </div>
                   <div className="bg-red-50/30 border border-red-100/40 rounded-xl p-4 text-center">
                     <p className="text-2xl font-black text-red-700">{previewData.errorCount}</p>
@@ -353,9 +353,9 @@ export default function CsvImport() {
                 </div>
               ) : (
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-teal-50/50 border border-teal-100/50 rounded-xl p-4 text-center">
-                    <p className="text-2xl font-black text-teal-850">{previewData.newCount}</p>
-                    <p className="text-[10px] text-teal-600 font-bold uppercase tracking-wider mt-0.5">Valid Rows Ready to Ingest</p>
+                  <div className="bg-blue-50/50 border border-blue-100/50 rounded-xl p-4 text-center">
+                    <p className="text-2xl font-black text-blue-850">{previewData.newCount}</p>
+                    <p className="text-[10px] text-blue-600 font-bold uppercase tracking-wider mt-0.5">Valid Rows Ready to Ingest</p>
                   </div>
                   <div className="bg-red-50/30 border border-red-100/40 rounded-xl p-4 text-center">
                     <p className="text-2xl font-black text-red-700">{previewData.errorCount}</p>
@@ -384,13 +384,13 @@ export default function CsvImport() {
               {/* Valid Rows Preview Table (Max first 10 rows) */}
               {previewData.previewRows && previewData.previewRows.length > 0 && (
                 <div>
-                  <h4 className="text-xs font-bold text-teal-900 uppercase tracking-wider mb-2.5">
+                  <h4 className="text-xs font-bold text-blue-900 uppercase tracking-wider mb-2.5">
                     Sample Ingestion Data (First 10 Rows)
                   </h4>
                   <div className="overflow-x-auto border border-gray-250 rounded-lg">
                     {importMode === 'purchase_order' ? (
                       <table className="w-full border-collapse text-left text-xs text-gray-500">
-                        <thead className="bg-gray-55/60 border-b border-gray-200 font-bold text-teal-900">
+                        <thead className="bg-gray-55/60 border-b border-gray-200 font-bold text-blue-900">
                           <tr>
                             <th className="p-3">Product Name</th>
                             <th className="p-3">Supplier / Party</th>
@@ -402,7 +402,7 @@ export default function CsvImport() {
                         </thead>
                         <tbody className="divide-y divide-gray-200">
                           {previewData.previewRows.map((row, idx) => (
-                            <tr key={idx} className="hover:bg-teal-50/5">
+                            <tr key={idx} className="hover:bg-blue-50/5">
                               <td className="p-3 font-semibold text-gray-800">
                                 {row.name}
                               </td>
@@ -415,10 +415,10 @@ export default function CsvImport() {
                               <td className="p-3 text-right font-bold text-gray-700">
                                 {row.quantityPurchased}
                               </td>
-                              <td className="p-3 text-right font-medium text-teal-600">
+                              <td className="p-3 text-right font-medium text-blue-600">
                                 +{row.freeQuantity}
                               </td>
-                              <td className="p-3 text-right font-bold text-teal-850">
+                              <td className="p-3 text-right font-bold text-blue-850">
                                 {formatCurrency(row.netAmountPaid)}
                               </td>
                             </tr>
@@ -427,7 +427,7 @@ export default function CsvImport() {
                       </table>
                     ) : (
                       <table className="w-full border-collapse text-left text-xs text-gray-500">
-                        <thead className="bg-gray-55/60 border-b border-gray-200 font-bold text-teal-900">
+                        <thead className="bg-gray-55/60 border-b border-gray-200 font-bold text-blue-900">
                           <tr>
                             <th className="p-3">Medicine Specifications</th>
                             <th className="p-3">Category</th>
@@ -438,7 +438,7 @@ export default function CsvImport() {
                         </thead>
                         <tbody className="divide-y divide-gray-200">
                           {previewData.previewRows.map((row, idx) => (
-                            <tr key={idx} className="hover:bg-teal-50/5">
+                            <tr key={idx} className="hover:bg-blue-50/5">
                               <td className="p-3 font-semibold text-gray-800">
                                 <div className="flex flex-col">
                                   <span>{row.name}</span>
@@ -450,7 +450,7 @@ export default function CsvImport() {
                               <td className="p-3 font-medium">{row.category}</td>
                               <td className="p-3 text-right">
                                 <div className="flex flex-col items-end">
-                                  <span className="font-bold text-teal-800">{formatCurrency(row.sellingPrice)}</span>
+                                  <span className="font-bold text-blue-800">{formatCurrency(row.sellingPrice)}</span>
                                   <span className="text-[10px] text-gray-400 line-through">{formatCurrency(row.mrp)}</span>
                                 </div>
                               </td>
@@ -479,7 +479,7 @@ export default function CsvImport() {
                 <button
                   onClick={handleConfirmImport}
                   disabled={loading || (previewData.newCount === 0 && previewData.updatedCount === 0 && previewData.totalRows === 0)}
-                  className="btn-teal py-2.5 px-6 font-semibold flex items-center gap-1.5 shadow-xs"
+                  className="btn-primary py-2.5 px-6 font-semibold flex items-center gap-1.5 shadow-xs"
                 >
                   {loading ? (
                     <>
@@ -498,10 +498,10 @@ export default function CsvImport() {
           {/* Empty State */}
           {!previewData && !resultData && (
             <div className="bg-white border border-gray-200 rounded-xl p-16 text-center text-sm text-gray-400 flex flex-col items-center justify-center shadow-xs">
-              <div className="w-16 h-16 rounded-full bg-teal-50 flex items-center justify-center mb-4">
-                <FileSpreadsheet className="w-8 h-8 text-teal-600" />
+              <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mb-4">
+                <FileSpreadsheet className="w-8 h-8 text-blue-600" />
               </div>
-              <h3 className="text-base font-bold text-teal-900 mb-1.5">No File Loaded</h3>
+              <h3 className="text-base font-bold text-blue-900 mb-1.5">No File Loaded</h3>
               <p className="text-xs text-gray-500 max-w-sm leading-relaxed">
                 {importMode === 'purchase_order'
                   ? 'Drag a Purchase Order Excel (.xlsx, .xls) or CSV sheet inside the uploader to review parsing diagnostics, match existing products, and preview stock updates.'

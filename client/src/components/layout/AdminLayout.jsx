@@ -45,7 +45,7 @@ const AdminLayout = ({ children }) => {
       {/* Brand */}
       <div className="px-5 py-5 border-b border-slate-700/60">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 bg-teal-500 rounded-lg flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shrink-0">
             <Landmark className="w-4 h-4 text-white" />
           </div>
           <div>
@@ -86,8 +86,8 @@ const AdminLayout = ({ children }) => {
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-teal-600 text-white'
-                    : 'text-slate-300 hover:bg-slate-700 hover:text-white'
+                    ? 'bg-blue-600 text-white'
+                    : 'text-slate-300 hover:bg-white/10 hover:text-white'
                 }`
               }
             >
@@ -111,7 +111,7 @@ const AdminLayout = ({ children }) => {
         </div>
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-slate-400 hover:bg-slate-700 hover:text-white transition-colors"
+          className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-slate-400 hover:bg-white/10 hover:text-white transition-colors"
         >
           <LogOut className="w-4 h-4" /> Sign Out
         </button>
@@ -122,7 +122,7 @@ const AdminLayout = ({ children }) => {
   return (
     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden">
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex flex-col w-56 bg-slate-900 shrink-0">
+      <aside className="hidden md:flex flex-col w-56 bg-[#1e3a5f] shrink-0">
         <SidebarContent />
       </aside>
 
@@ -133,7 +133,7 @@ const AdminLayout = ({ children }) => {
             className="absolute inset-0 bg-black/50"
             onClick={() => setSidebarOpen(false)}
           />
-          <aside className="relative z-10 flex flex-col w-64 bg-slate-900 h-full">
+          <aside className="relative z-10 flex flex-col w-64 bg-[#1e3a5f] h-full">
             <button
               onClick={() => setSidebarOpen(false)}
               className="absolute top-4 right-4 text-slate-400 hover:text-white"
@@ -148,9 +148,9 @@ const AdminLayout = ({ children }) => {
       {/* Main Content Area */}
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         {/* Mobile Top Bar */}
-        <header className="md:hidden flex items-center justify-between px-4 py-3 bg-slate-900 text-white shrink-0">
+        <header className="md:hidden flex items-center justify-between px-4 py-3 bg-[#1e3a5f] text-white shrink-0">
           <div className="flex items-center gap-2">
-            <Landmark className="w-5 h-5 text-teal-400" />
+            <Landmark className="w-5 h-5 text-blue-400" />
             <span className="font-bold text-sm">Pankaj Medical</span>
           </div>
           <button onClick={() => setSidebarOpen(true)} className="text-slate-300 hover:text-white">

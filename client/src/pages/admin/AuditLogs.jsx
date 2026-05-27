@@ -18,7 +18,7 @@ const ACTION_BADGE_COLORS = {
   DELETE: 'bg-red-50 text-red-700 border-red-100',
   DEACTIVATE: 'bg-orange-50 text-orange-700 border-orange-100',
   CREATE: 'bg-green-50 text-green-700 border-green-100',
-  INVITE: 'bg-teal-50 text-teal-700 border-teal-100',
+  INVITE: 'bg-blue-50 text-blue-700 border-blue-100',
   UPDATE: 'bg-blue-50 text-blue-700 border-blue-100',
   ACTIVATE: 'bg-emerald-50 text-emerald-700 border-emerald-100',
   LOGIN: 'bg-slate-50 text-slate-600 border-slate-200',
@@ -113,8 +113,8 @@ export default function AuditLogs() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-200 pb-5">
         <div>
-          <h1 className="text-xl md:text-2xl font-black text-teal-900 flex items-center gap-2">
-            <ClipboardList className="w-6 h-6 text-teal-700" /> Audit Log Viewer
+          <h1 className="text-xl md:text-2xl font-black text-blue-900 flex items-center gap-2">
+            <ClipboardList className="w-6 h-6 text-blue-700" /> Audit Log Viewer
           </h1>
           <p className="text-xs md:text-sm text-gray-500 font-medium mt-0.5">
             System-wide change history — operator actions, role changes, product edits and more.
@@ -140,7 +140,7 @@ export default function AuditLogs() {
               placeholder="Filter by action (e.g. PRODUCT, ORDER, LOGIN...)"
               value={filters.action}
               onChange={(e) => handleFilterChange('action', e.target.value)}
-              className="w-full pl-8 pr-3 py-2 border border-gray-200 rounded-lg text-xs font-semibold focus:ring-1 focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
+              className="w-full pl-8 pr-3 py-2 border border-gray-200 rounded-lg text-xs font-semibold focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
             />
           </div>
 
@@ -149,7 +149,7 @@ export default function AuditLogs() {
             <select
               value={filters.role}
               onChange={(e) => handleFilterChange('role', e.target.value)}
-              className="pl-8 pr-4 py-2 border border-gray-200 bg-white rounded-lg text-xs font-semibold focus:ring-1 focus:ring-teal-500 focus:outline-none appearance-none min-w-[150px]"
+              className="pl-8 pr-4 py-2 border border-gray-200 bg-white rounded-lg text-xs font-semibold focus:ring-1 focus:ring-blue-500 focus:outline-none appearance-none min-w-[150px]"
             >
               <option value="">All Roles</option>
               <option value="admin">Admin</option>
@@ -163,14 +163,14 @@ export default function AuditLogs() {
       {/* Stats Bar */}
       {!loading && (
         <div className="flex items-center gap-3 text-[11px] font-semibold text-gray-400">
-          <span className="bg-slate-100 px-2 py-0.5 rounded font-black text-teal-800">
+          <span className="bg-slate-100 px-2 py-0.5 rounded font-black text-blue-800">
             {pagination.total.toLocaleString()} entries
           </span>
           <span>Page {pagination.page} of {pagination.pages}</span>
           {(filters.action || filters.role) && (
             <button
               onClick={() => setFilters({ action: '', role: '' })}
-              className="text-teal-600 hover:text-teal-800 font-bold"
+              className="text-blue-600 hover:text-blue-800 font-bold"
             >
               × Clear Filters
             </button>
@@ -190,7 +190,7 @@ export default function AuditLogs() {
       <div className="bg-white border border-gray-200 rounded-xl shadow-xs overflow-hidden">
         {loading ? (
           <div className="py-20 text-center text-sm text-gray-400 flex flex-col items-center justify-center">
-            <Loader2 className="w-6 h-6 animate-spin text-teal-600 mb-2" />
+            <Loader2 className="w-6 h-6 animate-spin text-blue-600 mb-2" />
             Loading audit records...
           </div>
         ) : logs.length === 0 ? (
@@ -201,7 +201,7 @@ export default function AuditLogs() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs text-gray-500 border-collapse">
               <thead>
-                <tr className="bg-slate-50 font-bold uppercase tracking-wider text-teal-900 border-b border-gray-200 text-[10px]">
+                <tr className="bg-slate-50 font-bold uppercase tracking-wider text-blue-900 border-b border-gray-200 text-[10px]">
                   <th className="px-4 py-3.5">Timestamp</th>
                   <th className="px-4 py-3.5">Operator</th>
                   <th className="px-4 py-3.5">Action</th>
@@ -233,8 +233,8 @@ export default function AuditLogs() {
                       {/* Operator */}
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 rounded-full bg-teal-100 flex items-center justify-center shrink-0">
-                            <User className="w-3.5 h-3.5 text-teal-600" />
+                          <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
+                            <User className="w-3.5 h-3.5 text-blue-600" />
                           </div>
                           <div>
                             <div className="font-bold text-gray-700 text-[11px]">
@@ -282,7 +282,7 @@ export default function AuditLogs() {
                       <td className="px-4 py-3 text-center">
                         {(log.previousValue !== null || log.newValue !== null) ? (
                           <button
-                            className="text-[10px] font-bold text-teal-600 hover:text-teal-800 uppercase tracking-wider"
+                            className="text-[10px] font-bold text-blue-600 hover:text-blue-800 uppercase tracking-wider"
                           >
                             {expandedId === log._id ? '▲ Hide' : '▼ Diff'}
                           </button>
@@ -355,7 +355,7 @@ export default function AuditLogs() {
                   onClick={() => handlePageChange(p)}
                   className={`w-7 h-7 rounded-lg text-xs font-bold border transition-colors ${
                     p === pagination.page
-                      ? 'bg-teal-600 text-white border-teal-600'
+                      ? 'bg-blue-600 text-white border-blue-600'
                       : 'border-gray-200 text-gray-600 hover:bg-gray-50'
                   }`}
                 >

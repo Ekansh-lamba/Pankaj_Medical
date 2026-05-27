@@ -120,7 +120,7 @@ export default function OrderHistory() {
             onClick={() => setStatusFilter(tab.id)}
             className={`py-3 px-4 border-b-2 whitespace-nowrap transition-colors ${
               statusFilter === tab.id
-                ? 'border-primary-600 text-teal-750 font-black'
+                ? 'border-primary-600 text-primary-600 font-black'
                 : 'border-transparent hover:text-primary-600'
             }`}
           >

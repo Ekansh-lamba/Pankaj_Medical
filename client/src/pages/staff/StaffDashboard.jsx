@@ -11,7 +11,7 @@ const StaffDashboard = () => {
         {/* Welcome Box */}
         <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-xs mb-8">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center text-teal-700">
+            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-700">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
@@ -38,12 +38,12 @@ const StaffDashboard = () => {
             <div
               className={`p-4 rounded-lg border flex items-start gap-3 ${
                 user?.permissions?.manageOrders
-                  ? 'bg-teal-50 border-teal-200 text-teal-900'
+                  ? 'bg-blue-50 border-blue-200 text-blue-900'
                   : 'bg-gray-50 border-gray-200 text-gray-400'
               }`}
             >
               <ClipboardCheck
-                className={`w-5 h-5 shrink-0 mt-0.5 ${user?.permissions?.manageOrders ? 'text-teal-600' : 'text-gray-400'}`}
+                className={`w-5 h-5 shrink-0 mt-0.5 ${user?.permissions?.manageOrders ? 'text-blue-600' : 'text-gray-400'}`}
               />
               <div>
                 <h4 className="font-bold text-sm">Manage Customer Orders</h4>
@@ -61,12 +61,12 @@ const StaffDashboard = () => {
             <div
               className={`p-4 rounded-lg border flex items-start gap-3 ${
                 user?.permissions?.verifyPrescriptions
-                  ? 'bg-teal-50 border-teal-200 text-teal-900'
+                  ? 'bg-blue-50 border-blue-200 text-blue-900'
                   : 'bg-gray-50 border-gray-200 text-gray-400'
               }`}
             >
               <ShieldCheck
-                className={`w-5 h-5 shrink-0 mt-0.5 ${user?.permissions?.verifyPrescriptions ? 'text-teal-600' : 'text-gray-400'}`}
+                className={`w-5 h-5 shrink-0 mt-0.5 ${user?.permissions?.verifyPrescriptions ? 'text-blue-600' : 'text-gray-400'}`}
               />
               <div>
                 <h4 className="font-bold text-sm">Verify Prescriptions</h4>
@@ -84,12 +84,12 @@ const StaffDashboard = () => {
             <div
               className={`p-4 rounded-lg border flex items-start gap-3 ${
                 user?.permissions?.manageInventory
-                  ? 'bg-teal-50 border-teal-200 text-teal-900'
+                  ? 'bg-blue-50 border-blue-200 text-blue-900'
                   : 'bg-gray-50 border-gray-200 text-gray-400'
               }`}
             >
               <Package
-                className={`w-5 h-5 shrink-0 mt-0.5 ${user?.permissions?.manageInventory ? 'text-teal-600' : 'text-gray-400'}`}
+                className={`w-5 h-5 shrink-0 mt-0.5 ${user?.permissions?.manageInventory ? 'text-blue-600' : 'text-gray-400'}`}
               />
               <div>
                 <h4 className="font-bold text-sm">Manage Stock & Expiry</h4>
@@ -107,12 +107,12 @@ const StaffDashboard = () => {
             <div
               className={`p-4 rounded-lg border flex items-start gap-3 ${
                 user?.permissions?.viewReports
-                  ? 'bg-teal-50 border-teal-200 text-teal-900'
+                  ? 'bg-blue-50 border-blue-200 text-blue-900'
                   : 'bg-gray-50 border-gray-200 text-gray-400'
               }`}
             >
               <AlertCircle
-                className={`w-5 h-5 shrink-0 mt-0.5 ${user?.permissions?.viewReports ? 'text-teal-600' : 'text-gray-400'}`}
+                className={`w-5 h-5 shrink-0 mt-0.5 ${user?.permissions?.viewReports ? 'text-blue-600' : 'text-gray-400'}`}
               />
               <div>
                 <h4 className="font-bold text-sm">View Analytics Reports</h4>

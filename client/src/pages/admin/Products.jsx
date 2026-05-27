@@ -154,7 +154,7 @@ export default function Products() {
       {/* ── Header ──────────────────────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-xl md:text-2xl font-black text-teal-900">Inventory Management</h1>
+          <h1 className="text-xl md:text-2xl font-black text-blue-900">Inventory Management</h1>
           <p className="mt-1 text-sm text-gray-500 font-medium">
             {products.length.toLocaleString()} products total
             {inactiveCount > 0 && (
@@ -178,14 +178,14 @@ export default function Products() {
           <Link
             to="/admin/products/import"
             style={{ textDecoration: 'none' }}
-            className="btn-teal-outline flex items-center gap-1.5 text-xs py-2 px-4 shadow-xs"
+            className="btn-secondary flex items-center gap-1.5 text-xs py-2 px-4 shadow-xs"
           >
-            <Upload className="w-4 h-4 text-teal-700" /> Bulk CSV Import
+            <Upload className="w-4 h-4 text-blue-700" /> Bulk CSV Import
           </Link>
           <Link
             to="/admin/products/add"
             style={{ textDecoration: 'none' }}
-            className="btn-teal flex items-center gap-1.5 text-xs py-2 px-4 shadow-xs"
+            className="btn-primary flex items-center gap-1.5 text-xs py-2 px-4 shadow-xs"
           >
             <Plus className="w-4 h-4" /> Add New Medicine
           </Link>
@@ -201,7 +201,7 @@ export default function Products() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search by name, brand, batch..."
-            className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
+            className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
           />
           <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
         </div>
@@ -210,7 +210,7 @@ export default function Products() {
         <select
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value)}
-          className="border border-gray-300 rounded-lg text-sm bg-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-teal-500/20"
+          className="border border-gray-300 rounded-lg text-sm bg-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
         >
           <option value="">All Categories</option>
           <option value="Tablets &amp; Capsules">Tablets &amp; Capsules</option>
@@ -240,7 +240,7 @@ export default function Products() {
         <button
           onClick={fetchAdminProducts}
           disabled={loading}
-          className="p-2 rounded-lg border border-gray-200 text-gray-400 hover:text-teal-600 hover:border-teal-300 transition-colors"
+          className="p-2 rounded-lg border border-gray-200 text-gray-400 hover:text-blue-600 hover:border-blue-300 transition-colors"
           title="Refresh"
         >
           <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
@@ -251,15 +251,15 @@ export default function Products() {
 
       {/* ── Bulk action toolbar (appears when rows are selected) ───────── */}
       {selectedCount > 0 && (
-        <div className="bg-teal-50 border border-teal-200 rounded-xl px-4 py-3 mb-4 flex flex-wrap items-center gap-3 shadow-xs">
-          <span className="text-sm font-bold text-teal-800">{selectedCount} selected</span>
+        <div className="bg-blue-50 border border-blue-200 rounded-xl px-4 py-3 mb-4 flex flex-wrap items-center gap-3 shadow-xs">
+          <span className="text-sm font-bold text-blue-800">{selectedCount} selected</span>
 
           {/* Bulk action dropdown */}
           <div className="relative">
             <button
               onClick={() => setBulkDropOpen(v => !v)}
               disabled={bulkLoading}
-              className="flex items-center gap-1.5 text-xs font-bold py-1.5 px-3 rounded-lg border border-teal-300 bg-white text-teal-700 hover:bg-teal-50 transition-colors disabled:opacity-60"
+              className="flex items-center gap-1.5 text-xs font-bold py-1.5 px-3 rounded-lg border border-blue-300 bg-white text-blue-700 hover:bg-blue-50 transition-colors disabled:opacity-60"
             >
               Bulk Action <ChevronDown className="w-3.5 h-3.5" />
             </button>
@@ -267,7 +267,7 @@ export default function Products() {
               <div className="absolute top-full left-0 mt-1 z-20 bg-white border border-gray-200 rounded-lg shadow-lg min-w-[160px] overflow-hidden">
                 <button
                   onClick={() => runBulkAction('activate')}
-                  className="w-full text-left px-4 py-2.5 text-xs font-semibold text-teal-700 hover:bg-teal-50 transition-colors"
+                  className="w-full text-left px-4 py-2.5 text-xs font-semibold text-blue-700 hover:bg-blue-50 transition-colors"
                 >
                   ✓ Activate Selected
                 </button>
@@ -295,7 +295,7 @@ export default function Products() {
           </button>
 
           {bulkLoading && (
-            <span className="w-4 h-4 border-2 border-teal-600 border-t-transparent rounded-full animate-spin" />
+            <span className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
           )}
         </div>
       )}
@@ -311,19 +311,19 @@ export default function Products() {
       <div className="bg-white border border-gray-200 rounded-xl shadow-xs overflow-hidden">
         {loading ? (
           <div className="py-20 text-center text-sm text-gray-400 flex flex-col items-center justify-center">
-            <span className="w-6 h-6 border-2 border-teal-600 border-t-transparent rounded-full animate-spin mb-2" />
+            <span className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mb-2" />
             Loading stock details...
           </div>
         ) : filteredProducts.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-left text-sm text-gray-500">
-              <thead className="bg-gray-50 border-b border-gray-200 text-xs font-bold uppercase tracking-wider text-teal-900">
+              <thead className="bg-gray-50 border-b border-gray-200 text-xs font-bold uppercase tracking-wider text-blue-900">
                 <tr>
                   {/* Select-all checkbox */}
                   <th className="px-4 py-4 w-10">
                     <button
                       onClick={toggleSelectAll}
-                      className="text-teal-600 hover:text-teal-800 transition-colors"
+                      className="text-blue-600 hover:text-blue-800 transition-colors"
                       title={allSelected ? 'Deselect all' : 'Select all visible'}
                     >
                       {allSelected ? (
@@ -357,7 +357,7 @@ export default function Products() {
                       key={p._id}
                       className={`transition-colors ${
                         isSelected
-                          ? 'bg-teal-50/60'
+                          ? 'bg-blue-50/60'
                           : !p.isActive
                           ? 'bg-amber-50/30 opacity-80'
                           : 'hover:bg-gray-50/60'
@@ -367,7 +367,7 @@ export default function Products() {
                       <td className="px-4 py-3">
                         <button
                           onClick={() => toggleRow(p._id)}
-                          className="text-teal-600 hover:text-teal-800 transition-colors"
+                          className="text-blue-600 hover:text-blue-800 transition-colors"
                         >
                           {isSelected ? <CheckSquare className="w-4 h-4" /> : <Square className="w-4 h-4 text-gray-300 hover:text-gray-400" />}
                         </button>
@@ -398,7 +398,7 @@ export default function Products() {
                       {/* Pricing */}
                       <td className="px-4 py-3 text-right">
                         <div className="flex flex-col items-end">
-                          <span className="font-bold text-teal-800">{formatCurrency(p.sellingPrice)}</span>
+                          <span className="font-bold text-blue-800">{formatCurrency(p.sellingPrice)}</span>
                           <span className="text-xs text-gray-400 line-through">{formatCurrency(p.mrp)}</span>
                         </div>
                       </td>
@@ -426,14 +426,14 @@ export default function Products() {
                       <td className="px-4 py-3 text-center">
                         <div className="flex flex-wrap items-center justify-center gap-1">
                           {p.isActive ? (
-                            <span className="bg-teal-50 text-teal-700 text-[10px] font-bold px-2 py-0.5 rounded border border-teal-100 uppercase">Active</span>
+                            <span className="bg-blue-50 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded border border-blue-100 uppercase">Active</span>
                           ) : (
                             <span className="bg-amber-50 text-amber-700 text-[10px] font-bold px-2 py-0.5 rounded border border-amber-200 uppercase">Inactive</span>
                           )}
                           {p.isHidden ? (
                             <span className="bg-gray-100 text-gray-400 text-[10px] font-bold px-2 py-0.5 rounded border border-gray-200 uppercase">Hidden</span>
                           ) : (
-                            <span className="bg-teal-50 text-teal-600 text-[10px] font-bold px-2 py-0.5 rounded border border-teal-100 uppercase">Visible</span>
+                            <span className="bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-0.5 rounded border border-blue-100 uppercase">Visible</span>
                           )}
                         </div>
                       </td>
@@ -446,7 +446,7 @@ export default function Products() {
                             disabled={!p.isActive}
                             title={p.isHidden ? 'Show in store' : 'Hide from store'}
                             className={`p-1.5 rounded border transition-colors ${
-                              !p.isActive ? 'border-gray-200 text-gray-300 cursor-not-allowed' : 'border-gray-200 hover:border-teal-300 text-gray-400 hover:text-teal-600'
+                              !p.isActive ? 'border-gray-200 text-gray-300 cursor-not-allowed' : 'border-gray-200 hover:border-blue-300 text-gray-400 hover:text-blue-600'
                             }`}
                           >
                             {p.isHidden ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -454,7 +454,7 @@ export default function Products() {
 
                           <Link
                             to={`/admin/products/edit/${p._id}`}
-                            className="p-1.5 border border-gray-200 rounded text-gray-400 hover:text-teal-600 hover:border-teal-300 transition-colors"
+                            className="p-1.5 border border-gray-200 rounded text-gray-400 hover:text-blue-600 hover:border-blue-300 transition-colors"
                           >
                             <Edit className="w-4 h-4" />
                           </Link>

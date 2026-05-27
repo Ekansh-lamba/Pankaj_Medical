@@ -392,7 +392,7 @@ export default function Checkout() {
                       key={addr._id}
                       className={`block p-4 border rounded-xl bg-white cursor-pointer transition-all ${
                         selectedAddressId === addr._id
-                          ? 'border-primary-500 ring-2 ring-teal-500/10'
+                          ? 'border-primary-500 ring-2 ring-primary-500/10'
                           : 'border-gray-200 hover:border-gray-300'
                       }`}
                     >
@@ -812,7 +812,7 @@ export default function Checkout() {
                 <h4 className="font-extrabold text-primary-900 uppercase tracking-wide flex items-center gap-1.5">
                   <CheckCircle className="w-4 h-4 shrink-0 text-primary-600" /> Awaiting Store Approval
                 </h4>
-                <p className="text-[11px] text-teal-750 font-medium">
+                <p className="text-[11px] text-primary-700 font-medium">
                   Your order has been placed and is awaiting store approval. You will be notified once confirmed.
                 </p>
               </div>

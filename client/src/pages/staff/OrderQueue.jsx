@@ -131,7 +131,7 @@ const OrderQueue = () => {
     switch (status) {
       case 'pending_payment': return 'bg-amber-100 text-amber-800 border-amber-250';
       case 'pending_approval': return 'bg-purple-100 text-purple-800 border-purple-250';
-      case 'confirmed': return 'bg-teal-100 text-teal-800 border-teal-250';
+      case 'confirmed': return 'bg-blue-100 text-blue-800 border-blue-300';
       case 'processing': return 'bg-blue-100 text-blue-800 border-blue-250';
       case 'packed': return 'bg-sky-100 text-sky-800 border-sky-250';
       case 'shipped': return 'bg-indigo-100 text-indigo-800 border-indigo-250';
@@ -181,7 +181,7 @@ const OrderQueue = () => {
           <span className="text-[10px] font-black uppercase border border-pink-250 bg-pink-50 text-pink-700 px-3 py-1 rounded-full">
             Returns: {orders.filter(o => o.status === 'return_requested').length}
           </span>
-          <span className="text-[10px] font-black uppercase border border-teal-200 bg-teal-50 text-teal-700 px-3 py-1 rounded-full">
+          <span className="text-[10px] font-black uppercase border border-blue-200 bg-blue-50 text-blue-700 px-3 py-1 rounded-full">
             Active Confirmed: {orders.filter(o => ['confirmed', 'processing', 'packed', 'shipped'].includes(o.status)).length}
           </span>
         </div>
@@ -198,10 +198,10 @@ const OrderQueue = () => {
               placeholder="Search by Order ID, customer, email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full text-xs font-semibold text-slate-800 border border-slate-250 pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:border-teal-500"
+              className="w-full text-xs font-semibold text-slate-800 border border-slate-250 pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:border-blue-500"
             />
           </div>
-          <button type="submit" className="btn-teal py-2.5 px-4 text-xs font-bold shrink-0">
+          <button type="submit" className="btn-primary py-2.5 px-4 text-xs font-bold shrink-0">
             Search
           </button>
         </form>
@@ -229,7 +229,7 @@ const OrderQueue = () => {
               type="checkbox"
               checked={rxFilter}
               onChange={(e) => setRxFilter(e.target.checked)}
-              className="rounded text-teal-600 focus:ring-teal-500 w-4 h-4 border-slate-300"
+              className="rounded text-blue-600 focus:ring-blue-500 w-4 h-4 border-slate-300"
             />
             <span>Requires Prescription</span>
           </label>
@@ -239,7 +239,7 @@ const OrderQueue = () => {
       {/* Orders List */}
       {loading ? (
         <div className="py-20 text-center text-sm text-slate-400 flex flex-col items-center justify-center bg-white border border-slate-200 rounded-xl">
-          <div className="w-8 h-8 border-4 border-teal-600 border-t-transparent rounded-full animate-spin mb-2" />
+          <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-2" />
           Sweeping the order logs...
         </div>
       ) : orders.length > 0 ? (
@@ -283,7 +283,7 @@ const OrderQueue = () => {
                       <User className="w-3.5 h-3.5" /> Customer Info
                     </h4>
                     <div className="text-xs font-semibold text-slate-800">
-                      <p className="font-extrabold uppercase text-teal-800">{order.customer?.name || 'Anonymized User'}</p>
+                      <p className="font-extrabold uppercase text-blue-800">{order.customer?.name || 'Anonymized User'}</p>
                       <p className="text-[11px] text-slate-500 mt-0.5">{order.customer?.email}</p>
                       <p className="text-[11px] text-slate-500 flex items-center gap-1 mt-1">
                         <Phone className="w-3 h-3 text-slate-400" /> {order.customer?.phone || 'No phone'}
@@ -299,7 +299,7 @@ const OrderQueue = () => {
                         {order.deliveryAddress?.city} - {order.deliveryAddress?.pinCode}
                       </div>
                     ) : (
-                      <div className="mt-2 text-xs text-teal-800 bg-teal-50/50 border border-teal-150 p-2.5 rounded-lg font-bold">
+                      <div className="mt-2 text-xs text-blue-800 bg-blue-50/50 border border-blue-200 p-2.5 rounded-lg font-bold">
                         Store Pickup Selected
                       </div>
                     )}
@@ -322,7 +322,7 @@ const OrderQueue = () => {
                               </span>
                             )}
                           </div>
-                          <span className="font-extrabold text-teal-800 shrink-0 text-[11px]">
+                          <span className="font-extrabold text-blue-800 shrink-0 text-[11px]">
                             Qty: {item.quantity}
                           </span>
                         </div>
@@ -348,7 +348,7 @@ const OrderQueue = () => {
                       </div>
                       <div className="flex justify-between border-t border-slate-100 pt-1.5 text-sm font-black text-slate-800">
                         <span>Grand Total:</span>
-                        <span className="text-teal-800">{formatCurrency(order.grandTotal)}</span>
+                        <span className="text-blue-800">{formatCurrency(order.grandTotal)}</span>
                       </div>
                     </div>
 
@@ -373,9 +373,9 @@ const OrderQueue = () => {
                       <button
                         onClick={() => handleCodCollected(order._id)}
                         disabled={updatingId === order._id}
-                        className="btn-teal-outline text-[11px] py-1.5 px-3 flex items-center gap-1 font-bold border-teal-500 bg-white"
+                        className="btn-secondary text-[11px] py-1.5 px-3 flex items-center gap-1 font-bold border-blue-500 bg-white"
                       >
-                        <DollarSign className="w-3.5 h-3.5 text-teal-600" /> Collect COD cash
+                        <DollarSign className="w-3.5 h-3.5 text-blue-600" /> Collect COD cash
                       </button>
                     )}
                   </div>
@@ -408,7 +408,7 @@ const OrderQueue = () => {
                             <button
                               onClick={() => handleReturnAction(order._id, 'approved')}
                               disabled={updatingId === order._id}
-                              className="btn-teal bg-green-600 hover:bg-green-700 border-none text-[10px] font-black uppercase py-1.5 px-3 rounded flex items-center gap-1 text-white"
+                              className="btn-primary bg-green-600 hover:bg-green-700 border-none text-[10px] font-black uppercase py-1.5 px-3 rounded flex items-center gap-1 text-white"
                             >
                               <Check className="w-3.5 h-3.5" /> Approve Return
                             </button>

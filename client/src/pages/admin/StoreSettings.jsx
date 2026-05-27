@@ -172,8 +172,8 @@ export default function StoreSettings() {
   if (loading) {
     return (
       <div className="py-20 text-center text-sm text-gray-400 flex flex-col items-center justify-center">
-        <Loader2 className="w-8 h-8 border-2 border-teal-600 border-t-transparent rounded-full animate-spin mb-3" />
-        <p className="font-semibold text-teal-800">Fetching store settings and governance configurations...</p>
+        <Loader2 className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mb-3" />
+        <p className="font-semibold text-blue-800">Fetching store settings and governance configurations...</p>
       </div>
     );
   }
@@ -184,8 +184,8 @@ export default function StoreSettings() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-200 pb-5">
         <div>
-          <h1 className="text-xl md:text-2xl font-black text-teal-900 flex items-center gap-2">
-            <SettingsIcon className="w-6 h-6 text-teal-700" /> Store Settings & Governance
+          <h1 className="text-xl md:text-2xl font-black text-blue-900 flex items-center gap-2">
+            <SettingsIcon className="w-6 h-6 text-blue-700" /> Store Settings & Governance
           </h1>
           <p className="text-xs md:text-sm text-gray-500 font-medium mt-0.5">
             Manage delivery thresholds, operating hours, active pin codes, auto discounts, and maintenance controls.
@@ -195,7 +195,7 @@ export default function StoreSettings() {
         <button
           onClick={handleSaveSettings}
           disabled={saving}
-          className="flex items-center gap-2 text-xs py-2.5 px-5 font-bold rounded-lg bg-teal-650 hover:bg-teal-750 text-white transition-all shadow-md active:scale-95"
+          className="flex items-center gap-2 text-xs py-2.5 px-5 font-bold rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-md active:scale-95"
         >
           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
           {saving ? 'Saving...' : 'Save Configuration'}
@@ -209,8 +209,8 @@ export default function StoreSettings() {
           
           {/* Section 1: Financial Limits & Delivery */}
           <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs space-y-4">
-            <h3 className="text-xs font-black uppercase tracking-wider text-teal-900 border-b border-gray-100 pb-2.5 flex items-center gap-1.5">
-              <Truck className="w-4 h-4 text-teal-600" /> Financial Settings & Logistics
+            <h3 className="text-xs font-black uppercase tracking-wider text-blue-900 border-b border-gray-100 pb-2.5 flex items-center gap-1.5">
+              <Truck className="w-4 h-4 text-blue-600" /> Financial Settings & Logistics
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -222,7 +222,7 @@ export default function StoreSettings() {
                     type="number"
                     value={settings.deliveryCharge}
                     onChange={(e) => handleFieldChange('deliveryCharge', Number(e.target.value))}
-                    className="w-full pl-7 pr-3 py-2 border border-gray-200 rounded-lg text-xs font-bold text-gray-700 focus:ring-1 focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
+                    className="w-full pl-7 pr-3 py-2 border border-gray-200 rounded-lg text-xs font-bold text-gray-700 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -235,7 +235,7 @@ export default function StoreSettings() {
                     type="number"
                     value={settings.freeDeliveryThreshold}
                     onChange={(e) => handleFieldChange('freeDeliveryThreshold', Number(e.target.value))}
-                    className="w-full pl-7 pr-3 py-2 border border-gray-200 rounded-lg text-xs font-bold text-gray-700 focus:ring-1 focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
+                    className="w-full pl-7 pr-3 py-2 border border-gray-200 rounded-lg text-xs font-bold text-gray-700 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -248,7 +248,7 @@ export default function StoreSettings() {
                     type="number"
                     value={settings.minimumOrderValue}
                     onChange={(e) => handleFieldChange('minimumOrderValue', Number(e.target.value))}
-                    className="w-full pl-7 pr-3 py-2 border border-gray-200 rounded-lg text-xs font-bold text-gray-700 focus:ring-1 focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
+                    className="w-full pl-7 pr-3 py-2 border border-gray-200 rounded-lg text-xs font-bold text-gray-700 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -261,7 +261,7 @@ export default function StoreSettings() {
                     type="number"
                     value={settings.estimatedDeliveryHours}
                     onChange={(e) => handleFieldChange('estimatedDeliveryHours', Number(e.target.value))}
-                    className="w-full pl-3 pr-10 py-2 border border-gray-200 rounded-lg text-xs font-bold text-gray-700 focus:ring-1 focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
+                    className="w-full pl-3 pr-10 py-2 border border-gray-200 rounded-lg text-xs font-bold text-gray-700 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -271,8 +271,8 @@ export default function StoreSettings() {
           {/* Section 2: Serviceable Pin Codes */}
           <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs space-y-4">
             <div>
-              <h3 className="text-xs font-black uppercase tracking-wider text-teal-900 flex items-center gap-1.5">
-                <Truck className="w-4 h-4 text-teal-600" /> Serviceable Pin Codes (Kanpur Area)
+              <h3 className="text-xs font-black uppercase tracking-wider text-blue-900 flex items-center gap-1.5">
+                <Truck className="w-4 h-4 text-blue-600" /> Serviceable Pin Codes (Kanpur Area)
               </h3>
               <p className="text-[10px] text-gray-400 font-semibold mt-0.5">
                 Customers must select or input one of these pin codes to place an order.
@@ -286,11 +286,11 @@ export default function StoreSettings() {
                 placeholder="Enter 6-digit pin code (e.g. 208011)"
                 value={pincodeInput}
                 onChange={(e) => setPincodeInput(e.target.value.replace(/\D/g, ''))}
-                className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-xs font-semibold focus:ring-1 focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
+                className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-xs font-semibold focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
               />
               <button
                 type="submit"
-                className="px-4 py-2 bg-teal-650 hover:bg-teal-750 text-white rounded-lg text-xs font-bold flex items-center gap-1 shrink-0"
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 shrink-0"
               >
                 <Plus className="w-3.5 h-3.5" /> Add Pin
               </button>
@@ -301,13 +301,13 @@ export default function StoreSettings() {
                 settings.serviceablePinCodes.map(pin => (
                   <span
                     key={pin}
-                    className="inline-flex items-center gap-1 text-[10px] font-black bg-teal-55/70 text-teal-800 border border-teal-100 px-2 py-1 rounded-md"
+                    className="inline-flex items-center gap-1 text-[10px] font-black bg-blue-100/70 text-blue-800 border border-blue-100 px-2 py-1 rounded-md"
                   >
                     {pin}
                     <button
                       type="button"
                       onClick={() => handleRemovePinCode(pin)}
-                      className="text-teal-600 hover:text-red-600 focus:outline-none"
+                      className="text-blue-600 hover:text-red-600 focus:outline-none"
                     >
                       <X className="w-3 h-3" />
                     </button>
@@ -325,8 +325,8 @@ export default function StoreSettings() {
           <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs space-y-4">
             <div className="flex justify-between items-center border-b border-gray-100 pb-2.5">
               <div>
-                <h3 className="text-xs font-black uppercase tracking-wider text-teal-900 flex items-center gap-1.5">
-                  <Percent className="w-4 h-4 text-teal-600" /> Auto-Applied Discounts
+                <h3 className="text-xs font-black uppercase tracking-wider text-blue-900 flex items-center gap-1.5">
+                  <Percent className="w-4 h-4 text-blue-600" /> Auto-Applied Discounts
                 </h3>
                 <p className="text-[10px] text-gray-400 font-semibold mt-0.5">
                   These offers are evaluated and applied automatically in the cart based on order size.
@@ -336,7 +336,7 @@ export default function StoreSettings() {
               {!showAddOffer && (
                 <button
                   onClick={() => setShowAddOffer(true)}
-                  className="px-3 py-1.5 border border-teal-55 text-teal-700 bg-teal-50 rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-teal-100"
+                  className="px-3 py-1.5 border border-blue-100 text-blue-700 bg-blue-50 rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-blue-100"
                 >
                   <Plus className="w-3.5 h-3.5" /> Add Auto-Offer
                 </button>
@@ -345,9 +345,9 @@ export default function StoreSettings() {
 
             {/* Add Auto-Offer form inline */}
             {showAddOffer && (
-              <form onSubmit={handleAddAutoOffer} className="border border-teal-100 bg-teal-50/20 rounded-xl p-4 space-y-3.5 text-xs animate-fadeIn">
-                <div className="flex justify-between items-center border-b border-teal-55 pb-2">
-                  <span className="font-extrabold text-teal-800 text-xs uppercase tracking-wider">New Auto Applied Offer Rule</span>
+              <form onSubmit={handleAddAutoOffer} className="border border-blue-100 bg-blue-50/20 rounded-xl p-4 space-y-3.5 text-xs animate-fadeIn">
+                <div className="flex justify-between items-center border-b border-blue-100 pb-2">
+                  <span className="font-extrabold text-blue-800 text-xs uppercase tracking-wider">New Auto Applied Offer Rule</span>
                   <button type="button" onClick={() => setShowAddOffer(false)} className="text-gray-400 hover:text-gray-650">
                     <X className="w-4 h-4" />
                   </button>
@@ -411,7 +411,7 @@ export default function StoreSettings() {
                   </div>
                 </div>
 
-                <div className="flex gap-2 justify-end pt-2 border-t border-teal-55">
+                <div className="flex gap-2 justify-end pt-2 border-t border-blue-100">
                   <button
                     type="button"
                     onClick={() => setShowAddOffer(false)}
@@ -421,7 +421,7 @@ export default function StoreSettings() {
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-bold"
+                    className="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold"
                   >
                     Confirm Rule
                   </button>
@@ -494,8 +494,8 @@ export default function StoreSettings() {
           
           {/* Section 4: Operating Hours & Contact */}
           <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs space-y-4">
-            <h3 className="text-xs font-black uppercase tracking-wider text-teal-900 border-b border-gray-100 pb-2.5 flex items-center gap-1.5">
-              <Clock className="w-4 h-4 text-teal-600" /> Operating Timings & Contacts
+            <h3 className="text-xs font-black uppercase tracking-wider text-blue-900 border-b border-gray-100 pb-2.5 flex items-center gap-1.5">
+              <Clock className="w-4 h-4 text-blue-600" /> Operating Timings & Contacts
             </h3>
 
             <div className="space-y-3.5">
@@ -529,7 +529,7 @@ export default function StoreSettings() {
                   placeholder="e.g. +91 99999 99999"
                   value={settings.pharmacyPhone || ''}
                   onChange={(e) => handleFieldChange('pharmacyPhone', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-xs font-semibold focus:ring-1 focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-xs font-semibold focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
                 />
               </div>
 
@@ -542,7 +542,7 @@ export default function StoreSettings() {
                   placeholder="e.g. contact@pankajmedical.com"
                   value={settings.pharmacyEmail || ''}
                   onChange={(e) => handleFieldChange('pharmacyEmail', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-xs font-semibold focus:ring-1 focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg text-xs font-semibold focus:ring-1 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
                 />
               </div>
             </div>
@@ -550,7 +550,7 @@ export default function StoreSettings() {
 
           {/* Section 5: System Maintenance & Offline Governance */}
           <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs space-y-4">
-            <h3 className="text-xs font-black uppercase tracking-wider text-teal-900 border-b border-gray-100 pb-2.5 flex items-center gap-1.5">
+            <h3 className="text-xs font-black uppercase tracking-wider text-blue-900 border-b border-gray-100 pb-2.5 flex items-center gap-1.5">
               <ShieldAlert className="w-4.5 h-4.5 text-amber-500" /> System Operations Status
             </h3>
 
