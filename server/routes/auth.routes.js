@@ -30,8 +30,10 @@ router.post(
 );
 
 // Non-rate limited Auth Endpoints (standard operations)
+const { protect } = require('../middleware/auth.middleware');
 router.get('/verify-email/:token', authController.verifyEmail);
 router.post('/refresh', authController.refresh);
 router.post('/logout', authController.logout);
+router.post('/resend-verification', protect, authController.resendVerification);
 
 module.exports = router;

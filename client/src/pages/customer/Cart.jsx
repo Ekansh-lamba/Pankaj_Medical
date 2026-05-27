@@ -1,13 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../hooks/useCart';
 import RxBadge from '../../components/shared/RxBadge';
 import { formatCurrency } from '../../utils/formatCurrency';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, ShieldAlert, AlertCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { useAuthStore } from '../../store/authStore';
+import api from '../../services/api';
 
 export default function Cart() {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
+  const [isResending, setIsResending] = useState(false);
   const {
     items,
     subtotal,
@@ -49,7 +53,28 @@ export default function Cart() {
     }
   };
 
+  const resendVerification = async () => {
+    if (isResending) return;
+    setIsResending(true);
+    try {
+      const res = await api.post('/api/auth/resend-verification');
+      if (res.data && res.data.success) {
+        toast.success(res.data.message || 'Verification email has been resent!');
+      } else {
+        toast.error(res.data.message || 'Failed to resend verification email.');
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to resend verification email.');
+    } finally {
+      setIsResending(false);
+    }
+  };
+
   const handleProceed = () => {
+    if (user && !user.isVerified) {
+      toast.error('Please verify your email address before placing orders.');
+      return;
+    }
     if (subtotal < 200) {
       toast.error('Minimum order subtotal for checkout is ₹200');
       return;
@@ -68,6 +93,22 @@ export default function Cart() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 md:px-6 py-10 bg-gray-50 font-sans">
+      {user && !user.isVerified && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 flex items-center gap-3 shadow-xs">
+          <ShieldAlert className="text-amber-500 w-5 h-5 shrink-0" />
+          <span className="text-amber-800 text-xs font-semibold">
+            Please verify your email address to place orders.
+            <button
+              onClick={resendVerification}
+              disabled={isResending}
+              className="ml-2 underline font-bold hover:text-amber-900 transition-colors"
+            >
+              {isResending ? 'Resending...' : 'Resend verification email'}
+            </button>
+          </span>
+        </div>
+      )}
+
       <h1 className="text-xl md:text-2xl font-black text-teal-900 mb-8 flex items-center gap-2">
         <ShoppingBag className="w-6 h-6 text-teal-700" /> Shopping Cart ({itemCount} {itemCount === 1 ? 'item' : 'items'})
       </h1>
@@ -230,9 +271,16 @@ export default function Cart() {
                 </div>
               )}
 
+              {user && !user.isVerified && (
+                <div className="bg-amber-50 border border-amber-100 rounded-lg p-3 flex items-start gap-2 text-[11px] text-amber-700 font-semibold leading-normal">
+                  <ShieldAlert className="w-4 h-4 shrink-0 text-amber-500 mt-0.5" />
+                  <span>Please verify your email address to enable checkout.</span>
+                </div>
+              )}
+
               <button
                 onClick={handleProceed}
-                disabled={subtotal < 200}
+                disabled={subtotal < 200 || (user && !user.isVerified)}
                 className="w-full btn-teal py-3 px-4 font-extrabold rounded-lg flex items-center justify-center gap-2 shadow-xs disabled:opacity-50 disabled:cursor-not-allowed group transition-all"
               >
                 Proceed to Checkout <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />

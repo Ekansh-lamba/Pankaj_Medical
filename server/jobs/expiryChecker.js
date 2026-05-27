@@ -1,6 +1,7 @@
 const cron = require('node-cron');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
+const User = require('../models/User');
 const { sendLowStockAlert, sendDailySummary } = require('../services/email.service');
 
 /**
@@ -160,6 +161,21 @@ const startCron = () => {
 
   // Hourly cron job running at the beginning of each hour
   cron.schedule('0 * * * *', runHourlyPrescriptionAutoCancel);
+
+  // Clean up unverified accounts older than 24 hours (Runs at 02:00 AM daily)
+  cron.schedule('0 2 * * *', async () => {
+    try {
+      const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000);
+      const deleteResult = await User.deleteMany({
+        isVerified: false,
+        role: 'customer',
+        createdAt: { $lt: cutoff }
+      });
+      console.log(`[Cron] Cleaned up ${deleteResult.deletedCount} unverified accounts`);
+    } catch (cronErr) {
+      console.error('[Cron] Unverified account cleanup error:', cronErr);
+    }
+  });
 
   console.log(
     '[Cron Job] Automated schedulers successfully initialized (Daily Expiry Sweeps, Hourly Stale Prescriptions Lock-releases, and 9:00 AM Daily Summary).'

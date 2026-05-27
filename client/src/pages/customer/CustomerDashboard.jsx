@@ -53,9 +53,12 @@ const QUICK_ACTIONS = [
   },
 ];
 
+import api from '../../services/api';
+
 export default function CustomerDashboard() {
   const { user, softDeleteUserAccount, isLoading } = useAuthStore();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isResending, setIsResending] = useState(false);
 
   const handleDeleteAccount = async () => {
     try {
@@ -65,8 +68,41 @@ export default function CustomerDashboard() {
     }
   };
 
+  const resendVerification = async () => {
+    if (isResending) return;
+    setIsResending(true);
+    try {
+      const res = await api.post('/api/auth/resend-verification');
+      if (res.data && res.data.success) {
+        alert(res.data.message || 'Verification email has been resent!');
+      } else {
+        alert(res.data.message || 'Failed to resend verification email.');
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to resend verification email.');
+    } finally {
+      setIsResending(false);
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">
+
+      {user && !user.isVerified && (
+        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6 flex items-center gap-3 shadow-sm">
+          <ShieldAlert className="text-amber-500 w-5 h-5 shrink-0" />
+          <span className="text-amber-800 text-sm font-medium">
+            Please verify your email address to place orders.
+            <button
+              onClick={resendVerification}
+              disabled={isResending}
+              className="ml-2 underline font-bold hover:text-amber-900 transition-colors"
+            >
+              {isResending ? 'Resending...' : 'Resend verification email'}
+            </button>
+          </span>
+        </div>
+      )}
 
       {/* ── Welcome card ─────────────────────────────────────────────── */}
       <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-6 flex items-center gap-4">

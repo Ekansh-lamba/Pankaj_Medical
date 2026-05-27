@@ -603,3 +603,56 @@ exports.resetPassword = async (req, res) => {
     return handleError(res, error, 'Password reset failed.', 'RESET_PASSWORD_ERROR');
   }
 };
+
+/**
+ * POST /resend-verification
+ * Resend Email Verification Token
+ */
+exports.resendVerification = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found.',
+        code: 'USER_NOT_FOUND'
+      });
+    }
+
+    if (user.isVerified) {
+      return res.status(400).json({
+        success: false,
+        message: 'Your email address is already verified.',
+        code: 'EMAIL_ALREADY_VERIFIED'
+      });
+    }
+
+    // Generate new Email Verification Token
+    const verificationToken = crypto.randomBytes(32).toString('hex');
+    const verificationExpires = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
+
+    user.emailVerificationToken = verificationToken;
+    user.emailVerificationExpires = verificationExpires;
+    await user.save();
+
+    // Send Verification Email
+    try {
+      await sendVerificationEmail(user.email, user.name, verificationToken);
+    } catch (emailErr) {
+      console.error('Failed to send verification email:', emailErr.message);
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to send verification email. Please try again later.',
+        code: 'EMAIL_SEND_FAILED'
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Verification email has been resent successfully. Please check your inbox.'
+    });
+  } catch (error) {
+    return handleError(res, error, 'An error occurred while resending verification email.', 'RESEND_VERIFICATION_ERROR');
+  }
+};

@@ -59,6 +59,14 @@ const createNotification = async (recipientId, type, title, message, link) => {
 
 // POST /api/orders — place order
 exports.placeOrder = async (req, res) => {
+  if (!req.user.isVerified) {
+    return res.status(403).json({
+      success: false,
+      message: 'Please verify your email address before placing orders.',
+      code: 'EMAIL_NOT_VERIFIED'
+    });
+  }
+
   const { deliveryType, deliveryAddress, items, paymentMethod, couponCode } = req.body;
 
   if (!deliveryType || !items || !Array.isArray(items) || items.length === 0) {
