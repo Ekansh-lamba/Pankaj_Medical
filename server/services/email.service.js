@@ -1,5 +1,12 @@
 const nodemailer = require('nodemailer');
 
+// Debug environment checks for Nodemailer setup
+console.log('EMAIL_USER value:', process.env.EMAIL_USER ? 'SET' : 'MISSING');
+console.log('EMAIL_PASS value:', process.env.EMAIL_PASS ? 'SET' : 'MISSING');
+console.log('EMAIL_HOST value:', process.env.EMAIL_HOST ? 'SET' : 'MISSING');
+console.log('EMAIL_PORT value:', process.env.EMAIL_PORT ? 'SET' : 'MISSING');
+console.log('NODE_ENV:', process.env.NODE_ENV);
+
 // Initialize the Nodemailer Transporter
 let transporter;
 
