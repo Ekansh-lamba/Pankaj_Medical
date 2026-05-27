@@ -63,6 +63,13 @@ p {
   @apply w-full px-3 py-2.5 border border-gray-300 rounded shadow-sm bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-150 placeholder:text-gray-400;
 }
 
+.card-base {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
+}
+
 .card-teal {
-  @apply bg-white border border-gray-200 rounded-lg p-6 shadow-sm;
+  @apply card-base p-6;
 }

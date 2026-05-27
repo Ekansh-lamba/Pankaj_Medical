@@ -63,7 +63,7 @@ export default function ProductCard({ product }) {
   };
 
   return (
-    <div className="relative bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col group h-full">
+    <div className="relative card-base overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col group h-full">
       {/* Expiring Soon Banner Alert */}
       {isExpiringSoon && (
         <div className="absolute top-2 left-2 z-10 bg-amber-500 text-white text-[10px] px-2.5 py-1 rounded-full font-bold flex items-center gap-1 shadow-sm">

@@ -8,7 +8,7 @@ import FilterSidebar from '../../components/shared/FilterSidebar';
 
 // Skeleton Loader Component for cards
 const ProductCardSkeleton = () => (
-  <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm p-4 flex flex-col space-y-4 animate-pulse">
+  <div className="card-base overflow-hidden shadow-sm p-4 flex flex-col space-y-4 animate-pulse">
     <div className="aspect-square bg-primary-50/70 rounded-lg"></div>
     <div className="space-y-2 flex-grow">
       <div className="h-3 w-1/4 bg-primary-50/70 rounded"></div>
@@ -152,7 +152,7 @@ export default function ProductList() {
             </>
           ) : (
             /* Empty Illustration State */
-            <div className="bg-white border border-slate-200 rounded-xl p-12 text-center max-w-lg mx-auto shadow-sm">
+            <div className="card-base p-12 text-center max-w-lg mx-auto shadow-sm">
               <div className="w-16 h-16 rounded-full bg-primary-50 flex items-center justify-center mx-auto mb-4">
                 <SlidersHorizontal className="w-6 h-6 text-primary-600" />
               </div>

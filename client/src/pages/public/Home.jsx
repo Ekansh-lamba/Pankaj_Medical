@@ -66,7 +66,7 @@ const Home = () => {
             <span className="inline-flex items-center gap-1.5 bg-primary-800/50 border border-primary-700/60 text-primary-100 font-semibold px-3 py-1 rounded-full text-xs uppercase tracking-wider mb-6">
               <Award className="w-3.5 h-3.5 text-primary-300" /> Trusted Local Chemist • Kanpur
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-none mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-none mb-6">
               Your Friendly <br />
               <span className="text-primary-300">Neighborhood Pharmacy</span>
             </h1>
@@ -152,21 +152,21 @@ const Home = () => {
             <p className="text-slate-500 text-sm">Getting your medicines has never been simpler. Follow these three quick steps.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm relative">
+            <div className="card-base p-6 shadow-sm relative">
               <span className="absolute -top-4 left-6 bg-primary-600 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shadow-md">1</span>
               <h3 className="text-lg font-bold text-slate-800 mt-2 mb-3">Search & Add to Cart</h3>
               <p className="text-slate-500 text-xs leading-relaxed">
                 Find the precise generic salt, syrup, or brand in our search catalog. Add desired quantities to your digital shopping cart safely.
               </p>
             </div>
-            <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm relative">
+            <div className="card-base p-6 shadow-sm relative">
               <span className="absolute -top-4 left-6 bg-primary-600 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shadow-md">2</span>
               <h3 className="text-lg font-bold text-slate-800 mt-2 mb-3">Upload Prescription</h3>
               <p className="text-slate-500 text-xs leading-relaxed">
                 If your medicine is classified as Schedule H or NRx, upload a photo of your prescription. Our licensed pharmacist reviews it in minutes.
               </p>
             </div>
-            <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm relative">
+            <div className="card-base p-6 shadow-sm relative">
               <span className="absolute -top-4 left-6 bg-primary-600 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm font-black shadow-md">3</span>
               <h3 className="text-lg font-bold text-slate-800 mt-2 mb-3">Same-Day Kanpur Delivery</h3>
               <p className="text-slate-500 text-xs leading-relaxed">
@@ -192,7 +192,7 @@ const Home = () => {
         {loading ? (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[...Array(4)].map((_, idx) => (
-              <div key={idx} className="bg-white border border-slate-200 rounded-xl p-4 flex flex-col space-y-4 animate-pulse">
+              <div key={idx} className="card-base p-4 flex flex-col space-y-4 animate-pulse">
                 <div className="aspect-square bg-slate-100 rounded-lg"></div>
                 <div className="h-3 w-1/4 bg-slate-100 rounded"></div>
                 <div className="h-4 w-3/4 bg-slate-100 rounded"></div>
@@ -207,7 +207,7 @@ const Home = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-10 bg-white border border-slate-200 rounded-xl">
+          <div className="text-center py-10 card-base">
             <p className="text-slate-400 text-sm">No medicines available in current search.</p>
           </div>
         )}
@@ -265,7 +265,7 @@ const Home = () => {
       <section className="bg-primary-900 text-white py-16 px-4 md:px-8 text-center relative overflow-hidden border-t border-primary-950">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-primary-600/10 rounded-full blur-3xl pointer-events-none"></div>
         <div className="max-w-xl mx-auto flex flex-col items-center relative z-10">
-          <h2 className="text-3xl font-black mb-3">
+          <h2 className="text-3xl font-black text-white mb-3">
             Search Our Inventory
           </h2>
           <p className="text-slate-300 mb-8 text-sm leading-relaxed">

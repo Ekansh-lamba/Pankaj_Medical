@@ -13,7 +13,7 @@ const About = () => {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-teal-900 mb-4">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-primary-900 mb-4">
             About Our Pharmacy
           </h1>
           <p className="text-gray-600 text-lg max-w-xl mx-auto">
@@ -25,7 +25,7 @@ const About = () => {
         {/* Corporate Profile Card */}
         <div className="border border-gray-200 rounded-xl p-8 bg-white shadow-sm mb-10">
           <h2 className="text-xl font-bold text-gray-800 border-b border-gray-100 pb-4 mb-6 flex items-center gap-2">
-            <Landmark className="text-teal-600 w-6 h-6" /> Licensed Corporate Profile
+            <Landmark className="text-primary-600 w-6 h-6" /> Licensed Corporate Profile
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -34,7 +34,7 @@ const About = () => {
                 <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider block">
                   Registered Store Name
                 </span>
-                <span className="text-base font-bold text-teal-800">{pharmacyDetails.name}</span>
+                <span className="text-base font-bold text-primary-800">{pharmacyDetails.name}</span>
               </div>
 
               <div>
@@ -60,9 +60,9 @@ const About = () => {
             </div>
           </div>
 
-          <div className="bg-teal-50 border border-teal-100 p-4 rounded-lg flex items-center gap-3">
-            <Award className="text-teal-700 w-6 h-6 shrink-0" />
-            <p className="text-sm text-teal-900 leading-normal">
+          <div className="bg-primary-50 border border-primary-100 p-4 rounded-lg flex items-center gap-3">
+            <Award className="text-primary-800 w-6 h-6 shrink-0" />
+            <p className="text-sm text-primary-900 leading-normal">
               Licensed pharmacy operating inside Kanpur Nagar, strictly enforcing prescription check
               rules on Schedule H/NRX medicines under Drug Controller regulatory guidelines.
             </p>
@@ -88,19 +88,19 @@ const About = () => {
             <h3 className="text-lg font-bold text-gray-800 mb-4">Quality Standards</h3>
             <ul className="space-y-3">
               <li className="flex items-start gap-2 text-sm text-gray-700">
-                <CheckCircle className="w-5 h-5 text-teal-600 shrink-0 mt-0.5" />
+                <CheckCircle className="w-5 h-5 text-primary-600 shrink-0 mt-0.5" />
                 <span>Procured only from verified wholesale channels.</span>
               </li>
               <li className="flex items-start gap-2 text-sm text-gray-700">
-                <CheckCircle className="w-5 h-5 text-teal-600 shrink-0 mt-0.5" />
+                <CheckCircle className="w-5 h-5 text-primary-600 shrink-0 mt-0.5" />
                 <span>Strict preservation at manufacturer-recommended storage temperatures.</span>
               </li>
               <li className="flex items-start gap-2 text-sm text-gray-700">
-                <CheckCircle className="w-5 h-5 text-teal-600 shrink-0 mt-0.5" />
+                <CheckCircle className="w-5 h-5 text-primary-600 shrink-0 mt-0.5" />
                 <span>Dedicated pharmacists verifying digital prescription uploads.</span>
               </li>
               <li className="flex items-start gap-2 text-sm text-gray-700">
-                <CheckCircle className="w-5 h-5 text-teal-600 shrink-0 mt-0.5" />
+                <CheckCircle className="w-5 h-5 text-primary-600 shrink-0 mt-0.5" />
                 <span>Computerized billing with genuine HSN codes and GST rates.</span>
               </li>
             </ul>

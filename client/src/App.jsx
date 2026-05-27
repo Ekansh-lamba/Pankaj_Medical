@@ -139,7 +139,7 @@ const App = () => {
           <Route
             path="*"
             element={
-              <Link to="/" className="text-teal-600 block text-center py-10 font-bold">
+              <Link to="/" className="text-primary-600 block text-center py-10 font-bold">
                 Page not found. Return to Home
               </Link>
             }

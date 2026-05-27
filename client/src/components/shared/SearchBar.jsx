@@ -86,7 +86,7 @@ export default function SearchBar() {
           }}
           onFocus={() => setShowDropdown(true)}
           placeholder="Search medicines or composition salts..."
-          className="w-full pl-9 pr-9 py-2 border border-gray-300 rounded-lg text-sm bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all placeholder:text-gray-400"
+          className="w-full pl-9 pr-9 py-2 border border-gray-300 rounded-lg text-sm bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all placeholder:text-gray-400"
         />
         
         {/* Search Icon */}
@@ -94,7 +94,7 @@ export default function SearchBar() {
         
         {/* Loading Spinner */}
         {loading && (
-          <Loader2 className="absolute right-3 top-2.5 w-4 h-4 text-teal-600 animate-spin" />
+          <Loader2 className="absolute right-3 top-2.5 w-4 h-4 text-primary-600 animate-spin" />
         )}
       </form>
 
@@ -103,14 +103,14 @@ export default function SearchBar() {
         <div className="absolute left-0 right-0 top-full mt-1.5 bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto z-50 divide-y divide-gray-100">
           {loading && suggestions.length === 0 ? (
             <div className="p-4 text-center text-xs text-gray-400 flex items-center justify-center gap-1.5">
-              <Loader2 className="w-4 h-4 animate-spin text-teal-600" /> Searching...
+              <Loader2 className="w-4 h-4 animate-spin text-primary-600" /> Searching...
             </div>
           ) : suggestions.length > 0 ? (
             suggestions.map((item) => (
               <div
                 key={item.slug}
                 onClick={() => handleSuggestionClick(item.slug)}
-                className="p-3 hover:bg-teal-50/50 cursor-pointer flex items-center justify-between transition-colors"
+                className="p-3 hover:bg-primary-50/50 cursor-pointer flex items-center justify-between transition-colors"
               >
                 <div className="flex flex-col pr-4">
                   <span className="text-sm font-bold text-gray-800 line-clamp-1">{item.name}</span>
@@ -121,7 +121,7 @@ export default function SearchBar() {
                 
                 <div className="flex items-center gap-2 shrink-0">
                   <RxBadge rxType={item.rxType} />
-                  <span className="text-xs font-bold text-teal-800">
+                  <span className="text-xs font-bold text-primary-600">
                     {formatCurrency(item.sellingPrice)}
                   </span>
                 </div>

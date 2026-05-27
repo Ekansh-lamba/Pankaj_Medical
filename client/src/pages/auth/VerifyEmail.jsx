@@ -41,23 +41,23 @@ const VerifyEmail = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full bg-white border border-gray-200 rounded-xl p-8 shadow-sm text-center">
-        <h2 className="text-2xl font-extrabold text-teal-900 mb-6">Email Verification</h2>
+      <div className="max-w-md w-full card-base p-8 shadow-sm text-center">
+        <h2 className="text-2xl font-extrabold text-primary-900 mb-6">Email Verification</h2>
 
         {isLoading ? (
           <div className="py-8 flex flex-col items-center justify-center gap-3">
-            <Loader className="w-10 h-10 text-teal-600 animate-spin" />
+            <Loader className="w-10 h-10 text-primary-600 animate-spin" />
             <p className="text-gray-500 text-sm">Verifying your registration details...</p>
           </div>
         ) : isSuccess ? (
           <div className="space-y-4 py-4">
-            <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 mx-auto">
+            <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center text-primary-600 mx-auto">
               <CheckCircle className="w-10 h-10" />
             </div>
             <h3 className="text-xl font-bold text-gray-800">Verification Successful!</h3>
             <p className="text-gray-600 text-sm leading-relaxed">{message}</p>
             <div className="pt-4">
-              <Link to="/login" className="btn-teal inline-block w-full">
+              <Link to="/login" className="btn-primary inline-block w-full">
                 Proceed to Login
               </Link>
             </div>

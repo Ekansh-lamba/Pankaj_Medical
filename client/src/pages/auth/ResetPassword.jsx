@@ -53,9 +53,9 @@ const ResetPassword = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
+      <div className="max-w-md w-full card-base p-8 shadow-sm">
         <div className="text-center mb-6">
-          <h2 className="text-2xl font-extrabold text-teal-900">Set New Password</h2>
+          <h2 className="text-2xl font-extrabold text-primary-900">Set New Password</h2>
           <p className="mt-1.5 text-sm text-gray-500">
             Configure a secure new password for your profile
           </p>
@@ -63,7 +63,7 @@ const ResetPassword = () => {
 
         {success ? (
           <div className="text-center py-4 space-y-4">
-            <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 mx-auto">
+            <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center text-primary-600 mx-auto">
               <CheckCircle className="w-6 h-6" />
             </div>
             <p className="text-gray-600 text-sm font-bold">Password Reset Successful!</p>
@@ -71,7 +71,7 @@ const ResetPassword = () => {
               Your credentials have been securely updated. You can now use your new password.
             </p>
             <div className="pt-2">
-              <Link to="/login" className="btn-teal inline-block w-full text-center">
+              <Link to="/login" className="btn-primary inline-block w-full text-center">
                 Go to Login
               </Link>
             </div>
@@ -96,7 +96,7 @@ const ResetPassword = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Min 8 characters"
-                    className="input-teal pl-9"
+                    className="input-base pl-9"
                     required
                     disabled={!token}
                   />
@@ -114,7 +114,7 @@ const ResetPassword = () => {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Repeat new password"
-                    className="input-teal pl-9"
+                    className="input-base pl-9"
                     required
                     disabled={!token}
                   />
@@ -125,7 +125,7 @@ const ResetPassword = () => {
               <button
                 type="submit"
                 disabled={isLoading || !token}
-                className="btn-teal w-full flex items-center justify-center gap-2"
+                className="btn-primary w-full flex items-center justify-center gap-2"
               >
                 {isLoading ? 'Updating Password...' : 'Save New Password'}
               </button>
@@ -133,7 +133,7 @@ const ResetPassword = () => {
               <div className="text-center pt-2">
                 <Link
                   to="/login"
-                  className="text-xs text-gray-500 hover:text-teal-600 font-semibold inline-flex items-center gap-1"
+                  className="text-xs text-gray-500 hover:text-primary-600 font-semibold inline-flex items-center gap-1"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" /> Cancel and return to Login
                 </Link>

@@ -73,13 +73,13 @@ export default function FilterSidebar({ filters, setFilters }) {
   const renderFiltersContent = () => (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-gray-200">
-        <h3 className="text-sm font-bold uppercase tracking-wider text-teal-900 flex items-center gap-1.5">
-          <SlidersHorizontal className="w-4 h-4 text-teal-600" /> Filters
+      <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+        <h3 className="text-sm font-bold uppercase tracking-wider text-primary-900 flex items-center gap-1.5">
+          <SlidersHorizontal className="w-4 h-4 text-primary-600" /> Filters
         </h3>
         <button
           onClick={handleClearAll}
-          className="text-xs text-teal-600 hover:text-teal-800 font-semibold transition-colors hover:underline"
+          className="text-xs text-primary-600 hover:text-primary-800 font-semibold transition-colors hover:underline"
         >
           Clear All
         </button>
@@ -87,15 +87,15 @@ export default function FilterSidebar({ filters, setFilters }) {
 
       {/* Category List */}
       <div>
-        <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Category</h4>
+        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Category</h4>
         <div className="space-y-2">
           {categoriesList.map((cat) => (
-            <label key={cat} className="flex items-center text-sm text-gray-700 cursor-pointer select-none">
+            <label key={cat} className="flex items-center text-sm text-slate-700 cursor-pointer select-none">
               <input
                 type="checkbox"
                 checked={filters.category === cat}
                 onChange={() => handleCategoryChange(cat)}
-                className="h-4 w-4 rounded text-teal-600 focus:ring-teal-500 border-gray-300 mr-2.5 transition-colors"
+                className="h-4 w-4 rounded text-primary-600 focus:ring-primary-500 border-slate-300 mr-2.5 transition-colors"
               />
               {cat}
             </label>
@@ -105,27 +105,27 @@ export default function FilterSidebar({ filters, setFilters }) {
 
       {/* Pricing Fields */}
       <div>
-        <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Price Range</h4>
+        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Price Range</h4>
         <div className="flex items-center gap-2">
           <div className="flex-1 relative">
-            <span className="absolute left-2.5 top-2.5 text-gray-400 text-sm">₹</span>
+            <span className="absolute left-2.5 top-2.5 text-slate-400 text-sm">₹</span>
             <input
               type="number"
               value={filters.minPrice || ''}
               onChange={(e) => handlePriceChange('minPrice', e.target.value)}
               placeholder="Min"
-              className="w-full pl-6 pr-2.5 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-teal-500 focus:border-teal-500"
+              className="w-full pl-6 pr-2.5 py-1.5 border border-slate-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
             />
           </div>
-          <span className="text-gray-400 text-xs">to</span>
+          <span className="text-slate-400 text-xs">to</span>
           <div className="flex-1 relative">
-            <span className="absolute left-2.5 top-2.5 text-gray-400 text-sm">₹</span>
+            <span className="absolute left-2.5 top-2.5 text-slate-400 text-sm">₹</span>
             <input
               type="number"
               value={filters.maxPrice || ''}
               onChange={(e) => handlePriceChange('maxPrice', e.target.value)}
               placeholder="Max"
-              className="w-full pl-6 pr-2.5 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-teal-500 focus:border-teal-500"
+              className="w-full pl-6 pr-2.5 py-1.5 border border-slate-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
             />
           </div>
         </div>
@@ -133,15 +133,15 @@ export default function FilterSidebar({ filters, setFilters }) {
 
       {/* Brands List */}
       <div>
-        <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">Brands</h4>
+        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Brands</h4>
         <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
           {topBrands.map((brand) => (
-            <label key={brand} className="flex items-center text-sm text-gray-700 cursor-pointer select-none">
+            <label key={brand} className="flex items-center text-sm text-slate-700 cursor-pointer select-none">
               <input
                 type="checkbox"
                 checked={filters.brand === brand}
                 onChange={() => handleBrandChange(brand)}
-                className="h-4 w-4 rounded text-teal-600 focus:ring-teal-500 border-gray-300 mr-2.5 transition-colors"
+                className="h-4 w-4 rounded text-primary-600 focus:ring-primary-500 border-slate-300 mr-2.5 transition-colors"
               />
               {brand}
             </label>
@@ -151,21 +151,21 @@ export default function FilterSidebar({ filters, setFilters }) {
 
       {/* Toggle Controls */}
       <div className="pt-2 space-y-3">
-        <label className="flex items-center text-sm text-gray-700 cursor-pointer select-none">
+        <label className="flex items-center text-sm text-slate-700 cursor-pointer select-none">
           <input
             type="checkbox"
             checked={filters.rxType === 'OTC'}
             onChange={handleRxTypeToggle}
-            className="h-4 w-4 rounded text-teal-600 focus:ring-teal-500 border-gray-300 mr-2.5 transition-colors"
+            className="h-4 w-4 rounded text-primary-600 focus:ring-primary-500 border-slate-300 mr-2.5 transition-colors"
           />
           OTC Medicines Only
         </label>
-        <label className="flex items-center text-sm text-gray-700 cursor-pointer select-none">
+        <label className="flex items-center text-sm text-slate-700 cursor-pointer select-none">
           <input
             type="checkbox"
             checked={filters.inStock === true}
             onChange={() => handleToggleChange('inStock')}
-            className="h-4 w-4 rounded text-teal-600 focus:ring-teal-500 border-gray-300 mr-2.5 transition-colors"
+            className="h-4 w-4 rounded text-primary-600 focus:ring-primary-500 border-slate-300 mr-2.5 transition-colors"
           />
           In Stock Only
         </label>
@@ -176,15 +176,15 @@ export default function FilterSidebar({ filters, setFilters }) {
   return (
     <>
       {/* Mobile Toggle Bar */}
-      <div className="md:hidden flex items-center justify-between bg-white border border-gray-200 rounded-lg p-3.5 mb-4 shadow-sm">
+      <div className="md:hidden flex items-center justify-between card-base p-3.5 mb-4">
         <button
           onClick={() => setIsOpen(true)}
-          className="flex items-center gap-1.5 text-sm font-semibold text-teal-800 hover:text-teal-900 focus:outline-none"
+          className="flex items-center gap-1.5 text-sm font-semibold text-primary-800 hover:text-primary-900 focus:outline-none"
         >
-          <SlidersHorizontal className="w-4 h-4 text-teal-600" /> Filter Medicines
+          <SlidersHorizontal className="w-4 h-4 text-primary-600" /> Filter Medicines
         </button>
         {filters.category || filters.brand || filters.rxType || filters.inStock || filters.minPrice || filters.maxPrice ? (
-          <span className="bg-teal-100 text-teal-800 text-xs px-2 py-0.5 rounded-full font-bold">
+          <span className="bg-primary-100 text-primary-800 text-xs px-2 py-0.5 rounded-full font-bold">
             Active Filters
           </span>
         ) : null}
@@ -200,7 +200,7 @@ export default function FilterSidebar({ filters, setFilters }) {
           <div className="relative w-80 max-w-sm bg-white h-full flex flex-col p-6 shadow-xl overflow-y-auto animate-in slide-in-from-left duration-250">
             <button
               onClick={() => setIsOpen(false)}
-              className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 focus:outline-none"
+              className="absolute right-4 top-4 text-slate-400 hover:text-slate-650 focus:outline-none"
             >
               <X className="w-5 h-5" />
             </button>
@@ -210,7 +210,7 @@ export default function FilterSidebar({ filters, setFilters }) {
       )}
 
       {/* Desktop Permanent left Sidebar */}
-      <div className="hidden md:block w-64 shrink-0 bg-white border border-gray-200 rounded-xl p-6 shadow-sm self-start">
+      <div className="hidden md:block w-64 shrink-0 card-base p-6 self-start">
         {renderFiltersContent()}
       </div>
     </>

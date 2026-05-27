@@ -168,7 +168,7 @@ export default function OrderDetail() {
   if (loading && !order) {
     return (
       <div className="py-20 text-center text-sm text-gray-400 flex flex-col items-center justify-center">
-        <Loader2 className="w-6 h-6 border-2 border-teal-600 border-t-transparent rounded-full animate-spin mb-2" />
+        <Loader2 className="w-6 h-6 border-2 border-primary-600 border-t-transparent rounded-full animate-spin mb-2" />
         Fetching order logs...
       </div>
     );
@@ -177,7 +177,7 @@ export default function OrderDetail() {
   if (!order) {
     return (
       <div className="py-16 text-center text-xs text-gray-400 font-semibold">
-        Order not found. <Link to="/my-orders" className="text-teal-700">Return to History</Link>
+        Order not found. <Link to="/my-orders" className="text-primary-800">Return to History</Link>
       </div>
     );
   }
@@ -195,12 +195,12 @@ export default function OrderDetail() {
         <div className="flex items-center gap-3">
           <Link
             to="/my-orders"
-            className="p-1.5 border border-gray-250 rounded-lg text-gray-500 hover:text-teal-700 hover:border-teal-100 transition-colors bg-white shrink-0"
+            className="p-1.5 border border-gray-250 rounded-lg text-gray-500 hover:text-primary-800 hover:border-primary-100 transition-colors bg-white shrink-0"
           >
             <ArrowLeft className="w-4 h-4" />
           </Link>
           <div>
-            <h1 className="text-lg font-black text-teal-900 leading-tight">Order Details</h1>
+            <h1 className="text-lg font-black text-primary-900 leading-tight">Order Details</h1>
             <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">
               Ref: <span className="text-gray-800 tracking-normal font-black">{order.orderNumber}</span>
             </p>
@@ -213,7 +213,7 @@ export default function OrderDetail() {
             <button
               onClick={handleDownloadInvoice}
               disabled={downloading}
-              className="flex items-center gap-1 text-xs text-teal-700 bg-teal-50 hover:bg-teal-100 font-bold py-2 px-4 rounded-lg border border-teal-100 transition-colors disabled:opacity-50"
+              className="flex items-center gap-1 text-xs text-primary-800 bg-primary-50 hover:bg-primary-100 font-bold py-2 px-4 rounded-lg border border-primary-100 transition-colors disabled:opacity-50"
             >
               {downloading ? (
                 <>
@@ -239,7 +239,7 @@ export default function OrderDetail() {
           {isReturnable && (
             <button
               onClick={() => setReturnOpen(true)}
-              className="flex items-center gap-1 text-xs text-teal-700 bg-teal-50 hover:bg-teal-100 font-bold py-2 px-4 rounded-lg border border-teal-100 transition-colors"
+              className="flex items-center gap-1 text-xs text-primary-800 bg-primary-50 hover:bg-primary-100 font-bold py-2 px-4 rounded-lg border border-primary-100 transition-colors"
             >
               <Undo2 className="w-3.5 h-3.5" /> Return Items
             </button>
@@ -250,7 +250,7 @@ export default function OrderDetail() {
       {/* Main Grid: Split timeline and items */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Timeline (Left 1col on desktop) */}
-        <div className="lg:col-span-1 bg-white border border-gray-200 rounded-xl p-5 shadow-xs h-fit space-y-5">
+        <div className="lg:col-span-1 card-base p-5 shadow-xs h-fit space-y-5">
           <OrderTimeline timeline={order.timeline} currentStatus={order.status} />
 
           {/* Payment metadata */}
@@ -294,7 +294,7 @@ export default function OrderDetail() {
                     <div className="border border-gray-150 rounded-lg p-2 bg-gray-50 flex items-center justify-center max-h-36 overflow-hidden">
                       {reuploadPreview === 'pdf' ? (
                         <div className="text-xs font-bold text-gray-500 py-4 flex flex-col items-center gap-1">
-                          <FileText className="w-8 h-8 text-teal-600" />
+                          <FileText className="w-8 h-8 text-primary-600" />
                           <span>Clarification.pdf loaded</span>
                         </div>
                       ) : (
@@ -314,14 +314,14 @@ export default function OrderDetail() {
                       <button
                         onClick={handlePrescriptionReupload}
                         disabled={uploadLoading}
-                        className="btn-teal text-[10px] py-1.5 px-4 font-bold flex items-center gap-1 shadow-xs"
+                        className="btn-primary text-[10px] py-1.5 px-4 font-bold flex items-center gap-1 shadow-xs"
                       >
                         {uploadLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : 'Submit Re-upload'}
                       </button>
                     </div>
                   </div>
                 ) : (
-                  <label className="w-full max-w-sm border border-dashed border-gray-300 hover:border-teal-400 rounded-lg p-6 bg-gray-50 text-center cursor-pointer transition-colors flex flex-col items-center">
+                  <label className="w-full max-w-sm border border-dashed border-gray-300 hover:border-primary-400 rounded-lg p-6 bg-gray-50 text-center cursor-pointer transition-colors flex flex-col items-center">
                     <input
                       type="file"
                       accept="image/jpeg,image/png,application/pdf"
@@ -337,10 +337,10 @@ export default function OrderDetail() {
           )}
 
           {/* Delivery Details */}
-          <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs text-xs leading-normal flex items-start gap-3">
-            <MapPin className="w-5 h-5 text-teal-600 shrink-0 mt-0.5" />
+          <div className="card-base p-5 shadow-xs text-xs leading-normal flex items-start gap-3">
+            <MapPin className="w-5 h-5 text-primary-600 shrink-0 mt-0.5" />
             <div>
-              <h3 className="font-extrabold text-teal-900 uppercase tracking-widest border-b border-gray-100 pb-1.5 mb-2.5">
+              <h3 className="font-extrabold text-primary-900 uppercase tracking-widest border-b border-gray-100 pb-1.5 mb-2.5">
                 Delivery Details
               </h3>
               {order.deliveryType === 'delivery' && order.deliveryAddress ? (
@@ -362,8 +362,8 @@ export default function OrderDetail() {
 
           {/* Prescription Status Details (If Rx order) */}
           {order.prescriptions && order.prescriptions.length > 0 && (
-            <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs text-xs leading-normal">
-              <h3 className="font-extrabold text-teal-900 uppercase tracking-widest border-b border-gray-150 pb-2.5 mb-3 flex items-center gap-1.5">
+            <div className="card-base p-5 shadow-xs text-xs leading-normal">
+              <h3 className="font-extrabold text-primary-900 uppercase tracking-widest border-b border-gray-150 pb-2.5 mb-3 flex items-center gap-1.5">
                 <FileText className="w-4.5 h-4.5" /> Prescription Verification Status
               </h3>
               <div className="space-y-3">
@@ -393,7 +393,7 @@ export default function OrderDetail() {
                         href={rx.imageUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-[10px] text-teal-700 hover:underline font-extrabold"
+                        className="text-[10px] text-primary-800 hover:underline font-extrabold"
                       >
                         View Signed Image
                       </a>
@@ -413,7 +413,7 @@ export default function OrderDetail() {
           )}
 
           {/* Invoice item lists */}
-          <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs space-y-4">
+          <div className="card-base p-5 shadow-xs space-y-4">
             <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-gray-150 pb-2.5">
               Invoice Items Breakdown
             </h3>
@@ -471,7 +471,7 @@ export default function OrderDetail() {
                   {order.deliveryCharge === 0 ? 'FREE' : formatCurrency(order.deliveryCharge)}
                 </span>
               </div>
-              <div className="w-full max-w-xs border-t border-gray-150 pt-2.5 flex justify-between font-black text-sm text-teal-900">
+              <div className="w-full max-w-xs border-t border-gray-150 pt-2.5 flex justify-between font-black text-sm text-primary-900">
                 <span>Grand Total</span>
                 <span className="font-black text-base">{formatCurrency(order.grandTotal)}</span>
               </div>
@@ -483,9 +483,9 @@ export default function OrderDetail() {
       {/* RETURN MODAL */}
       {returnOpen && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <form onSubmit={handleRequestReturn} className="bg-white border border-gray-200 rounded-xl p-5 w-full max-w-md animate-fadeIn space-y-4">
-            <h3 className="text-sm font-extrabold text-teal-900 uppercase tracking-widest border-b border-gray-150 pb-2 flex items-center gap-1.5">
-              <Undo2 className="w-4.5 h-4.5 text-teal-600" /> Raise Return Request
+          <form onSubmit={handleRequestReturn} className="card-base p-5 w-full max-w-md animate-fadeIn space-y-4">
+            <h3 className="text-sm font-extrabold text-primary-900 uppercase tracking-widest border-b border-gray-150 pb-2 flex items-center gap-1.5">
+              <Undo2 className="w-4.5 h-4.5 text-primary-600" /> Raise Return Request
             </h3>
             
             <div className="space-y-3 text-xs leading-normal">
@@ -502,7 +502,7 @@ export default function OrderDetail() {
                   placeholder="Tell us why you are returning these items (e.g. prescribed medicine changed, incorrect batch received)..."
                   value={returnReason}
                   onChange={(e) => setReturnReason(e.target.value)}
-                  className="w-full p-2.5 border border-gray-300 rounded-lg text-xs focus:ring-teal-500 focus:border-teal-500 focus:outline-none resize-none font-semibold text-gray-700"
+                  className="w-full p-2.5 border border-gray-300 rounded-lg text-xs focus:ring-primary-500 focus:border-primary-500 focus:outline-none resize-none font-semibold text-gray-700"
                 />
               </div>
             </div>
@@ -520,7 +520,7 @@ export default function OrderDetail() {
               </button>
               <button
                 type="submit"
-                className="btn-teal text-xs py-2 px-5 font-bold shadow-xs"
+                className="btn-primary text-xs py-2 px-5 font-bold shadow-xs"
               >
                 Submit Return Request
               </button>

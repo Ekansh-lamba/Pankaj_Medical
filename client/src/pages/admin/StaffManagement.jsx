@@ -193,10 +193,10 @@ export default function StaffManagement() {
       <div className="flex flex-col sm:flex-row justify-between items-start gap-4 border-b border-gray-200 pb-5">
         <div>
           <h1 className="text-xl md:text-2xl font-black text-teal-900 flex items-center gap-2">
-            <Users className="w-6 h-6 text-teal-700" /> Staff & Account Governance
+            <Users className="w-6 h-6 text-teal-700" /> Staff Management
           </h1>
           <p className="text-xs md:text-sm text-gray-500 font-medium mt-0.5">
-            Configure permission keys, invite dispatch temporary passcodes, and monitor operational clearances.
+            Configure roles, send temporary passcodes, and manage active permissions.
           </p>
         </div>
 
@@ -227,10 +227,10 @@ export default function StaffManagement() {
             <table className="w-full text-left text-xs text-gray-500 border-collapse">
               <thead>
                 <tr className="bg-slate-50 font-bold uppercase tracking-wider text-teal-900 border-b border-gray-200">
-                  <th className="px-4 py-4">Operator Info</th>
-                  <th className="px-4 py-4">Role Clearance</th>
+                  <th className="px-4 py-4">Staff Member</th>
+                  <th className="px-4 py-4">Role</th>
                   <th className="px-4 py-4">Status</th>
-                  <th className="px-4 py-4">Permission Cleared Keys</th>
+                  <th className="px-4 py-4">Permissions</th>
                   <th className="px-4 py-4 text-right">Actions</th>
                 </tr>
               </thead>
@@ -258,7 +258,7 @@ export default function StaffManagement() {
                       <div className="flex items-center gap-1.5">
                         {s.isActive ? (
                           <span className="flex items-center gap-1 text-[10px] font-bold text-green-600">
-                            <ShieldCheck className="w-4 h-4 text-green-500" /> Active Clear
+                            <ShieldCheck className="w-4 h-4 text-green-500" /> Active
                           </span>
                         ) : (
                           <span className="flex items-center gap-1 text-[10px] font-bold text-red-400">
@@ -287,7 +287,7 @@ export default function StaffManagement() {
                           disabled={actionLoading}
                           className="btn-white text-[10px] font-bold py-1 px-2.5 flex items-center gap-1"
                         >
-                          <Shield className="w-3.5 h-3.5" /> Edit Clearances
+                          <Shield className="w-3.5 h-3.5" /> Edit Permissions
                         </button>
                         
                         <button
@@ -363,14 +363,14 @@ export default function StaffManagement() {
               </div>
 
               <div>
-                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Role Clearance *</label>
+                <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Role *</label>
                 <select
                   value={inviteData.role}
                   onChange={(e) => handleInviteChange('role', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 bg-white rounded-lg focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
                 >
-                  <option value="staff">Staff (Limited Clearance)</option>
-                  <option value="admin">Administrator (Full Clearance)</option>
+                  <option value="staff">Staff (Limited Permissions)</option>
+                  <option value="admin">Administrator (Full Permissions)</option>
                 </select>
               </div>
 
@@ -437,7 +437,7 @@ export default function StaffManagement() {
             <div className="space-y-4">
               <div className="bg-gray-50 border border-gray-150 rounded-xl p-4 space-y-3">
                 <span className="block text-[10px] font-extrabold text-teal-800 uppercase tracking-widest border-b border-gray-200 pb-1">
-                  Active Access Clearances
+                  Active Access Permissions
                 </span>
                 
                 <div className="grid grid-cols-1 gap-3 pt-1">
@@ -474,7 +474,7 @@ export default function StaffManagement() {
                 disabled={actionLoading}
                 className="btn-teal text-xs py-2 px-5 font-bold shadow-xs flex items-center gap-1.5"
               >
-                {actionLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Save Clearances'}
+                {actionLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Save Permissions'}
               </button>
             </div>
           </form>

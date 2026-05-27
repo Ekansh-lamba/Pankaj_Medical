@@ -22,16 +22,16 @@ const NOTIFICATION_ICONS = {
 
 const NOTIFICATION_COLORS = {
   order_placed: 'text-blue-500 bg-blue-50',
-  order_confirmed: 'text-teal-600 bg-teal-50',
-  order_packed: 'text-teal-600 bg-teal-50',
-  order_shipped: 'text-teal-600 bg-teal-50',
-  order_delivered: 'text-teal-600 bg-teal-50',
+  order_confirmed: 'text-primary-600 bg-primary-50',
+  order_packed: 'text-primary-600 bg-primary-50',
+  order_shipped: 'text-primary-600 bg-primary-50',
+  order_delivered: 'text-primary-600 bg-primary-50',
   order_cancelled: 'text-red-500 bg-red-50',
-  prescription_approved: 'text-teal-600 bg-teal-50',
+  prescription_approved: 'text-primary-600 bg-primary-50',
   prescription_rejected: 'text-red-500 bg-red-50',
   prescription_reupload: 'text-amber-500 bg-amber-50',
   return_received: 'text-blue-500 bg-blue-50',
-  refund_initiated: 'text-teal-600 bg-teal-50',
+  refund_initiated: 'text-primary-600 bg-primary-50',
   low_stock: 'text-red-500 bg-red-50',
   new_rx_order: 'text-amber-500 bg-amber-50'
 };
@@ -133,7 +133,7 @@ export default function NotificationBell() {
       {/* Bell Trigger Icon */}
       <button
         onClick={handleToggle}
-        className="relative p-2 text-gray-500 hover:text-teal-600 hover:bg-gray-100 rounded-full transition-colors focus:outline-none"
+        className="relative p-2 text-gray-500 hover:text-primary-600 hover:bg-gray-100 rounded-full transition-colors focus:outline-none"
       >
         <Bell className="w-5 h-5" />
         {unreadCount > 0 && (
@@ -145,16 +145,16 @@ export default function NotificationBell() {
 
       {/* Dropdown Container */}
       {isOpen && (
-        <div className="absolute right-0 mt-2.5 w-80 bg-white border border-gray-200 rounded-xl shadow-lg z-50 overflow-hidden animate-fadeIn">
+        <div className="absolute right-0 mt-2.5 w-80 card-base shadow-lg z-50 overflow-hidden animate-fadeIn">
           {/* Header */}
           <div className="px-4 py-3 bg-gray-50 border-b border-gray-150 flex items-center justify-between">
-            <span className="text-xs font-extrabold text-teal-900 uppercase tracking-wider">
+            <span className="text-xs font-extrabold text-primary-900 uppercase tracking-wider">
               Notifications
             </span>
             {unreadCount > 0 && (
               <button
                 onClick={handleMarkAllAsRead}
-                className="text-[10px] text-teal-600 hover:text-teal-700 font-extrabold transition-colors"
+                className="text-[10px] text-primary-600 hover:text-primary-750 font-extrabold transition-colors"
               >
                 Mark all as read
               </button>
@@ -172,8 +172,8 @@ export default function NotificationBell() {
                   <div
                     key={notification._id}
                     onClick={() => handleMarkAsRead(notification._id, notification.link)}
-                    className={`p-3.5 flex items-start gap-3 hover:bg-teal-50/10 cursor-pointer transition-colors ${
-                      !notification.isRead ? 'bg-teal-50/5' : ''
+                    className={`p-3.5 flex items-start gap-3 hover:bg-primary-50/10 cursor-pointer transition-colors ${
+                      !notification.isRead ? 'bg-primary-50/5' : ''
                     }`}
                   >
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${iconColor}`}>
@@ -187,7 +187,7 @@ export default function NotificationBell() {
                           {notification.title}
                         </p>
                         {!notification.isRead && (
-                          <span className="w-1.5 h-1.5 bg-teal-500 rounded-full shrink-0 mt-1.5" />
+                          <span className="w-1.5 h-1.5 bg-primary-500 rounded-full shrink-0 mt-1.5" />
                         )}
                       </div>
                       <p className="text-[11px] text-gray-500 leading-normal mt-0.5 break-words">
@@ -219,7 +219,7 @@ export default function NotificationBell() {
                 setIsOpen(false);
                 navigate('/my-orders');
               }}
-              className="text-[10px] font-bold text-teal-800 hover:text-teal-900 uppercase tracking-widest"
+              className="text-[10px] font-bold text-primary-800 hover:text-primary-900 uppercase tracking-widest"
             >
               View All Orders
             </button>

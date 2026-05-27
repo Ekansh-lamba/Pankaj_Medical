@@ -39,7 +39,7 @@ export default function OrderCard({ order, onCancel, onRate }) {
   const isRated = !!order.rating?.score;
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-5 hover:shadow-md transition-all duration-200 flex flex-col md:flex-row md:items-center justify-between gap-5">
+    <div className="card-base p-5 hover:shadow-md transition-all duration-200 flex flex-col md:flex-row md:items-center justify-between gap-5">
       <div className="space-y-2">
         {/* Top Info */}
         <div className="flex flex-wrap items-center gap-3">

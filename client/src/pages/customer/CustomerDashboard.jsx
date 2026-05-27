@@ -13,10 +13,10 @@ const QUICK_ACTIONS = [
     description: 'Search & order from our full catalogue',
     Icon: Pill,
     color: 'teal',
-    bg: 'bg-teal-50',
-    border: 'border-teal-200',
-    icon: 'text-teal-600',
-    text: 'text-teal-800',
+    bg: 'bg-primary-50',
+    border: 'border-primary-200',
+    icon: 'text-primary-600',
+    text: 'text-primary-800',
   },
   {
     to: '/my-orders',
@@ -106,7 +106,7 @@ export default function CustomerDashboard() {
 
       {/* ── Welcome card ─────────────────────────────────────────────── */}
       <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm mb-6 flex items-center gap-4">
-        <div className="w-14 h-14 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 shrink-0">
+        <div className="w-14 h-14 bg-primary-100 rounded-full flex items-center justify-center text-primary-600 shrink-0">
           <User className="w-7 h-7" />
         </div>
         <div className="flex-grow min-w-0">
@@ -120,14 +120,14 @@ export default function CustomerDashboard() {
       {/* ── Account info ─────────────────────────────────────────────── */}
       <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm mb-6 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
         <div className="flex items-center gap-2.5 text-gray-600">
-          <Mail className="w-4 h-4 text-teal-600 shrink-0" />
+          <Mail className="w-4 h-4 text-primary-600 shrink-0" />
           <div>
             <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Email</div>
             <div className="font-semibold text-gray-800">{user?.email || 'N/A'}</div>
           </div>
         </div>
         <div className="flex items-center gap-2.5 text-gray-600">
-          <Phone className="w-4 h-4 text-teal-600 shrink-0" />
+          <Phone className="w-4 h-4 text-primary-600 shrink-0" />
           <div>
             <div className="text-[10px] font-bold uppercase tracking-wider text-gray-400">Phone</div>
             <div className="font-semibold text-gray-800">{user?.phone || 'Not configured'}</div>
@@ -195,7 +195,7 @@ export default function CustomerDashboard() {
               <button
                 onClick={handleDeleteAccount}
                 disabled={isLoading}
-                className="btn-teal bg-red-600 hover:bg-red-700 text-xs py-1.5 px-3"
+                className="btn-primary bg-red-600 hover:bg-red-700 text-xs py-1.5 px-3"
               >
                 {isLoading ? 'Processing...' : 'Confirm Delete'}
               </button>

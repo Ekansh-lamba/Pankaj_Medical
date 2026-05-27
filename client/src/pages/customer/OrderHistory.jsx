@@ -102,8 +102,8 @@ export default function OrderHistory() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 md:px-6 py-10 bg-gray-50 font-sans">
-      <h1 className="text-xl md:text-2xl font-black text-teal-900 mb-8 flex items-center gap-2">
-        <ShoppingBag className="w-6 h-6 text-teal-700" /> Order History
+      <h1 className="text-xl md:text-2xl font-black text-primary-900 mb-8 flex items-center gap-2">
+        <ShoppingBag className="w-6 h-6 text-primary-800" /> Order History
       </h1>
 
       {/* Tabs */}
@@ -120,8 +120,8 @@ export default function OrderHistory() {
             onClick={() => setStatusFilter(tab.id)}
             className={`py-3 px-4 border-b-2 whitespace-nowrap transition-colors ${
               statusFilter === tab.id
-                ? 'border-teal-600 text-teal-750 font-black'
-                : 'border-transparent hover:text-teal-600'
+                ? 'border-primary-600 text-teal-750 font-black'
+                : 'border-transparent hover:text-primary-600'
             }`}
           >
             {tab.label}
@@ -131,7 +131,7 @@ export default function OrderHistory() {
 
       {loading ? (
         <div className="py-20 text-center text-sm text-gray-400 flex flex-col items-center justify-center">
-          <Loader2 className="w-6 h-6 border-2 border-teal-600 border-t-transparent rounded-full animate-spin mb-2" />
+          <Loader2 className="w-6 h-6 border-2 border-primary-600 border-t-transparent rounded-full animate-spin mb-2" />
           Loading your order history...
         </div>
       ) : filteredOrders.length > 0 ? (
@@ -155,7 +155,7 @@ export default function OrderHistory() {
               >
                 Previous
               </button>
-              <span className="font-extrabold text-teal-900">Page {page} of {pages}</span>
+              <span className="font-extrabold text-primary-900">Page {page} of {pages}</span>
               <button
                 disabled={page === pages}
                 onClick={() => setPage(prev => prev + 1)}
@@ -167,11 +167,11 @@ export default function OrderHistory() {
           )}
         </div>
       ) : (
-        <div className="bg-white border border-gray-200 rounded-xl p-16 text-center max-w-lg mx-auto shadow-xs flex flex-col items-center justify-center">
-          <div className="w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center mb-4">
-            <ShoppingBag className="w-8 h-8 text-teal-600" />
+        <div className="card-base p-16 text-center max-w-lg mx-auto shadow-xs flex flex-col items-center justify-center">
+          <div className="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center mb-4">
+            <ShoppingBag className="w-8 h-8 text-primary-600" />
           </div>
-          <h2 className="text-base font-bold text-teal-900 mb-1">No Orders Found</h2>
+          <h2 className="text-base font-bold text-primary-900 mb-1">No Orders Found</h2>
           <p className="text-xs text-gray-500 font-semibold max-w-xs mb-6 leading-relaxed">
             You don't have any placed orders matching this filter classification yet.
           </p>
@@ -181,8 +181,8 @@ export default function OrderHistory() {
       {/* CANCELLATION DIALOG MODAL */}
       {cancelModal.open && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white border border-gray-200 rounded-xl p-5 w-full max-w-md animate-fadeIn space-y-4">
-            <h3 className="text-sm font-extrabold text-teal-900 uppercase tracking-widest border-b border-gray-150 pb-2 flex items-center gap-1.5">
+          <div className="card-base p-5 w-full max-w-md animate-fadeIn space-y-4">
+            <h3 className="text-sm font-extrabold text-primary-900 uppercase tracking-widest border-b border-gray-150 pb-2 flex items-center gap-1.5">
               <Ban className="w-4.5 h-4.5 text-red-500" /> Cancel Order {cancelModal.orderNumber}
             </h3>
             <div className="space-y-3">
@@ -194,7 +194,7 @@ export default function OrderHistory() {
                 placeholder="Please tell us why you want to cancel this order..."
                 value={cancelModal.reason}
                 onChange={(e) => setCancelModal({ ...cancelModal, reason: e.target.value })}
-                className="w-full p-2.5 border border-gray-300 rounded-lg text-xs focus:ring-teal-500 focus:border-teal-500 focus:outline-none resize-none font-semibold text-gray-700"
+                className="w-full p-2.5 border border-gray-300 rounded-lg text-xs focus:ring-primary-500 focus:border-primary-500 focus:outline-none resize-none font-semibold text-gray-700"
               />
             </div>
             <div className="flex gap-2 justify-end">
@@ -218,8 +218,8 @@ export default function OrderHistory() {
       {/* RATING DIALOG MODAL */}
       {rateModal.open && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white border border-gray-200 rounded-xl p-5 w-full max-w-md animate-fadeIn space-y-5">
-            <h3 className="text-sm font-extrabold text-teal-900 uppercase tracking-widest border-b border-gray-150 pb-2 flex items-center gap-1.5">
+          <div className="card-base p-5 w-full max-w-md animate-fadeIn space-y-5">
+            <h3 className="text-sm font-extrabold text-primary-900 uppercase tracking-widest border-b border-gray-150 pb-2 flex items-center gap-1.5">
               <Star className="w-4.5 h-4.5 text-amber-500 fill-amber-500" /> Rate Order {rateModal.orderNumber}
             </h3>
 
@@ -255,7 +255,7 @@ export default function OrderHistory() {
                   placeholder="Share your experience with our packaging, speed of service, or medicine quality..."
                   value={rateModal.comment}
                   onChange={(e) => setRateModal({ ...rateModal, comment: e.target.value })}
-                  className="w-full p-2.5 border border-gray-300 rounded-lg text-xs focus:ring-teal-500 focus:border-teal-500 focus:outline-none resize-none font-semibold text-gray-700"
+                  className="w-full p-2.5 border border-gray-300 rounded-lg text-xs focus:ring-primary-500 focus:border-primary-500 focus:outline-none resize-none font-semibold text-gray-700"
                 />
               </div>
             </div>
@@ -269,7 +269,7 @@ export default function OrderHistory() {
               </button>
               <button
                 onClick={handleConfirmRate}
-                className="btn-teal text-xs py-2 px-5 font-bold shadow-xs"
+                className="btn-primary text-xs py-2 px-5 font-bold shadow-xs"
               >
                 Submit Rating
               </button>

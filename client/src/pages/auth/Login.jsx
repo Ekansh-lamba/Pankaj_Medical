@@ -229,7 +229,7 @@ const Login = () => {
 
         {/* Value Prop / Taglines */}
         <div className="space-y-8 max-w-md my-auto">
-          <h1 className="text-4xl font-extrabold tracking-tight leading-tight">
+          <h1 className="text-4xl font-extrabold text-white tracking-tight leading-tight">
             Your Trusted Local Pharmacy, <span className="text-primary-300">Now Online.</span>
           </h1>
           <p className="text-slate-300 text-sm leading-relaxed">
@@ -450,9 +450,12 @@ const Login = () => {
           <button
             onClick={handleGoogleLogin}
             disabled={isLoading}
-            className="w-full bg-white hover:bg-slate-50 border border-slate-300 text-slate-750 font-bold py-2.5 px-4 rounded-lg shadow-sm transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2 text-sm"
+            className="w-full bg-white hover:bg-slate-50 border border-gray-300 text-[#374151] font-semibold py-2.5 px-4 rounded-lg shadow-sm transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2.5 text-sm"
           >
-            <Chrome className="w-4 h-4 text-red-500 shrink-0" /> Use Google OAuth
+            <svg width="18" height="18" viewBox="0 0 18 18" className="shrink-0">
+              <path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1.32-1.31 3.83-4.3 3.83-2.6 0-4.71-2.15-4.71-4.8s2.11-4.8 4.71-4.8c1.48 0 2.47.63 3.04 1.18l2.07-2c-1.33-1.24-3.06-2-5.11-2C4.03 3.21 1 6.24 1 9.99s3.03 6.78 6.98 6.78c4.03 0 6.7-2.83 6.7-6.82 0-.46-.05-.8-.17-1.15z"/>
+            </svg>
+            <span>Continue with Google</span>
           </button>
 
           {/* Footnotes */}

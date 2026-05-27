@@ -341,20 +341,20 @@ export default function Checkout() {
       {/* Checkout step indicator tracker */}
       {step < 4 && (
         <div className="flex items-center justify-between border-b border-gray-250 pb-5 mb-8 text-xs font-bold text-gray-400 select-none">
-          <span className={`${step === 1 ? 'text-teal-700 font-black' : 'text-teal-600'}`}>1. Shipping Address</span>
+          <span className={`${step === 1 ? 'text-primary-800 font-black' : 'text-primary-600'}`}>1. Shipping Address</span>
           <span className="text-gray-300">&rarr;</span>
-          <span className={`${step === 2 ? 'text-teal-700 font-black' : hasRxItems ? 'text-gray-400' : 'opacity-40 cursor-not-allowed'}`}>
+          <span className={`${step === 2 ? 'text-primary-800 font-black' : hasRxItems ? 'text-gray-400' : 'opacity-40 cursor-not-allowed'}`}>
             2. Upload Prescription
           </span>
           <span className="text-gray-300">&rarr;</span>
-          <span className={`${step === 3 ? 'text-teal-700 font-black' : 'text-gray-400'}`}>3. Review & Pay</span>
+          <span className={`${step === 3 ? 'text-primary-800 font-black' : 'text-gray-400'}`}>3. Review & Pay</span>
         </div>
       )}
 
       {/* STEP 1: ADDRESS SELECTION */}
       {step === 1 && (
         <div className="space-y-6">
-          <h2 className="text-lg font-black text-teal-900">Select Delivery Method</h2>
+          <h2 className="text-lg font-black text-primary-900">Select Delivery Method</h2>
 
           {/* Toggle Type */}
           <div className="grid grid-cols-2 gap-4">
@@ -362,7 +362,7 @@ export default function Checkout() {
               onClick={() => setDeliveryType('delivery')}
               className={`p-4 border rounded-xl flex flex-col gap-1 items-center transition-all ${
                 deliveryType === 'delivery'
-                  ? 'border-teal-500 bg-teal-50/10 text-teal-800 font-bold'
+                  ? 'border-primary-500 bg-primary-50/10 text-primary-800 font-bold'
                   : 'border-gray-250 bg-white text-gray-500'
               }`}
             >
@@ -373,7 +373,7 @@ export default function Checkout() {
               onClick={() => setDeliveryType('pickup')}
               className={`p-4 border rounded-xl flex flex-col gap-1 items-center transition-all ${
                 deliveryType === 'pickup'
-                  ? 'border-teal-500 bg-teal-50/10 text-teal-800 font-bold'
+                  ? 'border-primary-500 bg-primary-50/10 text-primary-800 font-bold'
                   : 'border-gray-250 bg-white text-gray-500'
               }`}
             >
@@ -392,7 +392,7 @@ export default function Checkout() {
                       key={addr._id}
                       className={`block p-4 border rounded-xl bg-white cursor-pointer transition-all ${
                         selectedAddressId === addr._id
-                          ? 'border-teal-500 ring-2 ring-teal-500/10'
+                          ? 'border-primary-500 ring-2 ring-teal-500/10'
                           : 'border-gray-200 hover:border-gray-300'
                       }`}
                     >
@@ -402,11 +402,11 @@ export default function Checkout() {
                           name="selected_address"
                           checked={selectedAddressId === addr._id}
                           onChange={() => setSelectedAddressId(addr._id)}
-                          className="mt-1 text-teal-600 focus:ring-teal-500"
+                          className="mt-1 text-primary-600 focus:ring-primary-500"
                         />
                         <div className="flex-1 text-xs">
                           <div className="flex items-center gap-2">
-                            <span className="font-extrabold text-teal-900 uppercase tracking-wider">{addr.label}</span>
+                            <span className="font-extrabold text-primary-900 uppercase tracking-wider">{addr.label}</span>
                             {addr.isDefault && (
                               <span className="bg-gray-100 text-gray-400 text-[9px] px-1.5 py-0.5 rounded font-black uppercase">
                                 DEFAULT
@@ -434,8 +434,8 @@ export default function Checkout() {
                   <Plus className="w-4 h-4" /> Add New Address
                 </button>
               ) : (
-                <form onSubmit={handleAddNewAddress} className="bg-white border border-gray-200 rounded-xl p-5 space-y-4 animate-fadeIn">
-                  <h3 className="text-xs font-extrabold text-teal-900 uppercase tracking-widest border-b border-gray-150 pb-2">
+                <form onSubmit={handleAddNewAddress} className="card-base p-5 space-y-4 animate-fadeIn">
+                  <h3 className="text-xs font-extrabold text-primary-900 uppercase tracking-widest border-b border-gray-150 pb-2">
                     New Address Details
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -444,7 +444,7 @@ export default function Checkout() {
                       <select
                         value={newAddress.label}
                         onChange={(e) => setNewAddress({ ...newAddress, label: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-250 rounded-lg text-xs bg-white focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
+                        className="w-full px-3 py-2 border border-gray-250 rounded-lg text-xs bg-white focus:ring-primary-500 focus:border-primary-500 focus:outline-none"
                       >
                         <option value="Home">Home</option>
                         <option value="Office">Office</option>
@@ -458,7 +458,7 @@ export default function Checkout() {
                         placeholder="House / Shop Number, Street / Road Name"
                         value={newAddress.line1}
                         onChange={(e) => setNewAddress({ ...newAddress, line1: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-250 rounded-lg text-xs focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
+                        className="w-full px-3 py-2 border border-gray-250 rounded-lg text-xs focus:ring-primary-500 focus:border-primary-500 focus:outline-none"
                       />
                     </div>
                     <div className="sm:col-span-2">
@@ -468,7 +468,7 @@ export default function Checkout() {
                         placeholder="Landmark, Area, Sector Name"
                         value={newAddress.line2}
                         onChange={(e) => setNewAddress({ ...newAddress, line2: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-250 rounded-lg text-xs focus:ring-teal-500 focus:border-teal-500 focus:outline-none"
+                        className="w-full px-3 py-2 border border-gray-250 rounded-lg text-xs focus:ring-primary-500 focus:border-primary-500 focus:outline-none"
                       />
                     </div>
                     <div>
@@ -478,7 +478,7 @@ export default function Checkout() {
                         placeholder="e.g. 208011"
                         value={newAddress.pinCode}
                         onChange={(e) => setNewAddress({ ...newAddress, pinCode: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-250 rounded-lg text-xs focus:ring-teal-500 focus:border-teal-500 focus:outline-none font-bold"
+                        className="w-full px-3 py-2 border border-gray-250 rounded-lg text-xs focus:ring-primary-500 focus:border-primary-500 focus:outline-none font-bold"
                       />
                     </div>
                     <div>
@@ -512,7 +512,7 @@ export default function Checkout() {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="btn-teal py-2 px-5 text-xs font-bold flex items-center gap-1.5"
+                      className="btn-primary py-2 px-5 text-xs font-bold flex items-center gap-1.5"
                     >
                       {loading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : 'Save Address'}
                     </button>
@@ -521,10 +521,10 @@ export default function Checkout() {
               )}
             </div>
           ) : (
-            <div className="bg-white border border-gray-200 rounded-xl p-5 flex items-start gap-3.5 text-xs leading-normal">
-              <MapPin className="w-5 h-5 text-teal-600 shrink-0 mt-0.5" />
+            <div className="card-base p-5 flex items-start gap-3.5 text-xs leading-normal">
+              <MapPin className="w-5 h-5 text-primary-600 shrink-0 mt-0.5" />
               <div>
-                <h3 className="font-extrabold text-teal-900 uppercase tracking-wide">Pickup Location</h3>
+                <h3 className="font-extrabold text-primary-900 uppercase tracking-wide">Pickup Location</h3>
                 <p className="text-gray-700 font-bold mt-1">PANKAJ MEDICAL AND GENERAL STORES</p>
                 <p className="text-gray-500 font-medium mt-0.5">133/17 M Block, Kidwainagar, Kanpur Nagar, UP</p>
                 <p className="text-gray-400 text-[10px] uppercase font-bold mt-2 tracking-wider">
@@ -538,7 +538,7 @@ export default function Checkout() {
           <div className="flex justify-end pt-5 border-t border-gray-200">
             <button
               onClick={handleAddressStepSubmit}
-              className="btn-teal py-3 px-6 text-xs font-bold uppercase tracking-wider flex items-center gap-2 group shadow-xs"
+              className="btn-primary py-3 px-6 text-xs font-bold uppercase tracking-wider flex items-center gap-2 group shadow-xs"
             >
               Continue to Next Step <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
             </button>
@@ -552,11 +552,11 @@ export default function Checkout() {
           <div className="flex items-center gap-2 mb-2">
             <button
               onClick={() => setStep(1)}
-              className="p-1.5 border border-gray-250 rounded-lg text-gray-500 hover:text-teal-700 hover:border-teal-100 transition-colors bg-white shrink-0"
+              className="p-1.5 border border-gray-250 rounded-lg text-gray-500 hover:text-primary-800 hover:border-primary-100 transition-colors bg-white shrink-0"
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
-            <h2 className="text-lg font-black text-teal-900">Upload Doctor's Prescription</h2>
+            <h2 className="text-lg font-black text-primary-900">Upload Doctor's Prescription</h2>
           </div>
 
           <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 flex items-start gap-3 text-xs text-amber-800 font-bold leading-normal">
@@ -570,13 +570,13 @@ export default function Checkout() {
           </div>
 
           {/* Upload card */}
-          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-xs flex flex-col items-center">
+          <div className="card-base p-6 shadow-xs flex flex-col items-center">
             {prescriptionPreview ? (
               <div className="w-full max-w-sm space-y-4">
                 <div className="border border-gray-250 rounded-xl p-3 bg-gray-50 flex items-center justify-center overflow-hidden max-h-64">
                   {prescriptionPreview === 'pdf' ? (
                     <div className="py-10 text-center flex flex-col items-center gap-2 text-xs font-bold text-gray-500">
-                      <FileText className="w-12 h-12 text-teal-600" />
+                      <FileText className="w-12 h-12 text-primary-600" />
                       <span>Prescription_Document.pdf loaded successfully</span>
                     </div>
                   ) : (
@@ -597,7 +597,7 @@ export default function Checkout() {
                 </div>
               </div>
             ) : (
-              <label className="w-full max-w-md border-2 border-dashed border-gray-300 hover:border-teal-400 rounded-xl p-10 bg-gray-50/50 hover:bg-white text-center cursor-pointer transition-all flex flex-col items-center justify-center">
+              <label className="w-full max-w-md border-2 border-dashed border-gray-300 hover:border-primary-400 rounded-xl p-10 bg-gray-50/50 hover:bg-white text-center cursor-pointer transition-all flex flex-col items-center justify-center">
                 <input
                   type="file"
                   accept="image/jpeg,image/png,application/pdf"
@@ -617,7 +617,7 @@ export default function Checkout() {
           <div className="flex justify-end pt-5 border-t border-gray-200">
             <button
               onClick={handlePrescriptionStepSubmit}
-              className="btn-teal py-3 px-6 text-xs font-bold uppercase tracking-wider flex items-center gap-2 group shadow-xs"
+              className="btn-primary py-3 px-6 text-xs font-bold uppercase tracking-wider flex items-center gap-2 group shadow-xs"
             >
               Continue to Final Step <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
             </button>
@@ -631,19 +631,19 @@ export default function Checkout() {
           <div className="flex items-center gap-2 mb-2">
             <button
               onClick={() => setStep(hasRxItems ? 2 : 1)}
-              className="p-1.5 border border-gray-250 rounded-lg text-gray-500 hover:text-teal-700 hover:border-teal-100 transition-colors bg-white shrink-0"
+              className="p-1.5 border border-gray-250 rounded-lg text-gray-500 hover:text-primary-800 hover:border-primary-100 transition-colors bg-white shrink-0"
             >
               <ArrowLeft className="w-4 h-4" />
             </button>
-            <h2 className="text-lg font-black text-teal-900">Review & Payment</h2>
+            <h2 className="text-lg font-black text-primary-900">Review & Payment</h2>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left Column: Recap */}
             <div className="lg:col-span-2 space-y-4">
               {/* Delivery Recap */}
-              <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs text-xs leading-normal">
-                <h3 className="font-extrabold text-teal-900 uppercase tracking-widest border-b border-gray-150 pb-2.5 mb-3 flex items-center gap-1.5">
+              <div className="card-base p-5 shadow-xs text-xs leading-normal">
+                <h3 className="font-extrabold text-primary-900 uppercase tracking-widest border-b border-gray-150 pb-2.5 mb-3 flex items-center gap-1.5">
                   <MapPin className="w-4.5 h-4.5" /> Shipping Address
                 </h3>
                 {deliveryType === 'delivery' && activeAddress ? (
@@ -663,19 +663,19 @@ export default function Checkout() {
 
               {/* Prescription Image Recap */}
               {hasRxItems && prescriptionFile && (
-                <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs text-xs leading-normal">
-                  <h3 className="font-extrabold text-teal-900 uppercase tracking-widest border-b border-gray-150 pb-2.5 mb-3 flex items-center gap-1.5">
+                <div className="card-base p-5 shadow-xs text-xs leading-normal">
+                  <h3 className="font-extrabold text-primary-900 uppercase tracking-widest border-b border-gray-150 pb-2.5 mb-3 flex items-center gap-1.5">
                     <FileText className="w-4.5 h-4.5" /> Linked Prescription Document
                   </h3>
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="w-4.5 h-4.5 text-teal-600" />
+                    <CheckCircle className="w-4.5 h-4.5 text-primary-600" />
                     <span className="font-bold text-gray-700 truncate">{prescriptionFile.name}</span>
                   </div>
                 </div>
               )}
 
               {/* Item Lists Recap */}
-              <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs space-y-4">
+              <div className="card-base p-5 shadow-xs space-y-4">
                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-gray-150 pb-2.5">
                   Review Cart Items
                 </h3>
@@ -695,7 +695,7 @@ export default function Checkout() {
 
             {/* Right Column: Payment Actions & Sums */}
             <div className="lg:col-span-1 space-y-4">
-              <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs space-y-5">
+              <div className="card-base p-5 shadow-xs space-y-5">
                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest border-b border-gray-150 pb-2.5">
                   Payment Method
                 </h3>
@@ -704,7 +704,7 @@ export default function Checkout() {
                   {/* COD */}
                   <label className={`block p-4 border rounded-xl cursor-pointer transition-all ${
                     paymentMethod === 'cod'
-                      ? 'border-teal-500 bg-teal-50/10 text-teal-800 font-bold'
+                      ? 'border-primary-500 bg-primary-50/10 text-primary-800 font-bold'
                       : 'border-gray-250 bg-white text-gray-500'
                   }`}>
                     <div className="flex items-center gap-3">
@@ -713,7 +713,7 @@ export default function Checkout() {
                         name="payment_select"
                         checked={paymentMethod === 'cod'}
                         onChange={() => setPaymentMethod('cod')}
-                        className="text-teal-600 focus:ring-teal-500"
+                        className="text-primary-600 focus:ring-primary-500"
                       />
                       <div className="text-xs">
                         <p className="font-extrabold uppercase tracking-wide">Cash on Delivery</p>
@@ -727,7 +727,7 @@ export default function Checkout() {
                   {/* Online Razorpay */}
                   <label className={`block p-4 border rounded-xl cursor-pointer transition-all ${
                     paymentMethod === 'razorpay'
-                      ? 'border-teal-500 bg-teal-50/10 text-teal-800 font-bold'
+                      ? 'border-primary-500 bg-primary-50/10 text-primary-800 font-bold'
                       : 'border-gray-250 bg-white text-gray-500'
                   }`}>
                     <div className="flex items-start gap-3">
@@ -736,7 +736,7 @@ export default function Checkout() {
                         name="payment_select"
                         checked={paymentMethod === 'razorpay'}
                         onChange={() => setPaymentMethod('razorpay')}
-                        className="text-teal-600 focus:ring-teal-500 mt-0.5"
+                        className="text-primary-600 focus:ring-primary-500 mt-0.5"
                       />
                       <div className="text-xs">
                         <p className="font-extrabold uppercase tracking-wide">Pay Online via UPI/Card</p>
@@ -758,7 +758,7 @@ export default function Checkout() {
                     <span>Delivery Charge</span>
                     <span>{deliveryCharge === 0 ? 'FREE' : formatCurrency(deliveryCharge)}</span>
                   </div>
-                  <div className="border-t border-gray-150 pt-2.5 flex justify-between font-black text-sm text-teal-900">
+                  <div className="border-t border-gray-150 pt-2.5 flex justify-between font-black text-sm text-primary-900">
                     <span>Grand Total</span>
                     <span>{formatCurrency(grandTotal)}</span>
                   </div>
@@ -767,7 +767,7 @@ export default function Checkout() {
                 <button
                   onClick={handlePlaceOrder}
                   disabled={loading}
-                  className="w-full btn-teal py-3 px-4 font-extrabold rounded-lg flex items-center justify-center gap-2 shadow-xs disabled:opacity-50"
+                  className="w-full btn-primary py-3 px-4 font-extrabold rounded-lg flex items-center justify-center gap-2 shadow-xs disabled:opacity-50"
                 >
                   {loading ? (
                     <>
@@ -787,12 +787,12 @@ export default function Checkout() {
 
       {/* STEP 4: ORDER SUCCESS */}
       {step === 4 && placedOrder && (
-        <div className="bg-white border border-gray-200 rounded-xl p-8 md:p-12 text-center max-w-xl mx-auto shadow-xs animate-fadeIn flex flex-col items-center">
-          <div className="w-16 h-16 bg-teal-50 rounded-full flex items-center justify-center mb-6">
-            <CheckCircle className="w-10 h-10 text-teal-600 animate-bounce" />
+        <div className="card-base p-8 md:p-12 text-center max-w-xl mx-auto shadow-xs animate-fadeIn flex flex-col items-center">
+          <div className="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center mb-6">
+            <CheckCircle className="w-10 h-10 text-primary-600 animate-bounce" />
           </div>
           
-          <h2 className="text-xl md:text-2xl font-black text-teal-900 mb-2">Order Placed Successfully!</h2>
+          <h2 className="text-xl md:text-2xl font-black text-primary-900 mb-2">Order Placed Successfully!</h2>
           <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-6">
             Order Reference: <span className="text-gray-800 font-black tracking-normal">{placedOrder.orderNumber}</span>
           </p>
@@ -808,9 +808,9 @@ export default function Checkout() {
                 </p>
               </div>
             ) : (
-              <div className="space-y-1 text-teal-800">
-                <h4 className="font-extrabold text-teal-900 uppercase tracking-wide flex items-center gap-1.5">
-                  <CheckCircle className="w-4 h-4 shrink-0 text-teal-600" /> Awaiting Store Approval
+              <div className="space-y-1 text-primary-800">
+                <h4 className="font-extrabold text-primary-900 uppercase tracking-wide flex items-center gap-1.5">
+                  <CheckCircle className="w-4 h-4 shrink-0 text-primary-600" /> Awaiting Store Approval
                 </h4>
                 <p className="text-[11px] text-teal-750 font-medium">
                   Your order has been placed and is awaiting store approval. You will be notified once confirmed.
@@ -823,7 +823,7 @@ export default function Checkout() {
             <Link to="/products" className="btn-white py-2.5 px-6 font-bold shadow-xs text-center flex-1 text-xs">
               Continue Shopping
             </Link>
-            <Link to={`/my-orders/${placedOrder._id}`} className="btn-teal py-2.5 px-6 font-bold shadow-xs text-center flex-1 text-xs">
+            <Link to={`/my-orders/${placedOrder._id}`} className="btn-primary py-2.5 px-6 font-bold shadow-xs text-center flex-1 text-xs">
               Track Order Details
             </Link>
           </div>

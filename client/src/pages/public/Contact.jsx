@@ -6,7 +6,7 @@ const Contact = () => {
     <div className="bg-white min-h-screen py-12 px-4 md:px-8">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-teal-900 mb-4">Contact Us</h1>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-primary-900 mb-4">Contact Us</h1>
           <p className="text-gray-600 text-lg max-w-xl mx-auto">
             Have questions about medicine availability or your prescription order? Reach out to our
             pharmacy team directly.
@@ -22,7 +22,7 @@ const Contact = () => {
 
             <div className="space-y-4 text-gray-600">
               <div className="flex items-start gap-3">
-                <MapPin className="text-teal-600 w-5 h-5 shrink-0 mt-0.5" />
+                <MapPin className="text-primary-600 w-5 h-5 shrink-0 mt-0.5" />
                 <div>
                   <h4 className="font-semibold text-gray-800 text-sm">Store Location</h4>
                   <p className="text-sm">
@@ -32,7 +32,7 @@ const Contact = () => {
               </div>
 
               <div className="flex items-start gap-3">
-                <Phone className="text-teal-600 w-5 h-5 shrink-0 mt-0.5" />
+                <Phone className="text-primary-600 w-5 h-5 shrink-0 mt-0.5" />
                 <div>
                   <h4 className="font-semibold text-gray-800 text-sm">Customer Helpline</h4>
                   <p className="text-sm">+91 512 260XXXX (Landline)</p>
@@ -41,7 +41,7 @@ const Contact = () => {
               </div>
 
               <div className="flex items-start gap-3">
-                <Mail className="text-teal-600 w-5 h-5 shrink-0 mt-0.5" />
+                <Mail className="text-primary-600 w-5 h-5 shrink-0 mt-0.5" />
                 <div>
                   <h4 className="font-semibold text-gray-800 text-sm">Support Email</h4>
                   <p className="text-sm">support@pankajmedical.in</p>
@@ -50,7 +50,7 @@ const Contact = () => {
               </div>
 
               <div className="flex items-start gap-3">
-                <Clock className="text-teal-600 w-5 h-5 shrink-0 mt-0.5" />
+                <Clock className="text-primary-600 w-5 h-5 shrink-0 mt-0.5" />
                 <div>
                   <h4 className="font-semibold text-gray-800 text-sm">Operational Hours</h4>
                   <p className="text-sm">Monday - Saturday: 09:00 AM - 10:00 PM IST</p>
@@ -59,7 +59,7 @@ const Contact = () => {
               </div>
             </div>
 
-            <div className="bg-teal-50 border border-teal-100 p-4 rounded-lg text-xs text-teal-900 leading-normal">
+            <div className="bg-primary-50 border border-primary-100 p-4 rounded-lg text-xs text-primary-900 leading-normal">
               <strong>Prescription Approvals Notice:</strong> Our pharmacists review prescriptions
               during working hours. Orders placed after 10:00 PM will be processed by 9:00 AM the
               following morning.
@@ -83,7 +83,7 @@ const Contact = () => {
                 <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">
                   Your Name
                 </label>
-                <input type="text" placeholder="John Doe" className="input-teal" required />
+                <input type="text" placeholder="John Doe" className="input-base" required />
               </div>
 
               <div>
@@ -93,7 +93,7 @@ const Contact = () => {
                 <input
                   type="text"
                   placeholder="johndoe@gmail.com or 9999999999"
-                  className="input-teal"
+                  className="input-base"
                   required
                 />
               </div>
@@ -105,12 +105,12 @@ const Contact = () => {
                 <textarea
                   rows="4"
                   placeholder="How can we help you?"
-                  className="input-teal"
+                  className="input-base"
                   required
                 ></textarea>
               </div>
 
-              <button type="submit" className="btn-teal w-full mt-2">
+              <button type="submit" className="btn-primary w-full mt-2">
                 Send Query
               </button>
             </form>

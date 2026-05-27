@@ -206,7 +206,7 @@ const Profile = () => {
   if (loading) {
     return (
       <div className="py-20 text-center text-sm text-gray-400 flex flex-col items-center justify-center">
-        <div className="w-8 h-8 border-4 border-teal-600 border-t-transparent rounded-full animate-spin mb-2" />
+        <div className="w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin mb-2" />
         Loading your profile...
       </div>
     );
@@ -214,8 +214,8 @@ const Profile = () => {
 
   return (
     <div className="max-w-5xl mx-auto px-4 md:px-6 py-10 bg-gray-50 font-sans">
-      <h1 className="text-xl md:text-2xl font-black text-teal-900 mb-8 flex items-center gap-2">
-        <User className="w-6 h-6 text-teal-700" /> My Profile
+      <h1 className="text-xl md:text-2xl font-black text-primary-900 mb-8 flex items-center gap-2">
+        <User className="w-6 h-6 text-primary-800" /> My Profile
       </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -223,8 +223,8 @@ const Profile = () => {
         <div className="lg:col-span-2 space-y-8">
           
           {/* Profile Card */}
-          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-xs">
-            <h3 className="text-xs font-black text-teal-800 uppercase tracking-wider mb-4 pb-2 border-b border-gray-100 flex items-center gap-1.5">
+          <div className="card-base p-6 shadow-xs">
+            <h3 className="text-xs font-black text-primary-800 uppercase tracking-wider mb-4 pb-2 border-b border-gray-100 flex items-center gap-1.5">
               <User className="w-4 h-4" /> Personal Information
             </h3>
 
@@ -239,7 +239,7 @@ const Profile = () => {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
-                    className="w-full text-xs font-semibold text-gray-800 border border-gray-250 p-2.5 rounded-lg focus:outline-none focus:border-teal-500"
+                    className="w-full text-xs font-semibold text-gray-800 border border-gray-250 p-2.5 rounded-lg focus:outline-none focus:border-primary-500"
                     placeholder="Enter your name"
                   />
                 </div>
@@ -264,7 +264,7 @@ const Profile = () => {
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-full text-xs font-semibold text-gray-800 border border-gray-250 pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:border-teal-500"
+                    className="w-full text-xs font-semibold text-gray-800 border border-gray-250 pl-10 pr-4 py-2.5 rounded-lg focus:outline-none focus:border-primary-500"
                     placeholder="e.g. 9876543210"
                   />
                 </div>
@@ -274,7 +274,7 @@ const Profile = () => {
                 <button
                   type="submit"
                   disabled={updating}
-                  className="btn-teal py-2.5 px-6 text-xs font-bold flex items-center gap-1.5"
+                  className="btn-primary py-2.5 px-6 text-xs font-bold flex items-center gap-1.5"
                 >
                   <Save className="w-4 h-4" /> {updating ? 'Saving...' : 'Update Details'}
                 </button>
@@ -283,15 +283,15 @@ const Profile = () => {
           </div>
 
           {/* Address Book Card */}
-          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-xs">
+          <div className="card-base p-6 shadow-xs">
             <div className="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
-              <h3 className="text-xs font-black text-teal-800 uppercase tracking-wider flex items-center gap-1.5">
+              <h3 className="text-xs font-black text-primary-800 uppercase tracking-wider flex items-center gap-1.5">
                 <MapPin className="w-4 h-4" /> Saved Delivery Addresses
               </h3>
               {!showAddressForm && (
                 <button
                   onClick={() => setShowAddressForm(true)}
-                  className="btn-teal-outline text-[11px] font-bold py-1 px-3 flex items-center gap-1"
+                  className="btn-secondary text-[11px] font-bold py-1 px-3 flex items-center gap-1"
                 >
                   <Plus className="w-3.5 h-3.5" /> Add New
                 </button>
@@ -317,7 +317,7 @@ const Profile = () => {
                   <div className={`p-3 rounded-lg text-xs font-semibold ${
                     addressStatus.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' :
                     addressStatus.type === 'error' ? 'bg-red-50 text-red-800 border border-red-200' :
-                    'bg-teal-50 text-teal-800 border border-teal-200'
+                    'bg-primary-50 text-primary-800 border border-primary-200'
                   }`}>
                     {addressStatus.msg}
                   </div>
@@ -348,7 +348,7 @@ const Profile = () => {
                       placeholder="e.g. 208001"
                       value={pinCode}
                       onChange={(e) => setPinCode(e.target.value)}
-                      className="w-full text-xs font-semibold text-gray-800 border border-gray-250 p-2 rounded-lg focus:outline-none focus:border-teal-500"
+                      className="w-full text-xs font-semibold text-gray-800 border border-gray-250 p-2 rounded-lg focus:outline-none focus:border-primary-500"
                     />
                   </div>
                 </div>
@@ -363,7 +363,7 @@ const Profile = () => {
                     placeholder="House/Flat No., Building Name, Street"
                     value={line1}
                     onChange={(e) => setLine1(e.target.value)}
-                    className="w-full text-xs font-semibold text-gray-800 border border-gray-250 p-2 rounded-lg focus:outline-none focus:border-teal-500"
+                    className="w-full text-xs font-semibold text-gray-800 border border-gray-250 p-2 rounded-lg focus:outline-none focus:border-primary-500"
                   />
                 </div>
 
@@ -413,7 +413,7 @@ const Profile = () => {
                     id="isDefault"
                     checked={isDefault}
                     onChange={(e) => setIsDefault(e.target.checked)}
-                    className="rounded text-teal-600 focus:ring-teal-500 w-4 h-4 border-gray-300"
+                    className="rounded text-primary-600 focus:ring-primary-500 w-4 h-4 border-gray-300"
                   />
                   <label htmlFor="isDefault" className="text-xs text-gray-600 font-bold">
                     Set as default delivery address
@@ -431,7 +431,7 @@ const Profile = () => {
                   <button
                     type="submit"
                     disabled={addressLoading}
-                    className="btn-teal text-[11px] py-2 px-4"
+                    className="btn-primary text-[11px] py-2 px-4"
                   >
                     {addressLoading ? 'Saving...' : 'Add Address'}
                   </button>
@@ -447,12 +447,12 @@ const Profile = () => {
                     key={addr._id}
                     className={`p-4 border rounded-xl relative ${
                       addr.isDefault
-                        ? 'border-teal-400 bg-teal-50/20'
+                        ? 'border-primary-400 bg-primary-50/20'
                         : 'border-gray-200 bg-white'
                     }`}
                   >
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="text-[10px] font-black text-teal-800 uppercase bg-teal-100/50 px-2 py-0.5 rounded">
+                      <span className="text-[10px] font-black text-primary-800 uppercase bg-primary-100/50 px-2 py-0.5 rounded">
                         {addr.label}
                       </span>
                       {addr.isDefault && (
@@ -498,8 +498,8 @@ const Profile = () => {
         <div className="lg:col-span-1 space-y-8">
           
           {/* Change Password Card */}
-          <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-xs">
-            <h3 className="text-xs font-black text-teal-800 uppercase tracking-wider mb-4 pb-2 border-b border-gray-100 flex items-center gap-1.5">
+          <div className="card-base p-6 shadow-xs">
+            <h3 className="text-xs font-black text-primary-800 uppercase tracking-wider mb-4 pb-2 border-b border-gray-100 flex items-center gap-1.5">
               <Lock className="w-4 h-4" /> Change Password
             </h3>
 
@@ -513,7 +513,7 @@ const Profile = () => {
                   required
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
-                  className="w-full text-xs font-semibold text-gray-800 border border-gray-250 p-2.5 rounded-lg focus:outline-none focus:border-teal-500"
+                  className="w-full text-xs font-semibold text-gray-800 border border-gray-250 p-2.5 rounded-lg focus:outline-none focus:border-primary-500"
                   placeholder="Enter current password"
                 />
               </div>
@@ -527,7 +527,7 @@ const Profile = () => {
                   required
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full text-xs font-semibold text-gray-800 border border-gray-250 p-2.5 rounded-lg focus:outline-none focus:border-teal-500"
+                  className="w-full text-xs font-semibold text-gray-800 border border-gray-250 p-2.5 rounded-lg focus:outline-none focus:border-primary-500"
                   placeholder="At least 6 characters"
                 />
               </div>
@@ -541,7 +541,7 @@ const Profile = () => {
                   required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full text-xs font-semibold text-gray-800 border border-gray-250 p-2.5 rounded-lg focus:outline-none focus:border-teal-500"
+                  className="w-full text-xs font-semibold text-gray-800 border border-gray-250 p-2.5 rounded-lg focus:outline-none focus:border-primary-500"
                   placeholder="Repeat new password"
                 />
               </div>
@@ -549,7 +549,7 @@ const Profile = () => {
               <button
                 type="submit"
                 disabled={passwordLoading}
-                className="w-full btn-teal py-2.5 font-bold text-xs rounded-lg"
+                className="w-full btn-primary py-2.5 font-bold text-xs rounded-lg"
               >
                 {passwordLoading ? 'Updating...' : 'Change Password'}
               </button>
@@ -579,7 +579,7 @@ const Profile = () => {
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white border border-gray-200 rounded-xl max-w-sm w-full p-6 shadow-xl space-y-4">
+          <div className="card-base max-w-sm w-full p-6 shadow-xl space-y-4">
             <h3 className="text-lg font-bold text-gray-800">Confirm Account Deletion</h3>
             <p className="text-sm text-gray-500 leading-relaxed">
               Are you sure you want to proceed? Your email, phone, name, and address data will be
@@ -595,7 +595,7 @@ const Profile = () => {
               <button
                 onClick={handleDeleteAccount}
                 disabled={authLoading}
-                className="btn-teal bg-red-600 hover:bg-red-700 text-xs py-1.5 px-3 text-white"
+                className="btn-primary bg-red-600 hover:bg-red-700 text-xs py-1.5 px-3 text-white"
               >
                 {authLoading ? 'Deleting...' : 'Confirm Delete'}
               </button>

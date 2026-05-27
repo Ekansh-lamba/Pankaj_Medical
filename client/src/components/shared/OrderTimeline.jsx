@@ -43,10 +43,10 @@ export default function OrderTimeline({ timeline = [], currentStatus }) {
             iconColor = 'text-green-500 bg-white ring-4 ring-green-50';
           } else if (isLatest) {
             Icon = Clock;
-            iconColor = 'text-teal-600 bg-white ring-4 ring-teal-50';
+            iconColor = 'text-primary-600 bg-white ring-4 ring-primary-50';
           } else {
             Icon = CheckCircle2;
-            iconColor = 'text-teal-500 bg-white';
+            iconColor = 'text-primary-500 bg-white';
           }
 
           return (
@@ -60,7 +60,7 @@ export default function OrderTimeline({ timeline = [], currentStatus }) {
               <div className="space-y-1">
                 <div className="flex items-center justify-between gap-4 flex-wrap">
                   <h4 className={`text-xs font-black uppercase tracking-wider ${
-                    isLatest ? 'text-teal-900 font-black' : 'text-gray-700'
+                    isLatest ? 'text-primary-900 font-black' : 'text-gray-700'
                   }`}>
                     {statusInfo.label}
                   </h4>

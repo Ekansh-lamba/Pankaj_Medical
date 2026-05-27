@@ -72,7 +72,7 @@ export default function ProductDetail() {
   if (loading) {
     return (
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-12 flex flex-col items-center justify-center min-h-[400px]">
-        <span className="w-8 h-8 border-4 border-teal-600 border-t-transparent rounded-full animate-spin"></span>
+        <span className="w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin"></span>
         <span className="mt-3 text-sm text-gray-500 font-semibold">Loading product specifications...</span>
       </div>
     );
@@ -86,7 +86,7 @@ export default function ProductDetail() {
         </div>
         <h2 className="text-xl font-bold text-gray-800 mb-1.5">Unable to load specifications</h2>
         <p className="text-sm text-gray-500 leading-relaxed mb-6">{error || 'This medicine is currently unavailable or does not exist.'}</p>
-        <Link to="/products" className="btn-teal inline-flex items-center gap-1.5">
+        <Link to="/products" className="btn-primary inline-flex items-center gap-1.5">
           <ArrowLeft className="w-4 h-4" /> Return to Catalogue
         </Link>
       </div>
@@ -136,9 +136,9 @@ export default function ProductDetail() {
       </Helmet>
       {/* Breadcrumb Navigation */}
       <nav className="flex items-center gap-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-6">
-        <Link to="/" className="hover:text-teal-600 transition-colors">Home</Link>
+        <Link to="/" className="hover:text-primary-600 transition-colors">Home</Link>
         <ChevronRight className="w-3.5 h-3.5" />
-        <Link to={`/products?category=${encodeURIComponent(category)}`} className="hover:text-teal-600 transition-colors">{category}</Link>
+        <Link to={`/products?category=${encodeURIComponent(category)}`} className="hover:text-primary-600 transition-colors">{category}</Link>
         <ChevronRight className="w-3.5 h-3.5" />
         <span className="text-gray-600 line-clamp-1">{name}</span>
       </nav>
@@ -175,7 +175,7 @@ export default function ProductDetail() {
                   key={idx}
                   onClick={() => setActiveImageIdx(idx)}
                   className={`w-16 h-16 rounded-lg border-2 p-1.5 bg-white transition-all flex items-center justify-center ${
-                    idx === activeImageIdx ? 'border-teal-600 shadow-sm' : 'border-gray-200 hover:border-gray-300'
+                    idx === activeImageIdx ? 'border-primary-600 shadow-sm' : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
                   <img src={img} alt={`Thumbnail ${idx + 1}`} className="object-contain max-h-full max-w-full" />
@@ -190,7 +190,7 @@ export default function ProductDetail() {
           <div className="pb-6 border-b border-gray-200 mb-6">
             {/* Brand Logo and Prescription labels */}
             <div className="flex flex-wrap items-center gap-2 mb-2">
-              <span className="bg-teal-50 text-teal-800 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded border border-teal-100">
+              <span className="bg-primary-50 text-primary-800 text-[10px] font-bold tracking-widest uppercase px-2 py-0.5 rounded border border-primary-100">
                 {brand}
               </span>
               <RxBadge rxType={rxType} />
@@ -234,11 +234,11 @@ export default function ProductDetail() {
             <div>
               <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">Special Price</span>
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-black text-teal-800">{formatCurrency(sellingPrice)}</span>
+                <span className="text-2xl font-black text-primary-800">{formatCurrency(sellingPrice)}</span>
                 {discount > 0 && (
                   <>
                     <span className="text-sm text-gray-400 line-through font-semibold">{formatCurrency(mrp)}</span>
-                    <span className="text-xs font-bold bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full">
+                    <span className="text-xs font-bold bg-primary-100 text-primary-800 px-2 py-0.5 rounded-full">
                       {discount}% OFF
                     </span>
                   </>
@@ -259,7 +259,7 @@ export default function ProductDetail() {
                   Only {stock} Items Left!
                 </span>
               ) : (
-                <span className="bg-teal-50 text-teal-800 border border-teal-200 text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                <span className="bg-primary-50 text-primary-800 border border-primary-200 text-xs font-bold px-3 py-1 rounded-full shadow-sm">
                   In Stock
                 </span>
               )}
@@ -270,7 +270,7 @@ export default function ProductDetail() {
           <button
             onClick={handleAdd}
             disabled={adding || isOutOfStock}
-            className="w-full sm:w-auto sm:min-w-[200px] btn-teal flex items-center justify-center gap-2 py-3.5 font-bold"
+            className="w-full sm:w-auto sm:min-w-[200px] btn-primary flex items-center justify-center gap-2 py-3.5 font-bold"
           >
             <ShoppingCart className="w-5 h-5" /> {adding ? 'Adding...' : 'Add to Cart'}
           </button>
@@ -278,7 +278,7 @@ export default function ProductDetail() {
       </div>
 
       {/* Description tabs section */}
-      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-xs mb-12">
+      <div className="card-base overflow-hidden shadow-xs mb-12">
         <div className="flex border-b border-gray-200 bg-gray-50/50">
           {[
             { id: 'description', label: 'Overview Description', icon: Info },
@@ -292,7 +292,7 @@ export default function ProductDetail() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-1.5 px-6 py-4 text-xs font-bold uppercase tracking-wider border-b-2 transition-all focus:outline-none ${
                   activeTab === tab.id
-                    ? 'border-teal-600 text-teal-700 bg-white font-black'
+                    ? 'border-primary-600 text-primary-800 bg-white font-black'
                     : 'border-transparent text-gray-400 hover:text-gray-600'
                 }`}
               >
@@ -305,7 +305,7 @@ export default function ProductDetail() {
         <div className="p-6 text-sm text-gray-600 leading-relaxed">
           {activeTab === 'description' && (
             <div>
-              <h3 className="text-sm font-bold text-teal-800 mb-2 uppercase tracking-wide">Usage Details</h3>
+              <h3 className="text-sm font-bold text-primary-800 mb-2 uppercase tracking-wide">Usage Details</h3>
               <p className="whitespace-pre-line">{description || 'No detailed description available for this medicine.'}</p>
             </div>
           )}
@@ -327,7 +327,7 @@ export default function ProductDetail() {
       {/* Substitutes Suggestion section */}
       {substitutes && substitutes.length > 0 && (
         <div>
-          <h2 className="text-lg font-black text-teal-900 mb-4 border-b border-gray-100 pb-2">
+          <h2 className="text-lg font-black text-primary-900 mb-4 border-b border-gray-100 pb-2">
             Similar Alternative Medicines (Same Salt Composition)
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
